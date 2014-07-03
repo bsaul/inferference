@@ -1,69 +1,19 @@
-#' B Score
-#'  
-#' @param predictors
-#' @return length(alpha) vector of IPW estimates
-#' @export
+#----------------------------------------#
+######       bscore()v              ######
+# compute psi_xp(B_i, X_i, theta)        #
+#----------------------------------------#
 
-bscore <- function(predictors, B, G, theta, data){
+Bscore <- function(predictors, B, G, theta, data){
   N <- length(unique(data[, G]))
   
-  Bscores <- matrix(nrow = N, ncol = length(theta))  
+  out <- matrix(nrow = N, ncol = length(theta))  
   for(ii in 1:N){
-    grp <- analysis_c[analysis_c$group == ii, ]
+    grp <- data[data$group == ii, ]
     X <- as.matrix(cbind(1, grp[, predictors]))
-    Bscores[ii, ] <- cmp_scores_ll(theta = theta, B = grp[ , B], X = X)
+    out[ii, ] <- cmp_scores_ll(theta = theta, B = grp[ , B], X = X)
   }
   
-  return(Bscores)
-}
-
-#' V Matrix
-#'  
-#' @param predictors
-#' @return V matrix
-#' @export
-
-V_matrix <- function(Bscores, ipw_obj){
-  k <- ipw_obj$summary$nalphas
-  N <- ipw_obj$summary$ngroups
-  l <- ipw_obj$summary$ntreatments
-  p <- ipw_obj$summary$npredictors
-  alphas <- ipw_obj$summary$alphas
-  
-  hold_Vi <- array(dim = c(p+2, p+2, N, k, l))
-  hold_V  <- array(dim = c(p+2, p+2, k, l),
-                   dimnames = list(1:(p+2), 1:(p+2), 
-                                   alphas, ipw_obj$summary$treatments))
-  ## OUTCOMES ##
-  for(ll in 1:l){
-    for(kk in 1:k){
-      psi_i_a <- cbind(Bscores, ipw_obj$ipw$outcome$group_resid[, kk, ll])
-      
-      for(ii in 1:N){
-        hold_Vi[ , , ii, kk, ll] <- psi_i_a[ii, ]  %*% t(psi_i_a[ii, ])  
-      }
-      hold_V[ , , kk, ll] <- apply(hold_Vi, 1:2, sum, na.rm = T)/N  
-    }
-  }
-  
-  ## CONTRASTS ##
-  for(ll in 1:l){
-    for(kk in 1:k){
-      for(pp in 1:p){
-        psi_i_eff <- cbind(Bscores, ipw_obj$ipw$contrasts$group_resid[, kk, ll])
-        
-        for(ii in 1:N){
-          hold_Vi[ , , ii, kk, ll] <- psi_i_a[ii, ]  %*% t(psi_i_a[ii, ])  
-        }
-      }
-      
-      
-
-      hold_V[ , , kk, ll] <- apply(hold_Vi, 1:2, sum, na.rm = T)/N  
-    }
-  }
-
-  return(hold_V)
+  return(out)
 }
 
 
@@ -72,7 +22,7 @@ V_matrix <- function(Bscores, ipw_obj){
 #' @param predictors
 #' @return length(alpha) vector of IPW estimates
 #' @export
-partialU <- function(y, G, A, B, data, weights, weight_dervs,
+Upartial <- function(y, G, A, B, data, weights, weight_dervs,
                      rescale.factor, na.rm = FALSE){
   out <- list()
   
@@ -179,4 +129,30 @@ partialU <- function(y, G, A, B, data, weights, weight_dervs,
   ## DONE ####
   return(out)
 }
+
+
+
+
+#' V Matrix
+#'  
+#' @param predictors
+#' @return V matrix
+#' @export
+V_matrix_effect <- function(Bscores, ipw_obj, alpha1, alpha2, trt.lvl1, trt.lvl2){
+
+  N <- ipw_obj$summary$ngroups
+  p <- ipw_obj$summary$npredictors
+  
+  tmp <- array(dim = c(p+2, p+2, N))
+
+  for(ii in 1:N){
+    hold <- c(Bscores[ii, ], ipw_obj$ipw$contrasts$group_resid[alpha1, trt.lvl1, alpha2, trt.lvl2, ii, alpha1, trt.lvl1, alpha2, trt.lvl2])
+    tmp[ , , ii] <- hold %*% t(hold)
+  }
+  
+  V <- apply(tmp, 1:2, sum, na.rm = T)/N
+
+  return(V)
+}
+
 
