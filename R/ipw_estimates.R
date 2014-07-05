@@ -23,7 +23,9 @@ ipw_estimates <- function(y, G, A, B, data, weights, weight_dervs, predictors,
                                  rescale.factor = rescale.factor, na.rm = na.rm)
   bscores <- Bscore(predictors, B, G, theta, data)
 
-  out <- list(point_estimates = points, bscores = bscores, Upart = Upart)
+  out <- list(point_estimates = points, 
+              bscores = bscores,
+              Upart = Upart)
   return(out)
 }
 
