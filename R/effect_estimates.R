@@ -5,21 +5,32 @@
 #' @export
 
 
-ipw_de <- function(obj, alpha, trt1, trt2){
+ipw_de <- function(obj, alpha, trt.lvl1, trt.lvl2){
   N <- obj[[1]]$summary$ngroups
+  a <- alpha
+  t1 <- trt.lvl1
+  t2 <- trt.lvl2
+    
+  pe <- obj$point_estimates$outcomes$contrasts$overall[a, t1, a, t2]
+  bscores <- obj$bscores
+
+  V <- V_matrix(bscores, obj[[1]], a, a, t1, t2, 
+                effect = 'contrast', marginal = FALSE )
   
-  point_estimate <- obj[[1]]$ipw$contrasts$overall[alpha, trt1, alpha, trt2]
-  V <- V_matrix_effect(obj[[2]], obj[[1]], alpha, alpha, trt1, trt2)
-  U21 <- apply(obj[[3]]$ipw$contrasts$group_resid[alpha, trt1, alpha, trt2, , alpha, trt1, alpha, trt2, ], 
-                2, sum, na.rm = T)/N
+  U21 <- apply(obj[[3]]$outcomes$contrasts$group_resid[a, t1, a, t2, , a, t1, a, t2, ], 
+                2, mean, na.rm = T)
   
   V21 <- V[dim(V)[1], 1:(dim(V)[2] - 1)]
   V11 <- V[1:(dim(V)[1] - 1), 1:(dim(V)[2] - 1)]
   V22 <- V[dim(V)[1], dim(V)[2]]
   ## VARIANCE Estimate
-  variance <- ((U21 - 2*V21) %*% solve(V11) %*% U21 + V22)/N
+  ve <- ((U21 - 2*V21) %*% solve(V11) %*% U21 + V22)/N
+  me <- 1.96 * sqrt(ve)
   
-  print(point_estimate + 1.96 * sqrt(variance))
+  out <- paste0('Estimate: ', round(pe, 2), ' 95% CI: (', 
+                round(pe - me, 2), ', ', round(pe + me, 2), ')' )
+   
+  return(print(out))
 }
 
 
