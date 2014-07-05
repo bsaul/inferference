@@ -47,9 +47,10 @@ ll <- function(x, pos, theta, B, X){
 #' @return Score
 #' @export
 
-cmp_scores_ll <- function(theta, B, X){
+cmp_scores_ll <- function(theta, B, X, print.errors = TRUE){
   scores <- sapply(1:length(theta), function(i){
-    f <- try(grad(ll, x = theta[i], pos = i, theta = theta, B = B, X = X))
+    f <- try(grad(ll, x = theta[i], pos = i, theta = theta, B = B, X = X),
+             silent = print.errors)
     return(ifelse(is(f, 'try-error'), NA, f))
   })
   return(scores)

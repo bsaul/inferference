@@ -14,14 +14,14 @@ ipw_estimates <- function(y, G, A, B, data, weights, weight_dervs, predictors,
   
   # Point Estimates
   points <- ipw_point_estimates(y = y, A = A, G = G, B = B, data = data,
-                                weights = weights, rescale.factor = rescale.factor)
+                                weights = weights, rescale.factor = rescale.factor,
+                                na.rm = na.rm)
 
   # Parts to Variance Estimates
+  Upart   <- ipw_point_estimates(y = y, A = A, G = G, B = B, data = data,
+                                 weights = weight_dervs, 
+                                 rescale.factor = rescale.factor, na.rm = na.rm)
   bscores <- Bscore(predictors, B, G, theta, data)
-  #V       <- V_matrices(bscores, points)
-  Upart   <- Upartial(y = y, A = A, G = G, B = B, data = data,
-                      weights = weights, weight_dervs = weight_dervs, 
-                      rescale.factor = rescale.factor, na.rm = na.rm)
 
   out <- list(point_estimates = points, bscores = bscores, Upart = Upart)
   return(out)
