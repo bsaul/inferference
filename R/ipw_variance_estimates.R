@@ -23,38 +23,6 @@ Bscore <- function(predictors, B, G, theta, data){
 }
 
 #-----------------------------------------------------------------------------#
-# Compute V11 
-#
-# @param 
-# @return 
-#-----------------------------------------------------------------------------#
-
-V11 <- function(bscores, na.rm = FALSE){  
-
-  if(na.rm == FALSE) {
-    # Replace missing values with 0
-    bscores[is.na(bscores)] <- 0
-  } else {
-    # Remove any rows with NA values
-    bscores <- bscores[apply(bscores, 1, function(x) sum(is.na(x))) == 0, ]
-  }
-  
-  N <- dim(bscores)[1]
-  p <- dim(bscores)[2]
-  
-  tmp <- array(dim = c(p, p, N))
-  
-  for(ii in 1:N){
-    tmp[ , , ii] <- bscores[ii, ] %*% t(bscores[ii, ])
-  }
-  
-  out <- apply(tmp, 1:2, mean, na.rm = T)
-    
-  return(out)
-}
-
-
-#-----------------------------------------------------------------------------#
 #' V Matrix
 #'  
 #' @param predictors
@@ -62,7 +30,7 @@ V11 <- function(bscores, na.rm = FALSE){
 #' @export
 #' 
 #-----------------------------------------------------------------------------#
-V_matrix_effects <- function(Bscores, ipw_obj, alpha1, alpha2, 
+V_matrix <- function(Bscores, ipw_obj, alpha1, alpha2, 
                              trt.lvl1, trt.lvl2, effect, marginal,
                              na.rm = FALSE){
 
