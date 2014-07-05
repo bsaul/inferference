@@ -52,16 +52,24 @@ ipw_point_estimates <- function(y, G, A, B, data, weights,
   dimnames(grp_est) <- list(groups, predictors, alphas)
   
   oa_est <- apply(grp_est, 2:3, mean, na.rm = TRUE)
-  #ymarg <- apply(grp_est, 2:3, mean, na.rm = TRUE)
-  
+
   out$marginal_outcomes$groups <- drop(grp_est)
   out$marginal_outcomes$overall <- drop(oa_est)
+  
+  hold_diff <- array(dim = c(N, p, k),
+                     dimnames = list(groups, predictors, alphas))
+  
+  for(pp in 1:p){
+    hold_diff[ , pp, ] <- grp_est[ , pp, ] - oa_est[pp, ]
+  }
+  
+  out$marginal_outcomes$group_resid <- drop(hold_diff)
   
   ## CALCULATE OVERALL EFFECTS ####
   
   hold_oe_overall <- array(dim = c(k, k, p),
                            dimnames = list(alphas, alphas, predictors))
-  hold_oe_grp <- array(dim = c(k, k, N, p), 
+  hold_oe_grp <- hold_oe_diff <- array(dim = c(k, k, N, p), 
                        dimnames = list(alphas, alphas, groups, predictors))
   
   for(pp in 1:p){
@@ -69,11 +77,13 @@ ipw_point_estimates <- function(y, G, A, B, data, weights,
     
     for(ii in 1:N){
       hold_oe_grp[ , , ii, pp] <- outer(grp_est[ii, pp, ], grp_est[ii, pp, ], '-')
+      hold_oe_diff[ , , ii, pp] <- hold_oe_grp[ , , ii, pp] - hold_oe_overall[ , , pp] 
     }
   }
   
   out$marginal_outcomes$contrasts$overall <- drop(hold_oe_overall)
   out$marginal_outcomes$contrasts$groups <- drop(hold_oe_grp)
+  out$marginal_outcomes$contrasts$group_resid <- drop(hold_oe_diff)
   
   ## CALCULATE OUTCOME ESTIMATES PER TREATMENT LEVEL####
   
