@@ -11,7 +11,7 @@
 #-----------------------------------------------------------------------------#
 
 ipw_point_estimates <- function(y, G, A, B, data, weights,
-                                 rescale.factor, na.rm = FALSE){
+                                 rescale.factor, set.NA.to.0 = TRUE){
   
   ## DEFINE OBJECTS NEEDED FOR FUNCTION ##
   out <- list()
@@ -34,7 +34,7 @@ ipw_point_estimates <- function(y, G, A, B, data, weights,
   }
   
   ## replace any missing weights with 0 ##
-  if(na.rm == FALSE) {
+  if(set.NA.to.0 == TRUE) {
     weights[is.na(weights)] <- 0
   }
   

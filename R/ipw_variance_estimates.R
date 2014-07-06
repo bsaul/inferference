@@ -32,7 +32,7 @@ Bscore <- function(predictors, B, G, theta, data){
 #-----------------------------------------------------------------------------#
 V_matrix <- function(Bscores, ipw_obj, alpha1, alpha2, 
                              trt.lvl1, trt.lvl2, effect, marginal,
-                             na.rm = FALSE){
+                             set.NA.to.0  = TRUE){
 
   N <- dim(Bscores)[1]
   p <- dim(Bscores)[2]
@@ -42,7 +42,7 @@ V_matrix <- function(Bscores, ipw_obj, alpha1, alpha2,
   t2 <- trt.lvl2
   
   ## replace any Bscores with 0 ##
-  if(na.rm == FALSE) {
+  if(set.NA.to.0 == TRUE) {
     Bscores[is.na(Bscores)] <- 0
   }
   

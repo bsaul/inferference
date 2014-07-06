@@ -10,17 +10,19 @@
 #' @export
 
 ipw_estimates <- function(y, G, A, B, data, weights, weight_dervs, bscores,
-                          predictors, rescale.factor, na.rm = FALSE){
+                          predictors, rescale.factor, set.NA.to.0 = TRUE){
   
   # Point Estimates
   points <- ipw_point_estimates(y = y, A = A, G = G, B = B, data = data,
-                                weights = weights, rescale.factor = rescale.factor,
-                                na.rm = na.rm)
+                                weights = weights, 
+                                rescale.factor = rescale.factor,
+                                set.NA.to.0 = set.NA.to.0)
 
   # Parts to Variance Estimates
   Upart   <- ipw_point_estimates(y = y, A = A, G = G, B = B, data = data,
                                  weights = weight_dervs, 
-                                 rescale.factor = rescale.factor, na.rm = na.rm)
+                                 rescale.factor = rescale.factor, 
+                                 set.NA.to.0 = set.NA.to.0)
   bscores <- bscores
 
   out <- list(point_estimates = points, 
