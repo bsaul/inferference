@@ -16,12 +16,13 @@
 #' @return scalar which is the result of the integral
 #' @export
 
-wght_calc <- function(type, A, alpha, ...){
+wght_calc <- function(type, A, alpha, hide.errors = TRUE, ...){
   
   # if any of the products within the integrand return Inf, then return NA
   # else return the result of integration
   f <- try(integrate(PrAX_integrand, -Inf, Inf, type = type, 
-                     alpha = alpha, A = A, ...))
+                     alpha = alpha, A = A, ...),
+           silent = hide.errors)
   PrA <- ifelse(is(f, 'try-error'), NA, f$value)
   
   ## TODO: I tried to write this function so that integrate() could have 

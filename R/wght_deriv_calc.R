@@ -4,10 +4,11 @@
 #' @return vector of derivatives with respect to element of theta
 #' @export
 
-wght_deriv_calc <- function(theta, A, X, type, alpha){
+wght_deriv_calc <- function(theta, A, X, type, alpha, hide.errors = TRUE){
   dervs <- sapply(1:length(theta), function(i){
     f <- try(grad(wght_calc, x = theta[i], pos = i, theta = theta, 
-                  type = type, alpha = alpha, A = A, X = X))
+                  type = type, alpha = alpha, A = A, X = X),
+             silent = hide.errors)
     return(ifelse(is(f, 'try-error'), NA, f))
   })
   return(dervs)
