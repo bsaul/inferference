@@ -1,12 +1,13 @@
 #-----------------------------------------------------------------------------#
-# Compute psi_xp(B_i, X_i, theta)    
-#
-# @param predictors character vector of predictors from model
-# @param B character naming B variable in data
-# @param G character vector (length == 1) naming group variable in data
-# @param theta
-# @param data dataframe
-# @return N X length(theta) matrix of scores
+#' Compute psi_xp(B_i, X_i, theta)    
+#'
+#' @param predictors character vector of predictors from model
+#' @param B character naming B variable in data
+#' @param G character vector (length == 1) naming group variable in data
+#' @param theta
+#' @param data dataframe
+#' @return N X length(theta) matrix of scores
+#' @export
 #-----------------------------------------------------------------------------#
 
 bscore_calc <- function(predictors, B, G, theta, data){

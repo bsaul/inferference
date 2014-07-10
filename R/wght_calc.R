@@ -20,6 +20,7 @@ wght_calc <- function(type, A, alpha, ...){
   
   # if any of the products within the integrand return Inf, then return NA
   # else return the result of integration
+
   f <- try(integrate(PrAX_integrand, -Inf, Inf, type = type, 
                      alpha = alpha, A = A, ...))
   PrA <- ifelse(is(f, 'try-error'), NA, f$value)

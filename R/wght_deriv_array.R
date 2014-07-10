@@ -29,7 +29,8 @@ wght_deriv_array <- function(alphas, data, groups, predictors, A, theta, type){
             FUN = function(x) {
               x <- as.matrix(x) # PrAX expects a matrix
               wght_deriv_calc(type = type, alpha = alpha, 
-                        A = x[, p+1], X = x[, 1:p], theta = theta)})
+                              A = x[, p+1], X = x[, 1:p], 
+                              theta = theta)})
     w2 <- matrix(unlist(w), ncol = p+1, byrow = TRUE,
                  dimnames= list(1:N, names(theta)))
     return(w2)}) 
