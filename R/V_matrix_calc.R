@@ -7,7 +7,7 @@
 #' 
 #-----------------------------------------------------------------------------#
 V_matrix <- function(Bscores, ipw_obj, alpha1, alpha2, 
-                             trt.lvl1, trt.lvl2, effect, marginal,
+                             trt.lvl1 = NULL, trt.lvl2 = NULL, effect, marginal,
                              set.NA.to.0  = TRUE){
 
   N <- dim(Bscores)[1]
