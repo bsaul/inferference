@@ -24,6 +24,13 @@ wght_matrix(alphas, data, groups, predictors, A, theta, type)
 a length(unique(group)) X length(alphas) matrix of group weights
 }
 \description{
-- creates a length(group) X l matrix of group weights
+Creates a number of groups by number of allocation scheme matrix of group weights.
+Allocation schemes are selected by the user.
+}
+\details{
+Groups should be numbered 1, ..., N
+
+\code{predictors} does not need to have a value corresponding to reference parameter.
+The function adds a column of 1s with \code{cbind()} as a first step.
 }
 

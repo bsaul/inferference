@@ -1,6 +1,12 @@
 #' Create a matrix of group weights 
 #' 
-#' - creates a length(group) X l matrix of group weights 
+#' Creates a number of groups by number of allocation scheme matrix of group weights.
+#' Allocation schemes are selected by the user. 
+#' 
+#' Groups should be numbered 1, ..., N
+#' 
+#' \code{predictors} does not need to have a value corresponding to reference parameter. 
+#' The function adds a column of 1s with \code{cbind()} as a first step.
 #'  
 #' @param alphas coverage levels in (0, 1), possibly (probably) vector valued
 #' @param data data frame

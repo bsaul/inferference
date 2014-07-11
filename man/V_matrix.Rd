@@ -3,8 +3,8 @@
 \alias{V_matrix}
 \title{V Matrix}
 \usage{
-V_matrix(Bscores, ipw_obj, alpha1, alpha2, trt.lvl1, trt.lvl2, effect, marginal,
-  set.NA.to.0 = TRUE)
+V_matrix(Bscores, ipw_obj, alpha1, alpha2, trt.lvl1 = NULL, trt.lvl2 = NULL,
+  effect, marginal, set.NA.to.0 = TRUE)
 }
 \arguments{
 \item{predictors}{}

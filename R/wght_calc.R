@@ -1,19 +1,23 @@
-#' Compute a group weight
+#' Compute IPW weight
+#' 
+#' Calculates the IPW for a single group. Used by \code{\link{wght_matrix}} to 
+#' create a matrix of weights for each group and allocation scheme.
 #' 
 #' Type c =
-#' \eqn{\frac{\pi}{Pr(A|X)}}
+#' \deqn{\frac{\prod_{j=1}^n \alpha^A_j (1 - \alpha)^(1- 
+#' A_j)}{Pr(A|X)}}{prod(alpha^A(1 - alpha)^A) / integrate(PrAX_integrand)}
 #' Type b =
-#' \eqn{\frac{1}{Pr(A|X)}}
-#' where the \eqn{\pi} term is brought into the dominator
+#' \deqn{\frac{1}{Pr(A|X)}}{1 / integrate(PrAX_integrand)}
 #' 
-#' @param f the function to integrad. Defaults to \code{\link{PrAX_integrand}}
-#' @param llimit lower limit of the integral defaults to \code{-Inf}
-#' @param ulimit upper limit of the integral defaults to \code{Inf}
+#' Type b incorporates the numerator of type c into the \eqn{Pr(A|X)} integral, 
+#' resulting in a slower computation but more accurate results (especially for large groups)
+#' 
+#' 
 #' @param type see description
-#' @param alpha allocation strategy
 #' @param A vector of treatments
-#' @param ... other arguments passed to integrand
-#' @return scalar which is the result of the integral
+#' @param alpha allocation strategy
+#' @param ... other arguments passed to \code{\link{PrAX_integrand}}
+#' @return scalar result of the integral
 #' @export
 
 wght_calc <- function(type, A, alpha, ...){
