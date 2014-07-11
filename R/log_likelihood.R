@@ -8,15 +8,17 @@
 #' @param x
 #' @param pos
 #' @return TBD
+#' @export
 
 lik_integrand <- function(b, theta, B, X, x, pos){  
   n <- length(B)
   theta[pos] <- x
-  ans <- 1
-  for(jj in 1:n){
-    p <- plogis(X[jj, ] %*% theta[-length(theta)] + b)
-    ans <- ans * dbinom(B[jj], 1, p)
-  }
+  theta.fix <- theta[1:ncol(X)]
+  
+  p <- plogis(drop(outer(X %*% theta.fix, b, '+'))) 
+  ans <- dbinom(B, 1, p)
+  
+  ans <- apply(ans, 2, prod)
   return(ans * dnorm(b, 0, theta[length(theta)]))
 }
 
@@ -30,6 +32,7 @@ lik_integrand <- function(b, theta, B, X, x, pos){
 #' @param B
 #' @param X
 #' @return value of log likelihood
+#' @export
 
 ll <- function(x, pos, theta, B, X){
   y <- log(integrate(lik_integrand, lower=-Inf,upper=Inf, theta = theta, 
