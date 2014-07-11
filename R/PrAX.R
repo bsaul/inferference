@@ -16,23 +16,22 @@
 #' @export
 #' 
 PrAX_integrand <- function(b, x, pos = NA, X, A, theta, alpha, r = 2/3, type){
-  n <- length(A)
-
   if(!is.na(pos)){
     theta[pos] <- x
   }
-
-  hh <- 1
-  for(jj in 1:n){
-    pr.b <- r*plogis(X[jj, ] %*% theta[-length(theta)] + b)
-    if(type == 'c'){
-      hh <- hh * (pr.b)^A[jj] * (1-pr.b)^(1-A[jj])
-    }
-    else if(type == 'b'){
-      hh <- hh * (pr.b/alpha)^A[jj] * ((1-pr.b)/(1 - alpha))^(1-A[jj])
-    }
+  
+  theta.fix <- theta[1:ncol(X)]
+  
+  pr.b <- r * (plogis(drop(outer(X %*% theta.fix, b, '+'))))  
+  
+  if(type == 'c'){
+    hh <- pr.b^A * (1 - pr.b)^(1 - A)
+  }
+  else if(type == 'b'){
+    hh <- (pr.b/alpha)^A * ((1-pr.b)/(1 - alpha))^(1-A)
   }
   
-  ans <- hh * dnorm(b, mean=0, sqrt(theta[length(theta)]))
-  return(ans) 
+  hh_ <- apply(hh, 2, prod)
+  
+  return(hh_ * dnorm(b, mean=0, sqrt(theta[length(theta)])))
 }
