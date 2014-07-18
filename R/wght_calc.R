@@ -12,10 +12,10 @@
 #' Type b incorporates the numerator of type c into the \eqn{Pr(A|X)} integral, 
 #' resulting in a slower computation but more accurate results (especially for large groups)
 #' 
+#' @param f.ab function to pass to the argument 'f' of \code{\link{integrate}}.
 #' @param type see description
-#' @param A vector of treatments
-#' @param alpha allocation strategy
-#' @param ... other arguments passed to \code{\link{PrAX_integrand}}
+#' @param ... other arguments passed to f.ab. If type = 'c', then arguments A 
+#' and alpha must be defined here
 #' @return scalar result of the integral
 #' @export
 

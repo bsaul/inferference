@@ -3,7 +3,7 @@
 \alias{wght_matrix}
 \title{Create a matrix of group weights}
 \usage{
-wght_matrix(alphas, data, groups, predictors, A, theta, type)
+wght_matrix(f.ab, alphas, data, groups, predictors, A, theta, type, ...)
 }
 \arguments{
 \item{alphas}{coverage levels in (0, 1), possibly (probably) vector valued}
@@ -16,9 +16,12 @@ wght_matrix(alphas, data, groups, predictors, A, theta, type)
 
 \item{A}{character vector of name of treatment variable in data}
 
-\item{theta}{p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be last.}
+\item{theta}{p + 1 vector of fixed effects plus the random effect variance.
+The variance estimate must be last.}
 
 \item{type}{type of weight to compute. See \code{\link{wght_calc}}}
+
+\item{...}{additional arguments passed to \code{f.ab}}
 }
 \value{
 a length(unique(group)) X length(alphas) matrix of group weights

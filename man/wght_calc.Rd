@@ -3,16 +3,15 @@
 \alias{wght_calc}
 \title{Compute IPW weight}
 \usage{
-wght_calc(type, A, alpha, ...)
+wght_calc(f.ab, type = NULL, ...)
 }
 \arguments{
+\item{f.ab}{function to pass to the argument 'f' of \code{\link{integrate}}.}
+
 \item{type}{see description}
 
-\item{A}{vector of treatments}
-
-\item{alpha}{allocation strategy}
-
-\item{...}{other arguments passed to \code{\link{PrAX_integrand}}}
+\item{...}{other arguments passed to f.ab. If type = 'c', then arguments A
+and alpha must be defined here}
 }
 \value{
 scalar result of the integral
