@@ -12,7 +12,6 @@
 #' Type b incorporates the numerator of type c into the \eqn{Pr(A|X)} integral, 
 #' resulting in a slower computation but more accurate results (especially for large groups)
 #' 
-#' 
 #' @param type see description
 #' @param A vector of treatments
 #' @param alpha allocation strategy
@@ -20,16 +19,29 @@
 #' @return scalar result of the integral
 #' @export
 
-wght_calc <- function(type, A, alpha, ...){
+wght_calc <- function(f.ab, type = NULL, ...){  
+  
+  f.ab <- match.fun(f.ab)
+  dots <- list(...)
+  args <- append(get_args(f.ab, ...), list(f = f.ab, lower = -Inf, upper = Inf))
+  
+  if("type" %in% names(formals(f.ab))){
+    args$type <- type
+  }
   
   # if any of the products within the integrand return Inf, then return NA
   # else return the result of integration
-
-  f <- try(integrate(PrAX_integrand, -Inf, Inf, type = type, 
-                     alpha = alpha, A = A, ...))
+  
+  f <- try(do.call("integrate", args = args))
   PrA <- ifelse(is(f, 'try-error'), NA, f$value)
   
   if (type == 'c'){
+    if((!'A' %in% names(dots)) | (!'alpha' %in% names(dots))){
+      stop("If using type 'c', A and alpha arguments must both be specified")
+    }
+    A <- dots[[match.arg('A', names(dots))]]
+    alpha <- dots[[match.arg('alpha', names(dots))]]
+    
     pp <- prod(alpha^A * (1-alpha)^(1-A))
     weight <- pp/PrA
   }
