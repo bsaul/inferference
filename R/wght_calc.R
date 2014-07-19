@@ -30,6 +30,7 @@ wght_calc <- function(f.ab,
                       type = 'b',
                       x = NA, 
                       pos = NA, 
+                      alpha,
                       ...)
 {  
   
@@ -50,6 +51,9 @@ wght_calc <- function(f.ab,
   if("pos" %in% f.ab.names){
     args$pos <- pos
   }
+  if("alpha" %in% f.ab.names){
+    args$alpha <- alpha
+  }
   # END TODO ##
     
   # if any of the products within the integrand return Inf, then return NA
@@ -59,11 +63,12 @@ wght_calc <- function(f.ab,
   PrA <- ifelse(is(f, 'try-error'), NA, f$value)
   
   if (type == 'c'){
-    if((!'A' %in% dot.names) | (!'alpha' %in% dot.names)){
-      stop("If using type 'c', A and alpha arguments must both be specified")
+    if(!'A' %in% dot.names){
+      stop("If using type 'c', A (treatment assignment) arguments must 
+           be specified")
     }
     A <- dots[[match.arg('A', dot.names)]]
-    alpha <- dots[[match.arg('alpha', dot.names)]]
+    #alpha <- dots[[match.arg('alpha', dot.names)]]
     
     pp <- prod(alpha^A * (1-alpha)^(1-A))
     weight <- pp/PrA

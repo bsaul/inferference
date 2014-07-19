@@ -11,10 +11,11 @@
 #' @return vector of derivatives with respect to element of theta
 #' @export
 
-wght_deriv_calc <- function(f.ab, 
+wght_deriv_calc <- function(f.ab,
                             theta, 
-                            type = 'b', 
-                            method= "Richardson", 
+                            alpha,
+                            type   = 'b', 
+                            method = "Richardson", 
                             method.args = list(eps=1e-4, d=0.0001, 
                                                 zero.tol=sqrt(.Machine$double.eps/7e-7), 
                                                 r=4, v=2, show.details=FALSE),
@@ -22,19 +23,20 @@ wght_deriv_calc <- function(f.ab,
                             ...)
 {  
   f.ab <- match.fun(f.ab)
-  args <- append(list(func = wght_calc, 
-                      f.ab = f.ab, 
-                      method= method, 
+  args <- append(list(func   = wght_calc, 
+                      f.ab   = f.ab, 
+                      alpha  = alpha,
+                      theta  = theta,
+                      type   = type,
+                      method = method, 
                       method.args = method.args), 
                  get_args(f.ab, ...)) # Get the necessary arguments for f.ab
   
-  if("type" %in% names(formals(f.ab))){
-    args$type <- type
-  }
-  if("theta" %in% names(formals(f.ab))){
-    args$theta <- theta
-  }
+#   if("theta" %in% names(formals(f.ab))){
+#     args$theta <- theta
+#   }
   
+#   print(names(args))
   dervs <- sapply(1:length(theta), function(i){
     args$x <- theta[i]; args$pos <- i
     f <- try(do.call('grad', args = args), silent = hide.errors)
