@@ -10,25 +10,48 @@
 #' \deqn{\frac{1}{Pr(A|X)}}{1 / integrate(PrAX_integrand)}
 #' 
 #' Type b incorporates the numerator of type c into the \eqn{Pr(A|X)} integral, 
-#' resulting in a slower computation but more accurate results (especially for large groups)
+#' resulting in a slower computation but more accurate results (especially 
+#' for large groups)
 #' 
 #' @param f.ab function to pass to the argument 'f' of \code{\link{integrate}}.
-#' @param type see description
+#' @param type see description. Defaults to 'b'.
+#' @param x necessary argument for \code{\link{grad}}. Defaults to NA, so if 
+#' not evaluting a derivative with \code{\link{wght_deriv_calc}}, this can be
+#' ignored.
+#' @param pos necessary taking a derivative when using to \code{\link{PrAX_integrand}} 
+#' Defaults to NA, so if not evaluting a derivative with \code{\link{wght_deriv_calc}}, 
+#' this can be ignored.
 #' @param ... other arguments passed to f.ab. If type = 'c', then arguments A 
 #' and alpha must be defined here
 #' @return scalar result of the integral
 #' @export
 
-wght_calc <- function(f.ab, type = NULL, ...){  
+wght_calc <- function(f.ab, 
+                      type = 'b',
+                      x = NA, 
+                      pos = NA, 
+                      ...)
+{  
   
   f.ab <- match.fun(f.ab)
+  f.ab.names <- names(formals(f.ab))
   dots <- list(...)
-  args <- append(get_args(f.ab, ...), list(f = f.ab, lower = -Inf, upper = Inf))
+  dot.names <- names(dots)
+  args <- append(get_args(f.ab, ...), 
+                 list(f = f.ab, lower = -Inf, upper = Inf))
   
-  if("type" %in% names(formals(f.ab))){
+  ## TODO: This could get cleaned up ##
+  if("type" %in% f.ab.names){
     args$type <- type
   }
-  
+  if("x" %in% f.ab.names){
+    args$x <- x
+  }
+  if("pos" %in% f.ab.names){
+    args$pos <- pos
+  }
+  # END TODO ##
+    
   # if any of the products within the integrand return Inf, then return NA
   # else return the result of integration
   
@@ -36,11 +59,11 @@ wght_calc <- function(f.ab, type = NULL, ...){
   PrA <- ifelse(is(f, 'try-error'), NA, f$value)
   
   if (type == 'c'){
-    if((!'A' %in% names(dots)) | (!'alpha' %in% names(dots))){
+    if((!'A' %in% dot.names) | (!'alpha' %in% dot.names)){
       stop("If using type 'c', A and alpha arguments must both be specified")
     }
-    A <- dots[[match.arg('A', names(dots))]]
-    alpha <- dots[[match.arg('alpha', names(dots))]]
+    A <- dots[[match.arg('A', dot.names)]]
+    alpha <- dots[[match.arg('alpha', dot.names)]]
     
     pp <- prod(alpha^A * (1-alpha)^(1-A))
     weight <- pp/PrA

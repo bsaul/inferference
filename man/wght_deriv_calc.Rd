@@ -3,10 +3,26 @@
 \alias{wght_deriv_calc}
 \title{Compute the derivative(s) of a weight}
 \usage{
-wght_deriv_calc(theta, A, X, type, alpha)
+wght_deriv_calc(f.ab, theta, type = "b", method = "Richardson",
+  method.args = list(eps = 1e-04, d = 1e-04, zero.tol =
+  sqrt(.Machine$double.eps/7e-07), r = 4, v = 2, show.details = FALSE),
+  hide.errors = TRUE, ...)
 }
 \arguments{
-\item{theta}{}
+\item{f.ab}{the function to passed to the argument 'f' of \code{\link{integrate}},
+which is part of \code{\link{wght_calc}}.}
+
+\item{theta}{parameters with which to take derivatives with respect to}
+
+\item{type}{see \code{\link{wght_calc}}. Defaults to 'b'.}
+
+\item{method}{see \code{\link{grad}}.}
+
+\item{method.args}{see \code{\link{grad}}}
+
+\item{hide.errors}{print \code{grad} error messages. Defaults to TRUE.}
+
+\item{...}{additional arguments passed to f.ab}
 }
 \value{
 vector of derivatives with respect to element of theta

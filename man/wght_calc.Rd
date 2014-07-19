@@ -3,12 +3,20 @@
 \alias{wght_calc}
 \title{Compute IPW weight}
 \usage{
-wght_calc(f.ab, type = NULL, ...)
+wght_calc(f.ab, type = "b", x = NA, pos = NA, ...)
 }
 \arguments{
 \item{f.ab}{function to pass to the argument 'f' of \code{\link{integrate}}.}
 
-\item{type}{see description}
+\item{type}{see description. Defaults to 'b'.}
+
+\item{x}{necessary argument for \code{\link{grad}}. Defaults to NA, so if
+not evaluting a derivative with \code{\link{wght_deriv_calc}}, this can be
+ignored.}
+
+\item{pos}{necessary taking a derivative when using to \code{\link{PrAX_integrand}}
+Defaults to NA, so if not evaluting a derivative with \code{\link{wght_deriv_calc}},
+this can be ignored.}
 
 \item{...}{other arguments passed to f.ab. If type = 'c', then arguments A
 and alpha must be defined here}
@@ -28,6 +36,7 @@ Type b =
 \deqn{\frac{1}{Pr(A|X)}}{1 / integrate(PrAX_integrand)}
 
 Type b incorporates the numerator of type c into the \eqn{Pr(A|X)} integral,
-resulting in a slower computation but more accurate results (especially for large groups)
+resulting in a slower computation but more accurate results (especially
+for large groups)
 }
 
