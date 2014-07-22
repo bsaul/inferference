@@ -3,7 +3,7 @@
 \alias{wght_deriv_calc}
 \title{Compute the derivative(s) of a weight}
 \usage{
-wght_deriv_calc(f.ab, theta, type = "b", method = "Richardson",
+wght_deriv_calc(f.ab, theta, alpha, type = "b", method = "Richardson",
   method.args = list(eps = 1e-04, d = 1e-04, zero.tol =
   sqrt(.Machine$double.eps/7e-07), r = 4, v = 2, show.details = FALSE),
   hide.errors = TRUE, ...)
