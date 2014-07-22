@@ -27,12 +27,13 @@ wght_deriv_array <- function(f.ab,
   # Make sure alphas are sorted
   alphas <- sort(alphas)
   
-  G <- data[, groups]
+  G <- factor(data[, groups])
   X <- cbind(1, data[, predictors])
   A <- data[, A]
   p <- ncol(X)
   N <- length(unique(G))
   k <- length(alphas) 
+  print(N)
 
   w.list <- lapply(alphas, function(alpha){
     w <- by(cbind(X, A), INDICES = G, simplify = TRUE, 
@@ -41,7 +42,7 @@ wght_deriv_array <- function(f.ab,
               wght_deriv_calc(f.ab = f.ab, type = type, alpha = alpha, 
                               A = x[, p+1], X = x[, 1:p], 
                               theta = theta, ...)})
-    w2 <- matrix(unlist(w), ncol = p+1, byrow = TRUE,
+    w2 <- matrix(unlist(w), ncol = p+1, byrow = TRUE),
                  dimnames= list(1:N, names(theta)))
     return(w2)}) 
   
