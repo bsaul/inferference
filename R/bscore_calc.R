@@ -13,6 +13,10 @@
 bscore_calc <- function(predictors, B, G, theta, data){
   N <- length(unique(data[, G]))
   
+  if(length(theta) != (length(predictors) + 2)){
+    stop("The length of theta is not equal to the number of predictors + 2 ")
+  }
+  
   out <- matrix(nrow = N, ncol = length(theta))  
   for(ii in 1:N){
     grp <- data[data$group == ii, ]
