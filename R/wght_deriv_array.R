@@ -33,8 +33,11 @@ wght_deriv_array <- function(f.ab,
   p <- ncol(X)
   N <- length(unique(G))
   k <- length(alphas) 
-  print(N)
-
+  
+  if(length(theta) != (p + 1)){
+    stop("The length of theta is not equal to the number of predictors + 2 ")
+  }
+  
   w.list <- lapply(alphas, function(alpha){
     w <- by(cbind(X, A), INDICES = G, simplify = TRUE, 
             FUN = function(x) {
@@ -42,7 +45,7 @@ wght_deriv_array <- function(f.ab,
               wght_deriv_calc(f.ab = f.ab, type = type, alpha = alpha, 
                               A = x[, p+1], X = x[, 1:p], 
                               theta = theta, ...)})
-    w2 <- matrix(unlist(w), ncol = p+1, byrow = TRUE),
+    w2 <- matrix(unlist(w), ncol = p+1, byrow = TRUE,
                  dimnames= list(1:N, names(theta)))
     return(w2)}) 
   
