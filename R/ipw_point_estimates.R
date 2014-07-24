@@ -16,7 +16,6 @@ ipw_point_estimates <- function(y,
                                 B, 
                                 data, 
                                 weights,
-                                center.alpha,
                                 rescale.factor = 1, 
                                 set.NA.to.0 = TRUE)
   {
@@ -73,26 +72,6 @@ ipw_point_estimates <- function(y,
   
   out$marginal_outcomes$group_resid <- drop(hold_diff)
   
-  ## CALCULATE OVERALL EFFECTS ####
-  
-  hold_oe_overall <- array(dim = c(k, k, p),
-                           dimnames = list(alphas, alphas, predictors))
-  hold_oe_grp <- hold_oe_diff <- array(dim = c(k, k, N, p), 
-                       dimnames = list(alphas, alphas, groups, predictors))
-  
-  for(pp in 1:p){
-    hold_oe_overall[ , , pp] <- outer(oa_est[pp, ], oa_est[pp, ], '-')
-    
-    for(ii in 1:N){
-      hold_oe_grp[ , , ii, pp] <- outer(grp_est[ii, pp, ], grp_est[ii, pp, ], '-')
-      hold_oe_diff[ , , ii, pp] <- hold_oe_grp[ , , ii, pp] - hold_oe_overall[ , , pp] 
-    }
-  }
-  
-  out$marginal_outcomes$contrasts$overall <- drop(hold_oe_overall)
-  out$marginal_outcomes$contrasts$groups <- drop(hold_oe_grp)
-  out$marginal_outcomes$contrasts$group_resid <- drop(hold_oe_diff)
-  
   ## CALCULATE OUTCOME ESTIMATES PER TREATMENT LEVEL####
   
   hold_grp <- hold_grp_diff <- array(dim = c(N, p, k, l),
@@ -133,37 +112,7 @@ ipw_point_estimates <- function(y,
   out$outcomes <- list(groups = drop(hold_grp), 
                        overall = drop(hold_oal), 
                        group_resid = drop(hold_grp_diff))
-  
-  ## CALCULATE EFFECT CONTRASTS ####
-  
-  hold_contrasts_oal <- array(dim = c(k, l, k, l, p),
-                              dimnames = list(alphas, trt_lvls, alphas, 
-                                              trt_lvls, predictors))
-  
-  hold_contrast_grp <- array(dim = c(k, l, k, l, N, p),
-                             dimnames = list(alphas, trt_lvls, alphas, trt_lvls, 
-                                             groups, predictors))
-  
-  hold_resid <- array(dim = c(k, l, k, l, N, k, l, k, l, p),
-                      dimnames = list(alphas, trt_lvls, alphas, trt_lvls, 
-                                      groups, alphas, trt_lvls, alphas, trt_lvls, 
-                                      predictors))
-  
-  for(pp in 1:p){
-    hold_contrasts_oal[ , , , , pp] <- outer(hold_oal[pp, , ], hold_oal[pp, , ], '-')
-    
-    for(ii in 1:N){
-      hold_contrast_grp[ , , , , ii, pp] <- outer(hold_grp[ii, pp, , ], hold_grp[ii, pp, , ], '-')
-    }
-    
-    hold_resid[ , , , , , , , , , pp] <- outer(hold_contrast_grp[ , , , , , pp],
-                                               hold_contrasts_oal[ , , , , pp], '-')
-  }
-  
-  out$outcomes$contrasts <- list(overall = drop(hold_contrasts_oal),
-                                 groups  = drop(hold_contrast_grp),
-                                 group_resid = drop(hold_resid))
-  
+
   ## DONE ####
   return(out)
 }
