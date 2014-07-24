@@ -6,9 +6,11 @@
 #' @export
 #' 
 #-----------------------------------------------------------------------------#
-V_matrix <- function(Bscores, ipw_obj, alpha1, alpha2, 
-                             trt.lvl1 = NULL, trt.lvl2 = NULL, effect, marginal,
-                             set.NA.to.0  = TRUE){
+V_matrix <- function(Bscores, ipw_obj, 
+                     alpha1, alpha2, 
+                     trt.lvl1 = NULL, trt.lvl2 = NULL, 
+                     effect, marginal,
+                     set.NA.to.0  = TRUE){
 
   N <- dim(Bscores)[1]
   p <- dim(Bscores)[2]
@@ -25,11 +27,21 @@ V_matrix <- function(Bscores, ipw_obj, alpha1, alpha2,
   fff <- ifelse(marginal == TRUE, 'marginal_outcomes', 'outcomes')
   
   if(effect == 'contrast'){   
-    x <- ipw_obj[[fff]]$contrasts$group_resid
+    hold_oal <- ipw_obj[[fff]]$overall 
+    hold_grp <- ipw_obj[[fff]]$groups
+
+    #x <- grp.pe - pe
+    #x <- ipw_obj[[fff]]$contrasts$group_resid
     if(marginal == TRUE){
-      x <- x[a1, a2, ]
+      pe <- hold_oal[a1] - hold_oal[a2]
+      grp.pe <- hold_grp[ ,a1] - hold_grp[, a2]
+      x <- grp.pe - pe
+      #x <- x[a1, a2, ]
     } else {
-      x <- x[a1, t1, a2, t2, , a1, t1, a2, t2]
+      pe <- hold_oal[a1, t1] - hold_oal[a2, t2]
+      grp.pe <- hold_grp[ ,a1, t1] - hold_grp[, a2, t2]
+      x <- grp.pe - pe
+      #x <- x[a1, t1, a2, t2, , a1, t1, a2, t2]
     }
   } 
   else if(effect == 'outcome'){
