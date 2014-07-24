@@ -1,11 +1,7 @@
 #-----------------------------------------------------------------------------#
 #' Run Interference  
 #'
-#' @param predictors character vector of predictors from model
-#' @param B character naming B variable in data
-#' @param G character vector (length == 1) naming group variable in data
-#' @param theta
-#' @param data dataframe
+#' @param predictors 
 #' @return N X length(theta) matrix of scores
 #' @export
 #-----------------------------------------------------------------------------#
@@ -25,7 +21,7 @@ run_interference <- function(f.ab,
   form <- paste(B, '~',
                 paste(predictors, collapse=' + '), 
                 '+ (1|', groups, ')')
-  fit <- glmer(form, data = sim1, family = binomial)
+  fit <- glmer(form, data = data, family = binomial)
   
   theta_fit <- c(fixef(fit), random.var = VarCorr(fit)[groups][[1]])
 

@@ -7,15 +7,7 @@ run_interference(f.ab, alphas, data, groups, outcome, A, B, predictors,
   type = "b", rescale.factor = 1)
 }
 \arguments{
-\item{predictors}{character vector of predictors from model}
-
-\item{B}{character naming B variable in data}
-
-\item{G}{character vector (length == 1) naming group variable in data}
-
-\item{theta}{}
-
-\item{data}{dataframe}
+\item{predictors}{}
 }
 \value{
 N X length(theta) matrix of scores

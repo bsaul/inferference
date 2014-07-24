@@ -8,5 +8,8 @@ Maintainer: Bradley Saul <saulb@live.unc.edu>
 Description: Causal inference with interference
 Depends:
     R (>= 3.1.0),
-    numDeriv (>= 2012.9-1)
+    numDeriv (>= 2012.9-1),
+    lme4(>= 1.1-6),
+    plyr(>= 1.8.1),
+    reshape2(>= 1.4)
 License: MIT

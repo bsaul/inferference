@@ -4,14 +4,22 @@
 #' @param y vector of unweighted group means (i.e. output from \code{\link{group_means}}
 #' @param a treatment level (0,1) for which to compute weights. Defaults to NULL which returns marginal.
 #' @param weights weight matrix/array to use
-#' @param rescale.factor factor by which to rescale values
+#' @param rescale.factor factor by which to rescale values. Defaults to 1.
 #' @param na.rm exclude groups missing weights? defaults to FALSE.
 #' @return length(alpha) vector of IPW estimates
 #' @export
 #-----------------------------------------------------------------------------#
 
-ipw_point_estimates <- function(y, G, A, B, data, weights,
-                                 rescale.factor, set.NA.to.0 = TRUE){
+ipw_point_estimates <- function(y, 
+                                G, 
+                                A, 
+                                B, 
+                                data, 
+                                weights,
+                                center.alpha,
+                                rescale.factor = 1, 
+                                set.NA.to.0 = TRUE)
+  {
   
   ## DEFINE OBJECTS NEEDED FOR FUNCTION ##
   out <- list()
