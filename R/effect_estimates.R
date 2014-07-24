@@ -1,46 +1,4 @@
 #-----------------------------------------------------------------------------#
-#' Calculate Marginal estimates
-#'  
-#' @param TBD
-#' @return TBD
-#' @export
-#-----------------------------------------------------------------------------#
-
-overall_effect <- function(obj, alpha1, alpha2){
-  N <- obj[[1]]$summary$ngroups
-  a1 <- alpha1
-  a2 <- alpha2
-  
-  pe <- obj$point_estimates$marginal_outcomes$contrasts$overall[a1, a2]
-  
-  ## VARIANCE ESTIMATION ####
-  bscores <- obj$bscores
-  
-  V <- V_matrix(bscores, obj[[1]], a1, a2,
-                effect = 'contrast', marginal = TRUE )
-  
-  U21 <- apply(obj[[3]]$marginal_outcomes$contrasts$group_resid[a1, a2, , ], 
-               2, mean, na.rm = T)
-  
-  V21 <- V[dim(V)[1], 1:(dim(V)[2] - 1)]
-  V11 <- V[1:(dim(V)[1] - 1), 1:(dim(V)[2] - 1)]
-  V22 <- V[dim(V)[1], dim(V)[2]]
-  ## VARIANCE Estimate
-  ve <- ((U21 - 2*V21) %*% solve(V11) %*% U21 + V22)/N
-  me <- 1.96 * sqrt(ve)
-  
-  toprint <- paste0('Estimate: ', round(pe, 2), ' 95% CI: (', 
-                    round(pe - me, 2), ', ', round(pe + me, 2), ')' )
-  
-  print(toprint)
-  
-  out <- c(pe, ve, pe-me, pe+me)
-  return(out)
-}
-
-
-
-#-----------------------------------------------------------------------------#
 #' Calculate Effect estimates
 #'  
 #' @param TBD
@@ -48,35 +6,76 @@ overall_effect <- function(obj, alpha1, alpha2){
 #' @export
 #-----------------------------------------------------------------------------#
 
-calc_effect <- function(obj, alpha1, alpha2, trt.lvl1, trt.lvl2){
+calc_effect <- function(obj, 
+                        alpha1, trt.lvl1, 
+                        alpha2, trt.lvl2,
+                        effect,
+                        marginal,
+                        print = FALSE)
+{
   N <- obj[[1]]$summary$ngroups
   a1 <- alpha1
   a2 <- alpha2
   t1 <- trt.lvl1
   t2 <- trt.lvl2
   
-  pe <- obj$point_estimates$outcomes$contrasts$overall[a1, t1, a2, t2]
+  fff <- ifelse(marginal == TRUE, 'marginal_outcomes', 'outcomes')
+  
+  hold_oal <- obj$point_estimates[[fff]]$overall
+  U_hold_oal <- obj$Upart[[fff]]$overall 
+  U_hold_grp <- obj$Upart[[fff]]$groups
+  
+  if(effect == 'contrast'){
+    if(marginal == TRUE){
+      pe <- hold_oal[a1] - hold_oal[a2]
+      U_pe <- U_hold_oal[ ,a1] - U_hold_oal[ ,a2]
+      U_pe_grp <- U_hold_grp[ , ,a1] - U_hold_grp[ , ,a2]  
+      U_grp_diff <- t(U_pe - t(U_pe_grp))
+    } else {
+      pe <- hold_oal[a1, t1] - hold_oal[a2, t2]
+      U_pe <- U_hold_oal[ ,a1, t1] - U_hold_oal[ ,a2, t2]
+      U_pe_grp <- U_hold_grp[ , ,a1, t1] - U_hold_grp[ , ,a2, t2]  
+      U_grp_diff <- t(U_pe - t(U_pe_grp))
+    }
+  } 
+  else if(effect == 'outcome'){
+    if(marginal == TRUE){
+      pe <- hold_oal[a1]
+      U_pe <- U_hold_oal[ ,a1]
+      U_pe_grp <- U_hold_grp[ , ,a1]
+      U_grp_diff <- t(U_pe - t(U_pe_grp))
+    } else {
+      pe <- hold_oal[a1, t1]
+      U_pe <- U_hold_oal[ ,a1, t1]
+      U_pe_grp <- U_hold_grp[ , ,a1, t1]
+      U_grp_diff <- t(U_pe - t(U_pe_grp))
+    }
+  }
   
   ## VARIANCE ESTIMATION ####
-  bscores <- obj$bscores
   
-  V <- V_matrix(bscores, obj[[1]], a1, a2, t1, t2, 
-                effect = 'contrast', marginal = FALSE )
+  # V matrix
+  V <- V_matrix(Bscores = obj$bscores, ipw_obj = obj[[1]], 
+                alpha1 = a1, alpha2 = a2, 
+                trt.lvl1 = t1, trt.lvl2 = t2, 
+                effect = effect, marginal = marginal)
+
   
-  U21 <- apply(obj[[3]]$outcomes$contrasts$group_resid[a1, t1, a2, t2, , a1, t1, a2, t2, ], 
-               2, mean, na.rm = T)
+  U21 <- apply(U_grp_diff, 2, mean, na.rm = T)
   
   V21 <- V[dim(V)[1], 1:(dim(V)[2] - 1)]
   V11 <- V[1:(dim(V)[1] - 1), 1:(dim(V)[2] - 1)]
   V22 <- V[dim(V)[1], dim(V)[2]]
+ 
   ## VARIANCE Estimate
   ve <- ((U21 - 2*V21) %*% solve(V11) %*% U21 + V22)/N
   me <- 1.96 * sqrt(ve)
   
-  toprint <- paste0('Estimate: ', round(pe, 2), ' 95% CI: (', 
+  if(print == TRUE){
+    toprint <- paste0('Estimate: ', round(pe, 2), ' 95% CI: (', 
                 round(pe - me, 2), ', ', round(pe + me, 2), ')' )
-  
-  print(toprint)
+    print(toprint)
+  }
   
   out <- c(pe, ve, pe-me, pe+me)
   return(out)
@@ -90,8 +89,13 @@ calc_effect <- function(obj, alpha1, alpha2, trt.lvl1, trt.lvl2){
 #' @export
 #-----------------------------------------------------------------------------#
 
-direct_effect <- function(obj, alpha, trt.lvl1 = '0', trt.lvl2 = '1'){
-  out <- calc_effect(obj, alpha, alpha, trt.lvl1, trt.lvl2)
+direct_effect <- function(obj, alpha, 
+                          trt.lvl1 = '0', trt.lvl2 = '1',
+                          print = FALSE)
+{
+  out <- calc_effect(obj, alpha, trt.lvl1, alpha, trt.lvl2,
+                     effect = 'contrast', marginal = FALSE,
+                     print = print)
   return(out)
 }
 
@@ -103,21 +107,48 @@ direct_effect <- function(obj, alpha, trt.lvl1 = '0', trt.lvl2 = '1'){
 #' @export
 #-----------------------------------------------------------------------------#
 
-indirect_effect <- function(obj, alpha1, alpha2, trt.lvl = '0'){
-  out <- calc_effect(obj, alpha1, alpha2, trt.lvl, trt.lvl)
+indirect_effect <- function(obj, alpha1, alpha2, 
+                            trt.lvl = '0', 
+                            print = FALSE)
+{
+  out <- calc_effect(obj, alpha1, trt.lvl, alpha2, trt.lvl,
+                     effect = 'contrast', marginal = FALSE,
+                     print = print)
   return(out)
 }
 
 
 #-----------------------------------------------------------------------------#
-#' Calculate indirect effect estimates
+#' Calculate Total effect estimates
 #'  
 #' @param TBD
 #' @return TBD
 #' @export
 #-----------------------------------------------------------------------------#
 
-total_effect <- function(obj, alpha1, alpha2, trt.lvl1 = '0', trt.lvl2 = '1'){
-  out <- calc_effect(obj, alpha1, alpha2, trt.lvl1, trt.lvl2)
+total_effect <- function(obj, alpha1, alpha2, 
+                         trt.lvl1 = '0', trt.lvl2 = '1', 
+                         print = FALSE)
+{
+  out <- calc_effect(obj, alpha1, trt.lvl1, alpha2, trt.lvl2,
+                     effect = 'contrast', marginal = FALSE,
+                     print = print)
+  return(out)
+}
+
+#-----------------------------------------------------------------------------#
+#' Calculate Overall effect estimates
+#'  
+#' @param TBD
+#' @return TBD
+#' @export
+#-----------------------------------------------------------------------------#
+
+overall_effect <- function(obj, alpha1, alpha2, 
+                           print = FALSE)
+{
+  out <- calc_effect(obj, alpha1, trt.lvl1 = NA, alpha2, trt.lvl2 = NA,
+                     effect = 'contrast', marginal = TRUE,
+                     print = print)
   return(out)
 }

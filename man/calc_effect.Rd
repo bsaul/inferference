@@ -3,7 +3,8 @@
 \alias{calc_effect}
 \title{Calculate Effect estimates}
 \usage{
-calc_effect(obj, alpha1, alpha2, trt.lvl1, trt.lvl2)
+calc_effect(obj, alpha1, trt.lvl1, alpha2, trt.lvl2, effect, marginal,
+  print = FALSE)
 }
 \arguments{
 \item{TBD}{}
