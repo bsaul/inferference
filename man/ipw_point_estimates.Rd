@@ -3,8 +3,8 @@
 \alias{ipw_point_estimates}
 \title{Calculate IPW point estimates}
 \usage{
-ipw_point_estimates(y, G, A, B, data, weights, center.alpha,
-  rescale.factor = 1, set.NA.to.0 = TRUE)
+ipw_point_estimates(y, G, A, B, data, weights, rescale.factor = 1,
+  set.NA.to.0 = TRUE)
 }
 \arguments{
 \item{y}{vector of unweighted group means (i.e. output from \code{\link{group_means}}}

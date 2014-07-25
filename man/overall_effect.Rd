@@ -3,7 +3,7 @@
 \alias{overall_effect}
 \title{Calculate Overall effect estimates}
 \usage{
-overall_effect(obj, alpha1, alpha2, print = FALSE)
+overall_effect(obj, alpha1, alpha2, print = FALSE, conf.level = 0.95)
 }
 \arguments{
 \item{TBD}{}

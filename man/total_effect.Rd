@@ -4,7 +4,7 @@
 \title{Calculate Total effect estimates}
 \usage{
 total_effect(obj, alpha1, alpha2, trt.lvl1 = "0", trt.lvl2 = "1",
-  print = FALSE)
+  print = FALSE, conf.level = 0.95)
 }
 \arguments{
 \item{TBD}{}

@@ -11,13 +11,21 @@ calc_effect <- function(obj,
                         alpha2, trt.lvl2,
                         effect,
                         marginal,
+                        conf.level = 0.95,
                         print = FALSE)
 {
+  if(!(alpha1 %in% obj[[1]]$summary$alphas) | 
+     !(alpha2 %in% obj[[1]]$summary$alphas) ){
+    stop(paste('At least one of the chosen coverage levels has not been estimated.\n',
+               ' Select from the following: \n', 
+               paste(obj[[1]]$summary$alphas, collapse = ' ')))
+  }
+  
   N <- obj[[1]]$summary$ngroups
-  a1 <- alpha1
-  a2 <- alpha2
-  t1 <- trt.lvl1
-  t2 <- trt.lvl2
+  a1 <- as.character(alpha1)
+  a2 <- as.character(alpha2)
+  t1 <- as.character(trt.lvl1)
+  t2 <- as.character(trt.lvl2)
   
   fff <- ifelse(marginal == TRUE, 'marginal_outcomes', 'outcomes')
   
@@ -69,15 +77,19 @@ calc_effect <- function(obj,
  
   ## VARIANCE Estimate
   ve <- ((U21 - 2*V21) %*% solve(V11) %*% U21 + V22)/N
-  me <- 1.96 * sqrt(ve)
+  
+  ## CONFIDENCE INTERVALS
+  qq <- conf.level + (1 - conf.level)/2
+  
+  me <- qnorm(qq) * sqrt(ve)
   
   if(print == TRUE){
-    toprint <- paste0('Estimate: ', round(pe, 2), ' 95% CI: (', 
+    toprint <- paste0('Estimate: ', round(pe, 2), conf.level*100, '% CI: (', 
                 round(pe - me, 2), ', ', round(pe + me, 2), ')' )
     print(toprint)
   }
   
-  out <- c(pe, ve, pe-me, pe+me)
+  out <- data.frame(point = pe, variance = ve, ll = pe-me, ul = pe+me)
   return(out)
 }
 
@@ -91,11 +103,11 @@ calc_effect <- function(obj,
 
 direct_effect <- function(obj, alpha, 
                           trt.lvl1 = '0', trt.lvl2 = '1',
-                          print = FALSE)
+                          print = FALSE, conf.level = 0.95)
 {
   out <- calc_effect(obj, alpha, trt.lvl1, alpha, trt.lvl2,
                      effect = 'contrast', marginal = FALSE,
-                     print = print)
+                     print = print, conf.level = 0.95)
   return(out)
 }
 
@@ -109,11 +121,11 @@ direct_effect <- function(obj, alpha,
 
 indirect_effect <- function(obj, alpha1, alpha2, 
                             trt.lvl = '0', 
-                            print = FALSE)
+                            print = FALSE, conf.level = 0.95)
 {
   out <- calc_effect(obj, alpha1, trt.lvl, alpha2, trt.lvl,
                      effect = 'contrast', marginal = FALSE,
-                     print = print)
+                     print = print, conf.level = 0.95)
   return(out)
 }
 
@@ -128,11 +140,11 @@ indirect_effect <- function(obj, alpha1, alpha2,
 
 total_effect <- function(obj, alpha1, alpha2, 
                          trt.lvl1 = '0', trt.lvl2 = '1', 
-                         print = FALSE)
+                         print = FALSE, conf.level = 0.95)
 {
   out <- calc_effect(obj, alpha1, trt.lvl1, alpha2, trt.lvl2,
                      effect = 'contrast', marginal = FALSE,
-                     print = print)
+                     print = print, conf.level = 0.95)
   return(out)
 }
 
@@ -145,10 +157,10 @@ total_effect <- function(obj, alpha1, alpha2,
 #-----------------------------------------------------------------------------#
 
 overall_effect <- function(obj, alpha1, alpha2, 
-                           print = FALSE)
+                           print = FALSE, conf.level = 0.95)
 {
   out <- calc_effect(obj, alpha1, trt.lvl1 = NA, alpha2, trt.lvl2 = NA,
                      effect = 'contrast', marginal = TRUE,
-                     print = print)
+                     print = print, conf.level = 0.95)
   return(out)
 }

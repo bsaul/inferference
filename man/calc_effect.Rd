@@ -4,7 +4,7 @@
 \title{Calculate Effect estimates}
 \usage{
 calc_effect(obj, alpha1, trt.lvl1, alpha2, trt.lvl2, effect, marginal,
-  print = FALSE)
+  conf.level = 0.95, print = FALSE)
 }
 \arguments{
 \item{TBD}{}

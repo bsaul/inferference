@@ -3,7 +3,8 @@
 \alias{indirect_effect}
 \title{Calculate indirect effect estimates}
 \usage{
-indirect_effect(obj, alpha1, alpha2, trt.lvl = "0", print = FALSE)
+indirect_effect(obj, alpha1, alpha2, trt.lvl = "0", print = FALSE,
+  conf.level = 0.95)
 }
 \arguments{
 \item{TBD}{}
