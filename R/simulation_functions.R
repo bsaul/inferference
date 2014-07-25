@@ -87,18 +87,20 @@ sim_units <- function(N, n,
 po_y_i <- function(groupdt, theta){
   n <- groupdt$group_size[1]
   
-  out <- sapply(0:1, function(a){
-    t(sapply(0:(n-1), function(kk) {
-    alpha <- (a + kk)/n
-    X <- cbind(1, a, alpha, groupdt$X1, groupdt$X2, a*alpha)
-    p  <- plogis(X %*% theta)
-    sapply(p, function(pp) rbinom(1, 1, pp))
-    }))
-  }, simplify = 'array')
+  hold <- sapply(0:1, function(a) {
+           t(sapply(0:(n-1), function(kk) {
+             alpha <- (a + kk)/n
+             X <- cbind(1, a, alpha, groupdt$X1, groupdt$X2, a*alpha)
+             p <- plogis(X %*% theta)
+             sapply(p, function(pp) rbinom(1, 1, pp))
+           }))
+          }, simplify = 'array')
   
-  dimnames(out) <- list(id = groupdt$id, k = 0:(n-1), A = 0:1)
-
-  return(melt(out, value.name = 'Y'))
+  dimnames(hold) <- list(id = groupdt$id, k = 0:(n-1), A = 0:1)
+  
+  out <- cbind(melt(hold, value.name = 'Y'), n)
+  
+  return(out)
 }
 
 #-----------------------------------------------------------------------------#
@@ -109,7 +111,11 @@ po_y_i <- function(groupdt, theta){
 
 sim_po <- function(base_dt, theta){
   po <- rbind.fill(lapply(split(base_dt, base_dt$group), po_y_i, theta))
-  return(po)
+
+  # Merge group information back to potential outcomes
+  out <- merge(po, base_dt[ , c('id', 'group')], by = 'id')
+  
+  return(out)
 }
 
 #-----------------------------------------------------------------------------#
@@ -151,6 +157,52 @@ replicate_sims <- function(base_dt, potential.outcomes, nsims){
   for(sim in 1:nsims){
     out[[sim]] <- sim_data(base_dt, potential.outcomes)
   }
+  return(out)
+}
+
+#-----------------------------------------------------------------------------#
+#' TBD
+#' @export 
+#-----------------------------------------------------------------------------#
+
+estimands <- function(po, alpha){
+  
+  ybar_ij <- function(x, alpha){
+    sum(x$Y * choose(x$n-1, x$k) * .25^x$k * (1 - .25)^(x$n - x$k - 1))
+  }
+  
+  # ybar_ij(a, alpha)
+  ij.aalpha.hold <- ddply(po, .(group, id, A), ybar_ij, alpha = alpha)
+  
+  # ybar_i(a, alpha)
+  i.aalpha.hold <- ddply(ij.aalpha.hold, .(group, A), summarize,
+                         ybar_i_aalpha = mean(V1))
+  
+  # ybar_i(a, alpha)
+  aalpha.hold <- ddply(i.aalpha.hold, .(A), summarize,
+                       ybar_alpha = mean(ybar_i_aalpha))
+  
+  ## Marginals
+  # ybar_ij(alpha)
+  hold <- merge(ij.aalpha.hold[ij.aalpha.hold$A == 1, c('id', 'group', 'V1')], 
+                ij.aalpha.hold[ij.aalpha.hold$A == 0, c('id', 'group', 'V1')], 
+                by = c('id', 'group'), suffixes = c('1', '0'))
+  
+  hold$ybar_ij_alpha <- alpha*hold$V11 + (1 - alpha) * hold$V10
+  
+  # ybar_i(alpha)
+  i.alpha.hold <- ddply(hold, .(group), summarize, 
+                        ybar_i_alpha = mean(ybar_ij_alpha))
+  
+  # ybar(alpha)
+  alpha.hold <- mean(i.alpha.hold$ybar_i_alpha)
+  
+  out <- data.frame(alpha = alpha, 
+                    A0 = aalpha.hold[1, 2], 
+                    A1 = aalpha.hold[2, 2], 
+                    de = aalpha.hold[1, 2] - aalpha.hold[2, 2],
+                    marg = alpha.hold)
+  
   return(out)
 }
 
