@@ -142,7 +142,8 @@ sim_data <- function(base_dt, potential.outcomes){
   # Calculate k = # treated in hood i excluding subject j 
   sim_dt <- ddply(dt, .(group), mutate, k = sum(A) - A)
 
-  sim_dt <- merge(sim_dt, potential.outcomes, by=c('id', 'k', 'A'), all.x = T)
+  sim_dt <- merge(sim_dt, potential.outcomes[ , c('Y', 'id', 'k', 'A')], 
+                  by=c('id', 'k', 'A'), all.x = T)
   #return(sim_dt[c('id', 'X1', "X2", "A", 'B', 'hood', 'alpha', 'k')])
   return(sim_dt[c('id', 'Y', 'X1', "X2", "A", 'B', 'group')])
 }
@@ -168,7 +169,7 @@ replicate_sims <- function(base_dt, potential.outcomes, nsims){
 estimands <- function(po, alpha){
   
   ybar_ij <- function(x, alpha){
-    sum(x$Y * choose(x$n-1, x$k) * .25^x$k * (1 - .25)^(x$n - x$k - 1))
+    sum(x$Y * choose(x$n-1, x$k) * alpha^x$k * (1 - alpha)^(x$n - x$k - 1))
   }
   
   # ybar_ij(a, alpha)
