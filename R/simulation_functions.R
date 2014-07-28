@@ -201,9 +201,7 @@ estimands <- function(po, alpha){
   out <- data.frame(alpha = alpha, 
                     A0 = aalpha.hold[1, 2], 
                     A1 = aalpha.hold[2, 2], 
-                    de = aalpha.hold[1, 2] - aalpha.hold[2, 2],
                     marg = alpha.hold)
-  
   return(out)
 }
 
