@@ -3,16 +3,29 @@
 \alias{total_effect}
 \title{Calculate Total effect estimates}
 \usage{
-total_effect(obj, alpha1, alpha2, trt.lvl1 = "0", trt.lvl2 = "1",
+total_effect(obj, alpha1, alpha2, trt.lvl1 = 0, trt.lvl2 = 1,
   print = FALSE, conf.level = 0.95)
 }
 \arguments{
-\item{TBD}{}
+\item{obj}{the name of the object created by \code{\link{run_interference}}}
+
+\item{alpha1}{the allocation scheme for which to estimate total effects}
+
+\item{alpha2}{the allocation scheme for which to estimate total effects}
+
+\item{trt.lvl1}{Defaults to 0.}
+
+\item{trt.lvl2}{Defaults to 1.}
+
+\item{print}{see \code{\link{calc_effect}}}
+
+\item{conf.level}{see \code{\link{calc_effect}}}
 }
 \value{
-TBD
+See \code{\link{calc_effect}}.
 }
 \description{
-Calculate Total effect estimates
+By default, this function computes:
+\eqn{\hat{Y}(0, alpha1) - \hat{Y}(1, alpha2)}{Yhat(0, alpha1) - Yhat(1, alpha2)}
 }
 

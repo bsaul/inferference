@@ -3,16 +3,27 @@
 \alias{indirect_effect}
 \title{Calculate indirect effect estimates}
 \usage{
-indirect_effect(obj, alpha1, alpha2, trt.lvl = "0", print = FALSE,
+indirect_effect(obj, alpha1, alpha2, trt.lvl = 0, print = FALSE,
   conf.level = 0.95)
 }
 \arguments{
-\item{TBD}{}
+\item{obj}{the name of the object created by \code{\link{run_interference}}}
+
+\item{alpha1}{the allocation scheme for which to estimate indirect effects}
+
+\item{alpha2}{the allocation scheme for which to estimate indirect effects}
+
+\item{trt.lvl}{Defaults to 0.}
+
+\item{print}{see \code{\link{calc_effect}}}
+
+\item{conf.level}{see \code{\link{calc_effect}}}
 }
 \value{
-TBD
+See \code{\link{calc_effect}}.
 }
 \description{
-Calculate indirect effect estimates
+By default, this function computes:
+\eqn{\hat{Y}(0, alpha1) - \hat{Y}(0, alpha2)}{Yhat(0, alpha1) - Yhat(0, alpha2)}
 }
 

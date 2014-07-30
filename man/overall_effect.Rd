@@ -6,12 +6,21 @@
 overall_effect(obj, alpha1, alpha2, print = FALSE, conf.level = 0.95)
 }
 \arguments{
-\item{TBD}{}
+\item{obj}{the name of the object created by \code{\link{run_interference}}}
+
+\item{alpha1}{the allocation scheme for which to estimate overall effects}
+
+\item{alpha2}{the allocation scheme for which to estimate overall effects}
+
+\item{print}{see \code{\link{calc_effect}}}
+
+\item{conf.level}{see \code{\link{calc_effect}}}
 }
 \value{
-TBD
+See \code{\link{calc_effect}}.
 }
 \description{
-Calculate Overall effect estimates
+By default, this function computes:
+\eqn{\hat{Y}(alpha1) - \hat{Y}(lpha2)}{Yhat(alpha1) - Yhat(alpha2)}
 }
 
