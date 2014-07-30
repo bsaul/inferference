@@ -3,16 +3,32 @@
 \alias{run_interference}
 \title{Run Interference}
 \usage{
-run_interference(f.ab, alphas, data, groups, outcome, A, B, predictors,
-  type = "b", rescale.factor = 1)
+run_interference(f.ab, alphas, data, groups, outcome, treatment, B, predictors,
+  type = "c", rescale.factor = 1, ...)
 }
 \arguments{
-\item{predictors}{}
+\item{f.ab}{f.ab function to pass to the argument 'f' of \code{\link{integrate}}.}
+
+\item{alphas}{the allocation schemes for which to estimate effects. Must be in (0, 1].}
+
+\item{data}{the analysis data.frame}
+
+\item{groups}{quoted name of group variable in \code{data}}
+
+\item{outcome}{quoted name of outcome variable in \code{data}}
+
+\item{treatment}{quoted name of treatment variable in \code{data}}
+
+\item{predictors}{character vector of predictor variables in \code{data}}
+
+\item{type}{see \code{\link{wght_calc}}}
 }
 \value{
-N X length(theta) matrix of scores
+Returns a list of ..
 }
 \description{
-Run Interference
+Prepares the object necessary to compute IPW effect estimates with
+\code{\link{calc_effect}}, \code{\link{direct_effect}}, \code{\link{indirect_effect}},
+\code{\link{total_effect}}, or \code{\link{overall_effect}}.
 }
 
