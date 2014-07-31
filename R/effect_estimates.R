@@ -49,10 +49,13 @@ calc_effect <- function(obj,
                         conf.level = 0.95,
                         print = FALSE){
   
-  if(!(alpha1 %in% obj[[1]]$summary$alphas) | 
-     !(alpha2 %in% obj[[1]]$summary$alphas) ){
+  # Print error if either estimates with alpha1 have been computed 
+  # or a constrast is being estimated when estimates for alpha2
+  # have not been computed
+  if (!(alpha1 %in% obj[[1]]$summary$alphas) | 
+     (effect == 'contrast' & !(alpha2 %in% obj[[1]]$summary$alphas))){
     stop(paste('At least one of the chosen coverage levels has not been estimated.\n',
-               ' Select from the following: \n', 
+               'Select from the following: \n', 
                paste(obj[[1]]$summary$alphas, collapse = ' ')))
   }
   
