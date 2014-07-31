@@ -3,8 +3,8 @@
 \alias{ipw_estimates}
 \title{Create IPW estimates}
 \usage{
-ipw_estimates(y, G, A, B, data, weights, weight_dervs, bscores, predictors,
-  rescale.factor, set.NA.to.0 = TRUE)
+ipw_estimates(y, G, A, data, weights, weight_dervs, predictors, rescale.factor,
+  set.NA.to.0 = TRUE)
 }
 \arguments{
 \item{y}{vector of unweighted group means (i.e. output from \code{\link{group_means}}}

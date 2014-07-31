@@ -3,7 +3,7 @@
 \alias{ipw_point_estimates}
 \title{Calculate IPW point estimates}
 \usage{
-ipw_point_estimates(y, G, A, B, data, weights, rescale.factor = 1,
+ipw_point_estimates(y, G, A, data, weights, rescale.factor = 1,
   set.NA.to.0 = TRUE)
 }
 \arguments{

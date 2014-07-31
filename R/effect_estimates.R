@@ -46,6 +46,7 @@ calc_effect <- function(obj,
                         trt.lvl2 = NA,
                         effect,
                         marginal,
+                        rescale.factor = 1,
                         conf.level = 0.95,
                         print = FALSE){
   
@@ -101,11 +102,11 @@ calc_effect <- function(obj,
   ## VARIANCE ESTIMATION ####
   
   # V matrix
-  V <- V_matrix(Bscores = obj$bscores, ipw_obj = obj[[1]], 
+  V <- V_matrix(Bscores = obj$bscores, 
+                ipw_obj = obj$point_estimates, 
                 alpha1 = a1, alpha2 = a2, 
                 trt.lvl1 = t1, trt.lvl2 = t2, 
                 effect = effect, marginal = marginal)
-
   
   U21 <- apply(U_grp_diff, 2, mean, na.rm = T)
   
@@ -127,7 +128,10 @@ calc_effect <- function(obj,
     print(toprint)
   }
   
-  out <- data.frame(point = pe, variance = ve, ll = pe-me, ul = pe+me)
+  out <- data.frame(point = pe,
+                    variance = ve, 
+                    ll = pe - me, 
+                    ul = pe + me)
   return(out)
 }
 

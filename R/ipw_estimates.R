@@ -9,24 +9,22 @@
 #' @return length(alpha) vector of IPW estimates
 #' @export
 
-ipw_estimates <- function(y, G, A, B, data, weights, weight_dervs, bscores,
+ipw_estimates <- function(y, G, A, data, weights, weight_dervs,
                           predictors, rescale.factor, set.NA.to.0 = TRUE){
   
   # Point Estimates
-  points <- ipw_point_estimates(y = y, A = A, G = G, B = B, data = data,
+  points <- ipw_point_estimates(y = y, A = A, G = G, data = data,
                                 weights = weights, 
                                 rescale.factor = rescale.factor,
                                 set.NA.to.0 = set.NA.to.0)
 
   # Parts to Variance Estimates
-  Upart   <- ipw_point_estimates(y = y, A = A, G = G, B = B, data = data,
+  Upart   <- ipw_point_estimates(y = y, A = A, G = G, data = data,
                                  weights = weight_dervs, 
                                  rescale.factor = rescale.factor, 
                                  set.NA.to.0 = set.NA.to.0)
-  bscores <- bscores
 
   out <- list(point_estimates = points, 
-              bscores = bscores,
               Upart = Upart)
   return(out)
 }

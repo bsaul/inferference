@@ -13,12 +13,10 @@
 ipw_point_estimates <- function(y, 
                                 G, 
                                 A, 
-                                B, 
                                 data, 
                                 weights,
                                 rescale.factor = 1, 
-                                set.NA.to.0 = TRUE)
-  {
+                                set.NA.to.0 = TRUE){
   
   ## DEFINE OBJECTS NEEDED FOR FUNCTION ##
   out <- list()

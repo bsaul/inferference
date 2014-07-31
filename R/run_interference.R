@@ -48,20 +48,18 @@ run_interference <- function(f.ab,
                               A = treatment,
                               theta = theta_fit, type = type)
 
-  bscores_fit <- bscore_calc(predictors = predictors, B = B, G = groups,
-                             theta = theta_fit, data = data)
-
   ## GET ESTIMATES ##
 
   out <- ipw_estimates(y = outcome, 
                        G = groups, 
                        A = treatment, 
-                       B = B, 
                        data = data, 
                        weights = WT_fit, 
                        weight_dervs = WTa_fit, 
-                       bscores = bscores_fit,
                        predictors = predictors, 
                        rescale.factor = rescale.factor)
+  
+  out$bscores <- bscore_calc(predictors = predictors, B = B, G = groups,
+                             theta = theta_fit, data = data)
   return(out)
 }
