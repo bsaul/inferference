@@ -13,6 +13,9 @@
 #' @param treatment quoted name of treatment variable in \code{data}
 #' @param predictors character vector of predictor variables in \code{data}
 #' @param type see \code{\link{wght_calc}}
+#' @param propensityB
+#' @param family
+#' @param additional arguments passed to other functions. See \code{\link{glmer}}
 #' @return Returns a list of ..
 #' @export
 #-----------------------------------------------------------------------------#
@@ -23,43 +26,70 @@ run_interference <- function(f.ab,
                              groups,
                              outcome,
                              treatment, 
-                             B,
                              predictors,
                              type = 'c',
                              rescale.factor = 1,
-                             ...)
-{
-  ## FIT GLMER MODEL ##
-  form <- paste(B, '~',
+                             propensityB = treatment,
+                             family = binomial,
+                             ...){
+  #### FIT GLMER MODEL ####
+  form <- paste(propensityB, '~',
                 paste(predictors, collapse=' + '), 
                 '+ (1|', groups, ')')
-  fit <- glmer(form, data = data, family = binomial)
+  
+  glmer_args <- append(list(formula = form, data = data, family = family),
+                       get_args(FUN = glmer, ...))
+  
+  fit <- do.call(glmer, args = glmer_args)
   
   theta_fit <- c(fixef(fit), random.var = VarCorr(fit)[groups][[1]])
 
-  ## NECESSARY PIECES FOR ESTIMATION ##
-
-  WT_fit <- wght_matrix(f.ab = f.ab, alphas = alphas, data = data,
-                        groups = groups, predictors = predictors, A = treatment,
-                        theta = theta_fit, type = type)
-
-  WTa_fit <- wght_deriv_array(f.ab = f.ab, alphas = alphas, data = data,
-                              groups = groups, predictors = predictors, 
-                              A = treatment,
-                              theta = theta_fit, type = type)
+  #### COMPUTE NECESSARY PIECES FOR ESTIMATION ####
+  f.ab <- match.fun(f.ab)
+  weight_args <- append(list(f.ab = f.ab, 
+                             alphas = alphas, 
+                             data = data,
+                             groups = groups, 
+                             predictors = predictors, 
+                             treatment = treatment,
+                             theta = theta_fit, 
+                             type = type),
+                        get_args(FUN = f.ab, ...))
+  
+  weights <- do.call(wght_matrix, args = weight_args)
+  weightd <- do.call(wght_deriv_array, args = weight_args)
+  
+  print(head(weights))
 
   ## GET ESTIMATES ##
-
-  out <- ipw_estimates(y = outcome, 
-                       G = groups, 
-                       A = treatment, 
-                       data = data, 
-                       weights = WT_fit, 
-                       weight_dervs = WTa_fit, 
-                       predictors = predictors, 
-                       rescale.factor = rescale.factor)
+  estimate_args <- append(list(y = outcome, 
+                               G = groups, 
+                               A = treatment, 
+                               data = data,
+                               rescale.factor = rescale.factor),
+                          get_args(FUN = ipw_point_estimates, ...))
   
-  out$bscores <- bscore_calc(predictors = predictors, B = B, G = groups,
-                             theta = theta_fit, data = data)
+  out <- list()
+  args1 <- append(estimate_args, list(weights = weights))
+  args2 <- append(estimate_args, list(weights = weightd))
+  print(names(args1))
+  
+  out$point_estimates <- do.call(ipw_point_estimates, args = args1)
+  out$Upart  <- do.call(ipw_point_estimates, args = args2)
+  
+#   out <- ipw_estimates(y = outcome, 
+#                        G = groups, 
+#                        A = treatment, 
+#                        data = data, 
+#                        weights = weights, 
+#                        weight_dervs = weightd, 
+#                        predictors = predictors, 
+#                        rescale.factor = rescale.factor)
+  
+  out$bscores <- bscore_calc(predictors = predictors, 
+                             B = propensityB, 
+                             G = groups,
+                             theta = theta_fit, 
+                             data = data)
   return(out)
 }
