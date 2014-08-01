@@ -18,18 +18,17 @@ wght_deriv_array <- function(f.ab,
                              data, 
                              groups, 
                              predictors, 
-                             A, 
+                             treatment, 
                              theta, 
                              type, 
-                             ...)
-{
+                             ...){
   
   # Make sure alphas are sorted
   alphas <- sort(alphas)
   
   G <- factor(data[, groups])
   X <- cbind(1, data[, predictors])
-  A <- data[, A]
+  A <- data[, treatment]
   p <- ncol(X)
   N <- length(unique(G))
   k <- length(alphas) 

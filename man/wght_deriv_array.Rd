@@ -3,7 +3,8 @@
 \alias{wght_deriv_array}
 \title{Create an array of group weight derivative}
 \usage{
-wght_deriv_array(f.ab, alphas, data, groups, predictors, A, theta, type, ...)
+wght_deriv_array(f.ab, alphas, data, groups, predictors, treatment, theta, type,
+  ...)
 }
 \arguments{
 \item{alphas}{coverage levels in (0, 1), possibly (probably) vector valued}

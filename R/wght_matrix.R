@@ -20,8 +20,15 @@
 #' @return a length(unique(group)) X length(alphas) matrix of group weights 
 #' @export
 
-wght_matrix <- function(f.ab, alphas, data, groups, predictors, A, 
-                        theta, type, ...){
+wght_matrix <- function(f.ab, 
+                        alphas, 
+                        data, 
+                        groups, 
+                        predictors, 
+                        treatment, 
+                        theta, 
+                        type, 
+                        ...){
   
   # Make sure alphas are sorted
   alphas <- sort(alphas)
@@ -29,7 +36,7 @@ wght_matrix <- function(f.ab, alphas, data, groups, predictors, A,
   G <- data[, groups]
   X <- cbind(1, data[, predictors])
   p <- ncol(X)
-  A <- data[, A]
+  A <- data[, treatment]
   
   w.list <- lapply(alphas, function(alpha){
     w <- by(cbind(X, A), INDICES = G, simplify = TRUE, 

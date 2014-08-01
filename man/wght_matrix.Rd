@@ -3,7 +3,7 @@
 \alias{wght_matrix}
 \title{Create a matrix of group weights}
 \usage{
-wght_matrix(f.ab, alphas, data, groups, predictors, A, theta, type, ...)
+wght_matrix(f.ab, alphas, data, groups, predictors, treatment, theta, type, ...)
 }
 \arguments{
 \item{alphas}{coverage levels in (0, 1), possibly (probably) vector valued}

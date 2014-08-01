@@ -4,7 +4,7 @@
 \title{Calculate IPW estimates}
 \usage{
 calc_effect(obj, alpha1, trt.lvl1, alpha2 = NA, trt.lvl2 = NA, effect,
-  marginal, conf.level = 0.95, print = FALSE)
+  marginal, rescale.factor = 1, conf.level = 0.95, print = FALSE)
 }
 \arguments{
 \item{obj}{the name of the object created by \code{\link{run_interference}}}
