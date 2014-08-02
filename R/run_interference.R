@@ -59,37 +59,27 @@ run_interference <- function(f.ab,
   weights <- do.call(wght_matrix, args = weight_args)
   weightd <- do.call(wght_deriv_array, args = weight_args)
   
-  print(head(weights))
-
-  ## GET ESTIMATES ##
+  #### COMPUTE ESTIMATES AND OUTPUT ####
   estimate_args <- append(list(y = outcome, 
                                G = groups, 
                                A = treatment, 
                                data = data,
                                rescale.factor = rescale.factor),
                           get_args(FUN = ipw_point_estimates, ...))
-  
-  out <- list()
   args1 <- append(estimate_args, list(weights = weights))
   args2 <- append(estimate_args, list(weights = weightd))
-  print(names(args1))
   
-  out$point_estimates <- do.call(ipw_point_estimates, args = args1)
-  out$Upart  <- do.call(ipw_point_estimates, args = args2)
-  
-#   out <- ipw_estimates(y = outcome, 
-#                        G = groups, 
-#                        A = treatment, 
-#                        data = data, 
-#                        weights = weights, 
-#                        weight_dervs = weightd, 
-#                        predictors = predictors, 
-#                        rescale.factor = rescale.factor)
-  
-  out$bscores <- bscore_calc(predictors = predictors, 
+  bscore_args <- append(list(predictors = predictors,
                              B = propensityB, 
                              G = groups,
                              theta = theta_fit, 
-                             data = data)
+                             data = data),
+                        get_args(FUN = bscore_calc, ...))
+ 
+  out <- list()
+  out$point_estimates <- do.call(ipw_point_estimates, args = args1)
+  out$Upart  <- do.call(ipw_point_estimates, args = args2)
+  out$bscores <- do.call(bscore_calc, args = bscore_args)
+
   return(out)
 }
