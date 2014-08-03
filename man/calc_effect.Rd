@@ -25,6 +25,8 @@ If marginal = TRUE or effect = 'outcome', this is ignored.}
 
 \item{marginal}{TRUE or FALSE}
 
+\item{rescale.factor}{factor by which to rescale values. Defaults to 1.}
+
 \item{conf.level}{Confidence level for confidence intervals. Defaults to 0.95.}
 
 \item{print}{TRUE/FALSE. If TRUE, the point estimates and confidence interval

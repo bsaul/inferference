@@ -3,7 +3,8 @@
 \alias{overall_effect}
 \title{Calculate Overall effect estimates}
 \usage{
-overall_effect(obj, alpha1, alpha2, print = FALSE, conf.level = 0.95)
+overall_effect(obj, alpha1, alpha2, print = FALSE, rescale.factor = 1,
+  conf.level = 0.95)
 }
 \arguments{
 \item{obj}{the name of the object created by \code{\link{run_interference}}}
@@ -11,6 +12,8 @@ overall_effect(obj, alpha1, alpha2, print = FALSE, conf.level = 0.95)
 \item{alpha1}{the allocation scheme for which to estimate overall effects}
 
 \item{alpha2}{the allocation scheme for which to estimate overall effects}
+
+\item{rescale.factor}{factor by which to rescale values. Defaults to 1.}
 
 \item{print}{see \code{\link{calc_effect}}}
 

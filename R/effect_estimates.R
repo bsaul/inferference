@@ -30,6 +30,7 @@
 #' If marginal = TRUE or effect = 'outcome', this is ignored.
 #' @param effect either 'contrast' or 'outcome'
 #' @param marginal TRUE or FALSE
+#' @param rescale.factor factor by which to rescale values. Defaults to 1.
 #' @param conf.level Confidence level for confidence intervals. Defaults to 0.95.
 #' @param print TRUE/FALSE. If TRUE, the point estimates and confidence interval
 #' are printed to the console. 
@@ -115,16 +116,19 @@ calc_effect <- function(obj,
   V22 <- V[dim(V)[1], dim(V)[2]]
  
   ## VARIANCE Estimate
-  ve <- ((U21 - 2*V21) %*% solve(V11) %*% U21 + V22)/N
+  ve <- ((U21 - 2*V21) %*% solve(V11) %*% U21 + V22)/N * rescale.factor^2
   
   ## CONFIDENCE INTERVALS
   qq <- conf.level + (1 - conf.level)/2
   
   me <- qnorm(qq) * sqrt(ve)
   
+  pe <- pe * rescale.factor
+  
   if(print == TRUE){
-    toprint <- paste0('Estimate: ', round(pe, 2), conf.level*100, '% CI: (', 
-                round(pe - me, 2), ', ', round(pe + me, 2), ')' )
+    toprint <- paste0('Estimate: ', round(pe, 2),
+                      conf.level*100, '% CI: (', 
+                      round(pe - me, 2), ', ', round(pe + me, 2), ')' )
     print(toprint)
   }
   
@@ -145,6 +149,7 @@ calc_effect <- function(obj,
 #' @param alpha the allocation scheme for which to estimate direct effects
 #' @param trt.lvl1 Defaults to 0.
 #' @param trt.lvl2 Defaults to 1.
+#' @param rescale.factor factor by which to rescale values. Defaults to 1.
 #' @param print see \code{\link{calc_effect}}
 #' @param conf.level see \code{\link{calc_effect}}
 #' @return See \code{\link{calc_effect}}.
@@ -156,10 +161,12 @@ direct_effect <- function(obj,
                           trt.lvl1 = 0, 
                           trt.lvl2 = 1,
                           print = FALSE, 
-                          conf.level = 0.95){
+                          conf.level = 0.95,
+                          rescale.factor = 1){
   out <- calc_effect(obj, alpha, trt.lvl1, alpha, trt.lvl2,
                      effect = 'contrast', marginal = FALSE,
-                     print = print, conf.level = conf.level)
+                     print = print, conf.level = conf.level,
+                     rescale.factor = rescale.factor)
   return(out)
 }
 
@@ -169,11 +176,11 @@ direct_effect <- function(obj,
 #' @description By default, this function computes:
 #' \eqn{\hat{Y}(0, alpha1) - \hat{Y}(0, alpha2)}{Yhat(0, alpha1) - Yhat(0, alpha2)}
 #'  
-#'  
 #' @param obj the name of the object created by \code{\link{run_interference}}
 #' @param alpha1 the allocation scheme for which to estimate indirect effects
 #' @param alpha2 the allocation scheme for which to estimate indirect effects
 #' @param trt.lvl Defaults to 0.
+#' @param rescale.factor factor by which to rescale values. Defaults to 1.
 #' @param print see \code{\link{calc_effect}}
 #' @param conf.level see \code{\link{calc_effect}}
 #' @return See \code{\link{calc_effect}}.
@@ -185,11 +192,13 @@ indirect_effect <- function(obj,
                             alpha2, 
                             trt.lvl = 0, 
                             print = FALSE, 
+                            rescale.factor = 1,
                             conf.level = 0.95){
   
   out <- calc_effect(obj, alpha1, trt.lvl, alpha2, trt.lvl,
                      effect = 'contrast', marginal = FALSE,
-                     print = print, conf.level = conf.level)
+                     print = print, conf.level = conf.level,
+                     rescale.factor = rescale.factor)
   return(out)
 }
 
@@ -204,6 +213,7 @@ indirect_effect <- function(obj,
 #' @param alpha2 the allocation scheme for which to estimate total effects
 #' @param trt.lvl1 Defaults to 0.
 #' @param trt.lvl2 Defaults to 1.
+#' @param rescale.factor factor by which to rescale values. Defaults to 1.
 #' @param print see \code{\link{calc_effect}}
 #' @param conf.level see \code{\link{calc_effect}}
 #' @return See \code{\link{calc_effect}}.
@@ -216,11 +226,13 @@ total_effect <- function(obj,
                          trt.lvl1 = 0, 
                          trt.lvl2 = 1, 
                          print = FALSE, 
+                         rescale.factor = 1,
                          conf.level = 0.95){
   
   out <- calc_effect(obj, alpha1, trt.lvl1, alpha2, trt.lvl2,
                      effect = 'contrast', marginal = FALSE,
-                     print = print, conf.level = conf.level)
+                     print = print, conf.level = conf.level,
+                     rescale.factor = rescale.factor)
   return(out)
 }
 
@@ -233,6 +245,7 @@ total_effect <- function(obj,
 #' @param obj the name of the object created by \code{\link{run_interference}}
 #' @param alpha1 the allocation scheme for which to estimate overall effects
 #' @param alpha2 the allocation scheme for which to estimate overall effects
+#' @param rescale.factor factor by which to rescale values. Defaults to 1.
 #' @param print see \code{\link{calc_effect}}
 #' @param conf.level see \code{\link{calc_effect}}
 #' @return See \code{\link{calc_effect}}.
@@ -243,10 +256,12 @@ overall_effect <- function(obj,
                            alpha1, 
                            alpha2, 
                            print = FALSE, 
+                           rescale.factor = 1,
                            conf.level = 0.95){
   
   out <- calc_effect(obj, alpha1, trt.lvl1 = NA, alpha2, trt.lvl2 = NA,
                      effect = 'contrast', marginal = TRUE,
-                     print = print, conf.level = conf.level)
+                     print = print, conf.level = conf.level,
+                     rescale.factor = rescale.factor)
   return(out)
 }

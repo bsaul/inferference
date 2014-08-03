@@ -4,7 +4,7 @@
 \title{Calculate Total effect estimates}
 \usage{
 total_effect(obj, alpha1, alpha2, trt.lvl1 = 0, trt.lvl2 = 1,
-  print = FALSE, conf.level = 0.95)
+  print = FALSE, rescale.factor = 1, conf.level = 0.95)
 }
 \arguments{
 \item{obj}{the name of the object created by \code{\link{run_interference}}}
@@ -16,6 +16,8 @@ total_effect(obj, alpha1, alpha2, trt.lvl1 = 0, trt.lvl2 = 1,
 \item{trt.lvl1}{Defaults to 0.}
 
 \item{trt.lvl2}{Defaults to 1.}
+
+\item{rescale.factor}{factor by which to rescale values. Defaults to 1.}
 
 \item{print}{see \code{\link{calc_effect}}}
 

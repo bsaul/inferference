@@ -4,8 +4,7 @@
 \title{Run Interference}
 \usage{
 run_interference(f.ab, alphas, data, groups, outcome, treatment, predictors,
-  type = "c", rescale.factor = 1, propensityB = treatment,
-  family = binomial, ...)
+  type = "c", propensityB = treatment, family = binomial, ...)
 }
 \arguments{
 \item{f.ab}{f.ab function to pass to the argument 'f' of \code{\link{integrate}}.}

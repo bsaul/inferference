@@ -4,7 +4,7 @@
 \title{Calculate Direct Effect estimates}
 \usage{
 direct_effect(obj, alpha, trt.lvl1 = 0, trt.lvl2 = 1, print = FALSE,
-  conf.level = 0.95)
+  conf.level = 0.95, rescale.factor = 1)
 }
 \arguments{
 \item{obj}{the name of the object created by \code{\link{run_interference}}}
@@ -14,6 +14,8 @@ direct_effect(obj, alpha, trt.lvl1 = 0, trt.lvl2 = 1, print = FALSE,
 \item{trt.lvl1}{Defaults to 0.}
 
 \item{trt.lvl2}{Defaults to 1.}
+
+\item{rescale.factor}{factor by which to rescale values. Defaults to 1.}
 
 \item{print}{see \code{\link{calc_effect}}}
 

@@ -4,7 +4,6 @@
 #' @param y vector of unweighted group means (i.e. output from \code{\link{group_means}}
 #' @param a treatment level (0,1) for which to compute weights. Defaults to NULL which returns marginal.
 #' @param weights weight matrix/array to use
-#' @param rescale.factor factor by which to rescale values. Defaults to 1.
 #' @param na.rm exclude groups missing weights? defaults to FALSE.
 #' @return length(alpha) vector of IPW estimates
 #' @export
@@ -15,7 +14,6 @@ ipw_point_estimates <- function(y,
                                 A, 
                                 data, 
                                 weights,
-                                rescale.factor = 1, 
                                 set.NA.to.0 = TRUE){
   
   ## DEFINE OBJECTS NEEDED FOR FUNCTION ##
@@ -53,7 +51,7 @@ ipw_point_estimates <- function(y,
   ## CALCULATE MARGINAL ESTIMATES ####
   ybar <- group_means(Y = y, A = A, G = G, a = NA, data = data)
   
-  grp_est <- apply(weights, 2:3, function(x) x * ybar) * rescale.factor
+  grp_est <- apply(weights, 2:3, function(x) x * ybar) 
   dimnames(grp_est) <- list(groups, predictors, alphas)
   
   oa_est <- apply(grp_est, 2:3, mean, na.rm = TRUE)
@@ -94,7 +92,7 @@ ipw_point_estimates <- function(y,
     #weights_trt <- t(t(weights)/((alphas^a*(1-alphas)^(1-a))))
     
     # Compute estimates
-    grp_est <- apply(weights_trt, 2:3, function(x) x * ybar_trt) * rescale.factor
+    grp_est <- apply(weights_trt, 2:3, function(x) x * ybar_trt) 
     oal_est <- apply(grp_est, 2:3, mean, na.rm = TRUE)
     
     hold_grp[ , , , ll] <- grp_est

@@ -28,7 +28,6 @@ run_interference <- function(f.ab,
                              treatment, 
                              predictors,
                              type = 'c',
-                             rescale.factor = 1,
                              propensityB = treatment,
                              family = binomial,
                              ...){
@@ -63,8 +62,7 @@ run_interference <- function(f.ab,
   estimate_args <- append(list(y = outcome, 
                                G = groups, 
                                A = treatment, 
-                               data = data,
-                               rescale.factor = rescale.factor),
+                               data = data),
                           get_args(FUN = ipw_point_estimates, ...))
   args1 <- append(estimate_args, list(weights = weights))
   args2 <- append(estimate_args, list(weights = weightd))
