@@ -4,7 +4,8 @@
 \title{Run Interference}
 \usage{
 run_interference(f.ab, alphas, data, groups, outcome, treatment, predictors,
-  type = "c", propensityB = treatment, family = binomial, ...)
+  type = "c", propensityB = treatment, family = binomial,
+  theta_known = NULL, ...)
 }
 \arguments{
 \item{f.ab}{f.ab function to pass to the argument 'f' of \code{\link{integrate}}.}
@@ -23,9 +24,14 @@ run_interference(f.ab, alphas, data, groups, outcome, treatment, predictors,
 
 \item{type}{see \code{\link{wght_calc}}}
 
-\item{propensityB}{}
+\item{propensityB.}{Defaults to \code{treatment}}
 
-\item{family}{}
+\item{family}{passed to \code{\link{glmer}}. See \code{\link{family}}}
+
+\item{theta_known}{if the parameter vector is known (e.g. for simulated data),
+this argument can be used to pass the known parameters to \code{\link{wght_calc}}
+and related functions. If this argument is given, fixed effect parameter estimation
+is skipped. Defaults to NULL.}
 
 \item{additional}{arguments passed to other functions. See \code{\link{glmer}}}
 }

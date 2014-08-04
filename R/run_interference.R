@@ -13,8 +13,12 @@
 #' @param treatment quoted name of treatment variable in \code{data}
 #' @param predictors character vector of predictor variables in \code{data}
 #' @param type see \code{\link{wght_calc}}
-#' @param propensityB
-#' @param family
+#' @param propensityB. Defaults to \code{treatment}
+#' @param family passed to \code{\link{glmer}}. See \code{\link{family}}
+#' @param theta_known if the parameter vector is known (e.g. for simulated data), 
+#' this argument can be used to pass the known parameters to \code{\link{wght_calc}} 
+#' and related functions. If this argument is given, fixed effect parameter estimation
+#' is skipped. Defaults to NULL.
 #' @param additional arguments passed to other functions. See \code{\link{glmer}}
 #' @return Returns a list of ..
 #' @export
@@ -30,18 +34,24 @@ run_interference <- function(f.ab,
                              type = 'c',
                              propensityB = treatment,
                              family = binomial,
+                             theta_known = NULL,
                              ...){
-  #### FIT GLMER MODEL ####
-  form <- paste(propensityB, '~',
-                paste(predictors, collapse=' + '), 
-                '+ (1|', groups, ')')
   
-  glmer_args <- append(list(formula = form, data = data, family = family),
-                       get_args(FUN = glmer, ...))
-  
-  fit <- do.call(glmer, args = glmer_args)
-  
-  theta_fit <- c(fixef(fit), random.var = VarCorr(fit)[groups][[1]])
+  if (is.null(theta_known)){
+    #### FIT GLMER MODEL ####
+    form <- paste(propensityB, '~',
+                  paste(predictors, collapse=' + '), 
+                  '+ (1|', groups, ')')
+    
+    glmer_args <- append(list(formula = form, data = data, family = family),
+                         get_args(FUN = glmer, ...))
+    
+    fit <- do.call(glmer, args = glmer_args)
+    
+    theta_fit <- c(fixef(fit), random.var = VarCorr(fit)[groups][[1]])
+  } else {
+    theta_fit <- theta_known
+  }
 
   #### COMPUTE NECESSARY PIECES FOR ESTIMATION ####
   f.ab <- match.fun(f.ab)
