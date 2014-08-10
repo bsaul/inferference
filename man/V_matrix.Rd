@@ -3,7 +3,7 @@
 \alias{V_matrix}
 \title{V Matrix}
 \usage{
-V_matrix(Bscores, ipw_obj, alpha1, alpha2, trt.lvl1 = NULL, trt.lvl2 = NULL,
+V_matrix(Bscores, ipw_obj, alpha1, trt.lvl1, alpha2 = NA, trt.lvl2 = NA,
   effect, marginal, set.NA.to.0 = TRUE)
 }
 \arguments{

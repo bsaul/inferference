@@ -19,7 +19,7 @@ lik_integrand <- function(b, theta, B, X, x, pos){
   ans <- dbinom(B, 1, p)
   
   ans <- apply(ans, 2, prod)
-  return(ans * dnorm(b, 0, theta[length(theta)]))
+  return(ans * dnorm(b, 0, sqrt(theta[length(theta)])))
 }
 
 #' Log Likelihood 

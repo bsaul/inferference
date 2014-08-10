@@ -11,18 +11,24 @@
 #-----------------------------------------------------------------------------#
 
 bscore_calc <- function(predictors, B, G, theta, data){
-  N <- length(unique(data[, G]))
-  
+
   if(length(theta) != (length(predictors) + 2)){
     stop("The length of theta is not equal to the number of predictors + 2 ")
   }
   
-  out <- matrix(nrow = N, ncol = length(theta))  
-  for(ii in 1:N){
-    grp <- data[data$group == ii, ]
-    X <- as.matrix(cbind(1, grp[, predictors]))
-    out[ii, ] <- cmp_scores_ll(theta = theta, B = grp[ , B], X = X)
-  }
+  dd <- data[order(as.numeric(data[, G])), ]  
+  X <- cbind(1, dd[, c(predictors, B)])
+  p <- length(theta) - 1
   
+  b.list <- by(X, INDICES = dd[, G], simplify = TRUE, 
+               FUN = function(x) {
+               x <- as.matrix(x) # PrAX expects a matrix
+               cmp_scores_ll(theta = theta, 
+                             B = x[ , (p + 1)], 
+                             X = x[ , 1:p]) })
+
+  out <- matrix(unlist(b.list), ncol = p + 1, byrow = TRUE,
+                     dimnames = list(sort(unique(data[ , G])), 
+                                     names(theta)))
   return(out)
 }
