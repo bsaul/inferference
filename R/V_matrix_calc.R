@@ -12,8 +12,8 @@ V_matrix <- function(Bscores,
                      trt.lvl1, 
                      alpha2   = NA, 
                      trt.lvl2 = NA, 
-                     effect, marginal,
-                     set.NA.to.0  = TRUE){
+                     effect, 
+                     marginal){
 
   N <- dim(Bscores)[1]
   p <- dim(Bscores)[2]
@@ -21,11 +21,6 @@ V_matrix <- function(Bscores,
   a2 <- alpha2
   t1 <- trt.lvl1
   t2 <- trt.lvl2
-  
-  ## replace any Bscores with 0 ##
-  if(set.NA.to.0 == TRUE) {
-    Bscores[is.na(Bscores)] <- 0
-  }
   
   fff <- ifelse(marginal == TRUE, 'marginal_outcomes', 'outcomes')
   

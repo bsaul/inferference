@@ -10,7 +10,12 @@
 #' @export
 #-----------------------------------------------------------------------------#
 
-bscore_calc <- function(predictors, B, G, theta, data){
+bscore_calc <- function(predictors, 
+                        B, 
+                        G, 
+                        theta, 
+                        data,
+                        set.NA.to.0 = TRUE){
 
   if(length(theta) != (length(predictors) + 2)){
     stop("The length of theta is not equal to the number of predictors + 2 ")
@@ -30,5 +35,10 @@ bscore_calc <- function(predictors, B, G, theta, data){
   out <- matrix(unlist(b.list), ncol = p + 1, byrow = TRUE,
                      dimnames = list(sort(unique(data[ , G])), 
                                      names(theta)))
+  ## replace any Bscores with 0 ##
+  if(set.NA.to.0 == TRUE) {
+    out[is.na(out)] <- 0
+  }
+  
   return(out)
 }
