@@ -3,7 +3,7 @@
 \alias{get_args}
 \title{Get Arguments}
 \usage{
-get_args(FUN, ...)
+get_args(FUN, args_list = NULL, ...)
 }
 \arguments{
 \item{FUN}{function for which to find arguments}

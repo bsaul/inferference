@@ -4,7 +4,7 @@
 \title{V Matrix}
 \usage{
 V_matrix(Bscores, ipw_obj, alpha1, trt.lvl1, alpha2 = NA, trt.lvl2 = NA,
-  effect, marginal, set.NA.to.0 = TRUE)
+  effect, marginal)
 }
 \arguments{
 \item{predictors}{}

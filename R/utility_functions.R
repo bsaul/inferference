@@ -11,8 +11,8 @@
 #' myargs <- get_args(lm, formula = Sepal.Length ~ Sepal.Width, data = iris )
 #' summary(do.call('lm', myargs))
 
-get_args <- function(FUN, ...){
-  dots <- list(...)
+get_args <- function(FUN, args_list = NULL, ...){
+  dots <- append(args_list, list(...))
   arg_names <- names(formals(FUN))
   
   args <- dots[arg_names]

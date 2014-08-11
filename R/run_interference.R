@@ -36,6 +36,7 @@ run_interference <- function(f.ab,
                              family = binomial,
                              theta_known = NULL,
                              ...){
+  dots <- list(...)
   
   if (is.null(theta_known)){
     #### FIT GLMER MODEL ####
@@ -44,7 +45,7 @@ run_interference <- function(f.ab,
                   '+ (1|', groups, ')')
     
     glmer_args <- append(list(formula = form, data = data, family = family),
-                         get_args(FUN = glmer, ...))
+                         get_args(FUN = glmer, args_list = dots))
     
     fit <- do.call(glmer, args = glmer_args)
     
@@ -63,7 +64,7 @@ run_interference <- function(f.ab,
                              treatment = treatment,
                              theta = theta_fit, 
                              type = type),
-                        get_args(FUN = f.ab, ...))
+                        get_args(FUN = f.ab, args_list = dots))
   
   weights <- do.call(wght_matrix, args = weight_args)
   weightd <- do.call(wght_deriv_array, args = weight_args)
@@ -73,7 +74,7 @@ run_interference <- function(f.ab,
                                G = groups, 
                                A = treatment, 
                                data = data),
-                          get_args(FUN = ipw_point_estimates, ...))
+                          get_args(FUN = ipw_point_estimates, args_list = dots))
   args1 <- append(estimate_args, list(weights = weights))
   args2 <- append(estimate_args, list(weights = weightd))
   
@@ -82,8 +83,8 @@ run_interference <- function(f.ab,
                              G = groups,
                              theta = theta_fit, 
                              data = data),
-                        get_args(FUN = bscore_calc, ...))
- 
+                        get_args(FUN = bscore_calc, args_list = dots))
+
   out <- list()
   out$point_estimates <- do.call(ipw_point_estimates, args = args1)
   out$Upart  <- do.call(ipw_point_estimates, args = args2)
