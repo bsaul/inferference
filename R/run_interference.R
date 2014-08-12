@@ -34,12 +34,16 @@ run_interference <- function(f.ab,
                              type = 'c',
                              propensityB = treatment,
                              family = binomial,
-                             theta_known = NULL,
+                             known_params = NULL,
                              ...){
+  ## Necessary bits ##
   dots <- list(...)
   
-  if (is.null(theta_known)){
-    #### FIT GLMER MODEL ####
+  ## Reorder data frame by groups ##
+  data <- data[order(data[ , groups]), ]
+  
+  #### Unless parameter values are provided, use glmer() for estimates ####
+  if (is.null(known_params)){
     form <- paste(propensityB, '~',
                   paste(predictors, collapse=' + '), 
                   '+ (1|', groups, ')')
@@ -51,7 +55,7 @@ run_interference <- function(f.ab,
     
     theta_fit <- c(fixef(fit), random.var = VarCorr(fit)[groups][[1]])
   } else {
-    theta_fit <- theta_known
+    theta_fit <- known_params
   }
 
   #### COMPUTE NECESSARY PIECES FOR ESTIMATION ####
@@ -85,7 +89,21 @@ run_interference <- function(f.ab,
                              data = data),
                         get_args(FUN = bscore_calc, args_list = dots))
 
+  #### Prepare output ####
   out <- list()
+  
+  ## Summary ##
+  trt_lvls <- sort(unique(data[, treatment]))
+  N <- length(unique(groups))
+  k <- length(alphas)
+  l <- length(trt_lvls)
+  
+  out$summary <- list(ngroups = N, 
+                      nalphas = k,
+                      alphas = alphas,
+                      ntreatments = l,
+                      treatments = trt_lvls,
+                      predictors = predictors)  
   out$point_estimates <- do.call(ipw_point_estimates, args = args1)
   out$Upart   <- do.call(ipw_point_estimates, args = args2)
   out$bscores <- do.call(bscore_calc, args = bscore_args)

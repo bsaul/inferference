@@ -3,16 +3,16 @@
 \alias{group_means}
 \title{Calculate outcome means per group per treatment level}
 \usage{
-group_means(Y, A, G, a, data)
+group_means(Y, A, G, a = NA, data)
 }
 \arguments{
 \item{Y}{name (character vector) of observed outcomes in data}
 
-\item{A}{treatment levels}
+\item{A}{name of treatment variable}
 
-\item{G}{}
+\item{G}{name of grouping variable in data}
 
-\item{a}{}
+\item{a}{value of treatment level, defaults to NA.}
 }
 \value{
 data dataset to use

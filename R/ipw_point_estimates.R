@@ -41,13 +41,6 @@ ipw_point_estimates <- function(y,
     weights[is.na(weights)] <- 0
   }
   
-  ## SUMMARY ## 
-  out$summary <- list(ngroups = N, 
-                      nalphas = k,
-                      ntreatments = l,
-                      alphas = alphas,
-                      treatments = trt_lvls)  
-  
   ## CALCULATE MARGINAL ESTIMATES ####
   ybar <- group_means(Y = y, A = A, G = G, a = NA, data = data)
   
@@ -58,15 +51,6 @@ ipw_point_estimates <- function(y,
 
   out$marginal_outcomes$groups <- drop(grp_est)
   out$marginal_outcomes$overall <- drop(oa_est)
-  
-  hold_diff <- array(dim = c(N, p, k),
-                     dimnames = list(groups, predictors, alphas))
-  
-  for(pp in 1:p){
-    hold_diff[ , pp, ] <- grp_est[ , pp, ] - oa_est[pp, ]
-  }
-  
-  out$marginal_outcomes$group_resid <- drop(hold_diff)
   
   ## CALCULATE OUTCOME ESTIMATES PER TREATMENT LEVEL####
   
@@ -86,10 +70,8 @@ ipw_point_estimates <- function(y,
     weights_trt <- array(dim= c(N, p, k))
     
     for(pp in 1:p){
-      weights_trt[ , pp, ] <- t(t(weights[ , pp, ])/((alphas^a*(1-alphas)^(1-a))))
+      weights_trt[ , pp, ] <- t(t(weights[ , pp, ])/((alphas^a * (1-alphas)^(1-a))))
     }
-    
-    #weights_trt <- t(t(weights)/((alphas^a*(1-alphas)^(1-a))))
     
     # Compute estimates
     grp_est <- apply(weights_trt, 2:3, function(x) x * ybar_trt) 
@@ -97,17 +79,10 @@ ipw_point_estimates <- function(y,
     
     hold_grp[ , , , ll] <- grp_est
     hold_oal[ , , ll]   <- oal_est
-    
-    for(kk in 1:k){
-      for(ii in 1:N){
-        hold_grp_diff[ii, , kk, ll] <- hold_grp[ii,  , kk, ll] - hold_oal[ , kk, ll]
-      }
-    }
   }
   
   out$outcomes <- list(groups = drop(hold_grp), 
-                       overall = drop(hold_oal), 
-                       group_resid = drop(hold_grp_diff))
+                       overall = drop(hold_oal))
 
   ## DONE ####
   return(out)

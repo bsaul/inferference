@@ -5,7 +5,7 @@
 \usage{
 run_interference(f.ab, alphas, data, groups, outcome, treatment, predictors,
   type = "c", propensityB = treatment, family = binomial,
-  theta_known = NULL, ...)
+  known_params = NULL, ...)
 }
 \arguments{
 \item{f.ab}{f.ab function to pass to the argument 'f' of \code{\link{integrate}}.}

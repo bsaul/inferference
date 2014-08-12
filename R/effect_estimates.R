@@ -54,14 +54,14 @@ calc_effect <- function(obj,
   # Print error if either estimates with alpha1 have been computed 
   # or a constrast is being estimated when estimates for alpha2
   # have not been computed
-  if (!(alpha1 %in% obj[[1]]$summary$alphas) | 
-     (effect == 'contrast' & !(alpha2 %in% obj[[1]]$summary$alphas))){
+  if (!(alpha1 %in% obj$summary$alphas) | 
+     (effect == 'contrast' & !(alpha2 %in% obj$summary$alphas))){
     stop(paste('At least one of the chosen coverage levels has not been estimated.\n',
                'Select from the following: \n', 
-               paste(obj[[1]]$summary$alphas, collapse = ' ')))
+               paste(obj$summary$alphas, collapse = ' ')))
   }
   
-  N <- obj[[1]]$summary$ngroups
+  N <- obj$summary$ngroups
   a1 <- as.character(alpha1)
   a2 <- as.character(alpha2)
   t1 <- as.character(trt.lvl1)
@@ -78,37 +78,37 @@ calc_effect <- function(obj,
     if(marginal == TRUE){
       pe <- hold_oal[a1] - hold_oal[a2]
       pe_grp_diff <- (hold_grp[ , a1] - hold_grp[ , a2]) - pe
-      U_pe <- U_hold_oal[ ,a1] - U_hold_oal[ ,a2]
-      U_pe_grp <- U_hold_grp[ , ,a1] - U_hold_grp[ , ,a2]  
-      U_grp_diff <- t(U_pe - t(U_pe_grp))
+      U_pe <- U_hold_oal[ , a1] - U_hold_oal[ , a2]
+      U_pe_grp <- U_hold_grp[ , , a1] - U_hold_grp[ , , a2]  
+      U_grp_diff <- t(t(U_pe_grp) - U_pe)
     } else {
       pe <- hold_oal[a1, t1] - hold_oal[a2, t2]
       pe_grp_diff <- (hold_grp[ , a1, t1] - hold_grp[ , a2, t2]) - pe
-      U_pe <- U_hold_oal[ ,a1, t1] - U_hold_oal[ ,a2, t2]
-      U_pe_grp <- U_hold_grp[ , ,a1, t1] - U_hold_grp[ , ,a2, t2]  
-      U_grp_diff <- t(U_pe - t(U_pe_grp))
+      U_pe <- U_hold_oal[ , a1, t1] - U_hold_oal[ , a2, t2]
+      U_pe_grp <- U_hold_grp[ , , a1, t1] - U_hold_grp[ , , a2, t2]  
+      U_grp_diff <- t(t(U_pe_grp) - U_pe)
     }
   } 
   else if(effect == 'outcome'){
     if(marginal == TRUE){
       pe <- hold_oal[a1]
       pe_grp_diff <- hold_grp[ , a1] - pe
-      U_pe <- U_hold_oal[ ,a1]
-      U_pe_grp <- U_hold_grp[ , ,a1]
-      U_grp_diff <- t(U_pe - t(U_pe_grp))
+      U_pe <- U_hold_oal[ , a1]
+      U_pe_grp <- U_hold_grp[ , , a1]
+      U_grp_diff <- t(t(U_pe_grp) - U_pe)
     } else {
       pe <- hold_oal[a1, t1]
       pe_grp_diff <- hold_grp[ , a1, t1] - pe
-      U_pe <- U_hold_oal[ ,a1, t1]
-      U_pe_grp <- U_hold_grp[ , ,a1, t1]
-      U_grp_diff <- t(U_pe - t(U_pe_grp))
+      U_pe <- U_hold_oal[ , a1, t1]
+      U_pe_grp <- U_hold_grp[ , , a1, t1]
+      U_grp_diff <- t(t(U_pe_grp) - U_pe)
     }
   }
   
   #### VARIANCE ESTIMATION ####
   
   # U matrix
-  U21 <- t(as.matrix(apply(U_grp_diff, 2, mean, na.rm = T)))
+  U21 <- (t(as.matrix(apply(U_grp_diff, 2, sum, na.rm = T))))/N
   
   # V matrix
   V <- V_matrix(scores = obj$bscores, 
@@ -116,17 +116,18 @@ calc_effect <- function(obj,
                 alpha1 = a1, alpha2 = a2, 
                 trt.lvl1 = t1, trt.lvl2 = t2, 
                 effect = effect, marginal = marginal)
-
   
-  V21 <- V[dim(V)[1], 1:(dim(V)[2] - 1)]
-  V11 <- V[1:(dim(V)[1] - 1), 1:(dim(V)[2] - 1)]
-  V22 <- V[dim(V)[1], dim(V)[2]]
+  vdim <- dim(V)[1]
+  
+  V21 <- V[vdim, 1:(vdim - 1)] # Last row, up to last column
+  V11 <- V[1:(vdim - 1), 1:(vdim - 1)] # up to last row, up to last column
+  V22 <- V[vdim, vdim] # bottom right element
  
   ## Sandwich Variance Estimate ##
   sve <- ((U21 - 2*V21) %*% solve(V11) %*% t(U21) + V22)/N * rescale.factor^2
   
   ## Empirical Variance Estimate ##
-  eve <- (1/(N^2)) * (sum((pe_grp_diff)^2))
+  eve <- (1/(N^2)) * (sum((pe_grp_diff)^2, na.rm = T)) * rescale.factor^2
   
   ## Confidence Intervals ##
   qq <- conf.level + (1 - conf.level)/2
