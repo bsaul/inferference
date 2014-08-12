@@ -1,13 +1,13 @@
 #-----------------------------------------------------------------------------#
 #' V Matrix
 #'  
-#' @param predictors
+#' @param scores
 #' @return V matrix
 #' @export
 #' 
 #-----------------------------------------------------------------------------#
-V_matrix <- function(Bscores, 
-                     ipw_obj, 
+V_matrix <- function(scores, 
+                     point_estimates, 
                      alpha1, 
                      trt.lvl1, 
                      alpha2   = NA, 
@@ -15,8 +15,8 @@ V_matrix <- function(Bscores,
                      effect, 
                      marginal){
 
-  N <- dim(Bscores)[1]
-  p <- dim(Bscores)[2]
+  N <- dim(scores)[1]
+  p <- dim(scores)[2]
   a1 <- alpha1
   a2 <- alpha2
   t1 <- trt.lvl1
@@ -25,8 +25,8 @@ V_matrix <- function(Bscores,
   fff <- ifelse(marginal == TRUE, 'marginal_outcomes', 'outcomes')
   
   if(effect == 'contrast'){   
-    hold_oal <- ipw_obj[[fff]]$overall 
-    hold_grp <- ipw_obj[[fff]]$groups
+    hold_oal <- point_estimates[[fff]]$overall 
+    hold_grp <- point_estimates[[fff]]$groups
 
     if(marginal == TRUE){
       pe <- hold_oal[a1] - hold_oal[a2]
@@ -39,7 +39,7 @@ V_matrix <- function(Bscores,
     }
   } 
   else if(effect == 'outcome'){
-    x <- ipw_obj[[fff]]$group_resid
+    x <- point_estimates[[fff]]$group_resid
     if(marginal == TRUE){
       x <- x[ , a1]
     } else {
@@ -50,7 +50,7 @@ V_matrix <- function(Bscores,
   tmp <- array(dim = c(p+1, p+1, N))
   
   for(ii in 1:N){
-    hold <- c(Bscores[ii, ], x[ii])
+    hold <- c(scores[ii, ], x[ii])
     tmp[ , , ii] <- hold %*% t(hold)
   }
   
