@@ -69,42 +69,25 @@ calc_effect <- function(obj,
   
   fff <- ifelse(marginal == TRUE, 'marginal_outcomes', 'outcomes')
   
-  hold_oal   <- obj$point_estimates[[fff]]$overall
-  hold_grp   <- obj$point_estimates[[fff]]$groups
-  U_hold_oal <- obj$Upart[[fff]]$overall 
-  U_hold_grp <- obj$Upart[[fff]]$groups
+  oal  <- obj$point_estimates[[fff]]$overall
+  grp  <- obj$point_estimates[[fff]]$groups
+  Uoal <- obj$Upart[[fff]]$overall 
+  Ugrp <- obj$Upart[[fff]]$groups
   
-  if(effect == 'contrast'){
-    if(marginal == TRUE){
-      pe <- hold_oal[a1] - hold_oal[a2]
-      pe_grp_diff <- (hold_grp[ , a1] - hold_grp[ , a2]) - pe
-      U_pe <- U_hold_oal[ , a1] - U_hold_oal[ , a2]
-      U_pe_grp <- U_hold_grp[ , , a1] - U_hold_grp[ , , a2]  
-      U_grp_diff <- t(t(U_pe_grp) - U_pe)
-    } else {
-      pe <- hold_oal[a1, t1] - hold_oal[a2, t2]
-      pe_grp_diff <- (hold_grp[ , a1, t1] - hold_grp[ , a2, t2]) - pe
-      U_pe <- U_hold_oal[ , a1, t1] - U_hold_oal[ , a2, t2]
-      U_pe_grp <- U_hold_grp[ , , a1, t1] - U_hold_grp[ , , a2, t2]  
-      U_grp_diff <- t(t(U_pe_grp) - U_pe)
-    }
-  } 
-  else if(effect == 'outcome'){
-    if(marginal == TRUE){
-      pe <- hold_oal[a1]
-      pe_grp_diff <- hold_grp[ , a1] - pe
-      U_pe <- U_hold_oal[ , a1]
-      U_pe_grp <- U_hold_grp[ , , a1]
-      U_grp_diff <- t(t(U_pe_grp) - U_pe)
-    } else {
-      pe <- hold_oal[a1, t1]
-      pe_grp_diff <- hold_grp[ , a1, t1] - pe
-      U_pe <- U_hold_oal[ , a1, t1]
-      U_pe_grp <- U_hold_grp[ , , a1, t1]
-      U_grp_diff <- t(t(U_pe_grp) - U_pe)
-    }
+  if(marginal == TRUE){
+    pe <- oal[a1] - ifelse(effect == 'contrast', oal[a2], 0)
+    pe_grp_diff <- (grp[ , a1] - ifelse(effect == 'contrast', grp[, a2], 0)) - pe
+    U_pe <- Uoal[ , a1] - ifelse(effect == 'contrast', Uoal[ , a2], 0)
+    U_pe_grp <- Ugrp[ , , a1] - ifelse(effect == 'contrast', Ugrp[ , , a2], 0)  
+    U_grp_diff <- -t(t(U_pe_grp) - U_pe)
+  } else {
+    pe <- oal[a1, t1] - ifelse(effect == 'contrast', oal[a2, t2], 0)
+    pe_grp_diff <- (grp[ , a1, t1] - ifelse(effect == 'contrast', grp[ , a2, t2], 0)) - pe
+    U_pe <- Uoal[ , a1, t1] - ifelse(effect == 'contrast', Uoal[ , a2, t2], 0)
+    U_pe_grp <- Ugrp[ , , a1, t1] - ifelse(effect == 'contrast', Ugrp[ , , a2, t2], 0)  
+    U_grp_diff <- -t(t(U_pe_grp) - U_pe)
   }
-  
+
   #### VARIANCE ESTIMATION ####
   
   # U matrix

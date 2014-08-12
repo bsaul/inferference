@@ -94,7 +94,7 @@ run_interference <- function(f.ab,
   
   ## Summary ##
   trt_lvls <- sort(unique(data[, treatment]))
-  N <- length(unique(groups))
+  N <- length(unique(data[ , groups]))
   k <- length(alphas)
   l <- length(trt_lvls)
   
