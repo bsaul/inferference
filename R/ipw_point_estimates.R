@@ -19,7 +19,7 @@ ipw_point_estimates <- function(y,
   ## DEFINE OBJECTS NEEDED FOR FUNCTION ##
   out <- list()
   
-  groups <- as.numeric(dimnames(weights)[[1]])
+  groups <- dimnames(weights)[[1]]
   alphas <- as.numeric(dimnames(weights)[[length(dim(weights))]])
   trt_lvls <- sort(unique(data[, A]))
   
@@ -83,8 +83,8 @@ ipw_point_estimates <- function(y,
     ybar_trt <- group_means(Y = y, A = A, G = G, a = a, data = data)
     
     # Modify weights per treatment level
-    weights_trt <- array(dim= c(N, p, k),
-                         dimnames = list(1:N, predictors, alphas))
+    weights_trt <- array(dim= c(N, p, k))
+    
     for(pp in 1:p){
       weights_trt[ , pp, ] <- t(t(weights[ , pp, ])/((alphas^a*(1-alphas)^(1-a))))
     }

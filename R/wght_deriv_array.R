@@ -22,34 +22,36 @@ wght_deriv_array <- function(f.ab,
                              theta, 
                              type, 
                              ...){
-  
-  # Make sure alphas are sorted
-  alphas <- sort(alphas)
-  
-  G <- factor(data[, groups])
-  X <- cbind(1, data[, predictors])
-  A <- data[, treatment]
-  p <- ncol(X)
-  N <- length(unique(G))
-  k <- length(alphas) 
-  
+  ## Gather necessary bits ##
+  G  <- data[, groups]
+  X  <- cbind(1, data[, predictors])
+  A  <- data[, treatment]
+  p  <- ncol(X) # number of predictors
+  aa <- sort(alphas) # Make sure alphas are sorted
+  gg <- unique(G)
+  k  <- length(alphas) 
+  N  <- length(unique(G))
+
+  ## Warnings ##
   if(length(theta) != (p + 1)){
     stop("The length of theta is not equal to the number of predictors + 2 ")
   }
   
-  w.list <- lapply(alphas, function(alpha){
+  ## Compute weight (derivative) for each group, parameter, and alpha level ##
+  w.list <- lapply(aa, function(alpha){
     w <- by(cbind(X, A), INDICES = G, simplify = TRUE, 
             FUN = function(x) {
               x <- as.matrix(x) # PrAX expects a matrix
               wght_deriv_calc(f.ab = f.ab, type = type, alpha = alpha, 
                               A = x[, p+1], X = x[, 1:p], 
                               theta = theta, ...)})
-    w2 <- matrix(unlist(w), ncol = p+1, byrow = TRUE,
-                 dimnames= list(1:N, names(theta)))
+    w2 <- matrix(unlist(w, use.names = FALSE), ncol = p+1, byrow = TRUE)
     return(w2)}) 
   
-  out <- array(unlist(w.list), dim = c(N, p+1, k),
-               dimnames = list(1:N, names(theta), alphas))
+  ## Reshape list into array ##
+  out <- array(unlist(w.list, use.names = FALSE), 
+               dim = c(N, p+1, k),
+               dimnames = list(gg, names(theta), aa))
   
   return(out)
 }

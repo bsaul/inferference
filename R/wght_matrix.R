@@ -29,17 +29,17 @@ wght_matrix <- function(f.ab,
                         theta, 
                         type, 
                         ...){
+  ## Gather necessary bits ##
+  G  <- data[, groups]
+  X  <- cbind(1, data[, predictors])
+  A  <- data[, treatment]
+  p  <- ncol(X) # number of predictors
+  aa <- sort(alphas) # Make sure alphas are sorted
+  gg <- unique(G)
   
-  # Make sure alphas are sorted
-  alphas <- sort(alphas)
-  
-  G <- data[, groups]
-  X <- cbind(1, data[, predictors])
-  p <- ncol(X)
-  A <- data[, treatment]
-  
-  w.list <- lapply(alphas, function(alpha){
-    w <- by(cbind(X, A), INDICES = G, simplify = TRUE, 
+  ## Compute weight for each group and alpha level ##
+  w.list <- lapply(aa, function(alpha){
+    w <- by(cbind(X, A), INDICES = G, simplify = FALSE, 
             FUN = function(x) {
               x <- as.matrix(x) # PrAX expects a matrix
               wght_calc(f.ab = f.ab, type = type, alpha = alpha, 
@@ -47,8 +47,11 @@ wght_matrix <- function(f.ab,
     as.numeric(w)
   }) 
   
-  w.matrix <- matrix(unlist(w.list), ncol = length(alphas), byrow = FALSE,
-                     dimnames = list(sort(unique(G)), alphas))
+  ## Reshape list into matrix ##
+  w.matrix <- matrix(unlist(w.list, use.names = FALSE), 
+                     ncol = length(alphas), 
+                     byrow = FALSE,
+                     dimnames = list(gg, aa))
   
   return(w.matrix)
 }

@@ -3,11 +3,11 @@
 \alias{V_matrix}
 \title{V Matrix}
 \usage{
-V_matrix(Bscores, ipw_obj, alpha1, trt.lvl1, alpha2 = NA, trt.lvl2 = NA,
-  effect, marginal)
+V_matrix(scores, point_estimates, alpha1, trt.lvl1, alpha2 = NA,
+  trt.lvl2 = NA, effect, marginal)
 }
 \arguments{
-\item{predictors}{}
+\item{scores}{}
 }
 \value{
 V matrix

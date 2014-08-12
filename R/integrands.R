@@ -23,8 +23,13 @@
 #' @export
 #' 
 PrAX_integrand <- function(b, x, pos = NA, X, A, theta, alpha = NA, r = 2/3, type){
+  
   if(!is.na(pos)){
     theta[pos] <- x
+  }
+  
+  if(!is.matrix(X)){
+    X <- as.matrix(X)
   }
   
   theta.fix <- theta[1:ncol(X)]

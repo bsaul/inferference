@@ -69,18 +69,21 @@ calc_effect <- function(obj,
   
   fff <- ifelse(marginal == TRUE, 'marginal_outcomes', 'outcomes')
   
-  hold_oal <- obj$point_estimates[[fff]]$overall
+  hold_oal   <- obj$point_estimates[[fff]]$overall
+  hold_grp   <- obj$point_estimates[[fff]]$groups
   U_hold_oal <- obj$Upart[[fff]]$overall 
   U_hold_grp <- obj$Upart[[fff]]$groups
   
   if(effect == 'contrast'){
     if(marginal == TRUE){
       pe <- hold_oal[a1] - hold_oal[a2]
+      pe_grp_diff <- (hold_grp[ , a1] - hold_grp[ , a2]) - pe
       U_pe <- U_hold_oal[ ,a1] - U_hold_oal[ ,a2]
       U_pe_grp <- U_hold_grp[ , ,a1] - U_hold_grp[ , ,a2]  
       U_grp_diff <- t(U_pe - t(U_pe_grp))
     } else {
       pe <- hold_oal[a1, t1] - hold_oal[a2, t2]
+      pe_grp_diff <- (hold_grp[ , a1, t1] - hold_grp[ , a2, t2]) - pe
       U_pe <- U_hold_oal[ ,a1, t1] - U_hold_oal[ ,a2, t2]
       U_pe_grp <- U_hold_grp[ , ,a1, t1] - U_hold_grp[ , ,a2, t2]  
       U_grp_diff <- t(U_pe - t(U_pe_grp))
@@ -89,53 +92,61 @@ calc_effect <- function(obj,
   else if(effect == 'outcome'){
     if(marginal == TRUE){
       pe <- hold_oal[a1]
+      pe_grp_diff <- hold_grp[ , a1] - pe
       U_pe <- U_hold_oal[ ,a1]
       U_pe_grp <- U_hold_grp[ , ,a1]
       U_grp_diff <- t(U_pe - t(U_pe_grp))
     } else {
       pe <- hold_oal[a1, t1]
+      pe_grp_diff <- hold_grp[ , a1, t1] - pe
       U_pe <- U_hold_oal[ ,a1, t1]
       U_pe_grp <- U_hold_grp[ , ,a1, t1]
       U_grp_diff <- t(U_pe - t(U_pe_grp))
     }
   }
   
-  ## VARIANCE ESTIMATION ####
+  #### VARIANCE ESTIMATION ####
+  
+  # U matrix
+  U21 <- t(as.matrix(apply(U_grp_diff, 2, mean, na.rm = T)))
   
   # V matrix
-  V <- V_matrix(Bscores = obj$bscores, 
-                ipw_obj = obj$point_estimates, 
+  V <- V_matrix(scores = obj$bscores, 
+                point_estimates = obj$point_estimates, 
                 alpha1 = a1, alpha2 = a2, 
                 trt.lvl1 = t1, trt.lvl2 = t2, 
                 effect = effect, marginal = marginal)
-  
-  U21 <- apply(U_grp_diff, 2, mean, na.rm = T)
+
   
   V21 <- V[dim(V)[1], 1:(dim(V)[2] - 1)]
   V11 <- V[1:(dim(V)[1] - 1), 1:(dim(V)[2] - 1)]
   V22 <- V[dim(V)[1], dim(V)[2]]
  
-  ## VARIANCE Estimate
-  ve <- ((U21 - 2*V21) %*% solve(V11) %*% U21 + V22)/N * rescale.factor^2
+  ## Sandwich Variance Estimate ##
+  sve <- ((U21 - 2*V21) %*% solve(V11) %*% t(U21) + V22)/N * rescale.factor^2
   
-  ## CONFIDENCE INTERVALS
+  ## Empirical Variance Estimate ##
+  eve <- (1/(N^2)) * (sum((pe_grp_diff)^2))
+  
+  ## Confidence Intervals ##
   qq <- conf.level + (1 - conf.level)/2
+  me <- qnorm(qq) * sqrt(sve)
   
-  me <- qnorm(qq) * sqrt(ve)
-  
+  ## Prepare Output ##
   pe <- pe * rescale.factor
   
   if(print == TRUE){
-    toprint <- paste0('Estimate: ', round(pe, 2),
+    toprint <- paste0('Estimate: ', round(pe, 2), ' ',
                       conf.level*100, '% CI: (', 
                       round(pe - me, 2), ', ', round(pe + me, 2), ')' )
     print(toprint)
   }
   
   out <- data.frame(point = pe,
-                    variance = ve, 
+                    sandwich_variance = sve, 
                     ll = pe - me, 
-                    ul = pe + me)
+                    ul = pe + me,
+                    empirical_variance = eve)
   return(out)
 }
 

@@ -65,7 +65,7 @@ run_interference <- function(f.ab,
                              theta = theta_fit, 
                              type = type),
                         get_args(FUN = f.ab, args_list = dots))
-  
+
   weights <- do.call(wght_matrix, args = weight_args)
   weightd <- do.call(wght_deriv_array, args = weight_args)
   
@@ -80,15 +80,17 @@ run_interference <- function(f.ab,
   
   bscore_args <- append(list(predictors = predictors,
                              B = propensityB, 
-                             G = groups,
+                             groups = groups,
                              theta = theta_fit, 
                              data = data),
                         get_args(FUN = bscore_calc, args_list = dots))
 
   out <- list()
   out$point_estimates <- do.call(ipw_point_estimates, args = args1)
-  out$Upart  <- do.call(ipw_point_estimates, args = args2)
+  out$Upart   <- do.call(ipw_point_estimates, args = args2)
   out$bscores <- do.call(bscore_calc, args = bscore_args)
+  out$weights <- weights
+  out$weightd <- weightd
 
   return(out)
 }

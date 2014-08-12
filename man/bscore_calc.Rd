@@ -3,7 +3,7 @@
 \alias{bscore_calc}
 \title{Compute psi_xp(B_i, X_i, theta)}
 \usage{
-bscore_calc(predictors, B, G, theta, data, set.NA.to.0 = TRUE)
+bscore_calc(predictors, B, groups, theta, data, set.NA.to.0 = TRUE)
 }
 \arguments{
 \item{predictors}{character vector of predictors from model}
