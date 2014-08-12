@@ -74,17 +74,18 @@ calc_effect <- function(obj,
   Uoal <- obj$Upart[[fff]]$overall 
   Ugrp <- obj$Upart[[fff]]$groups
   
+  chk <- effect == 'contrast'
   if(marginal == TRUE){
-    pe <- oal[a1] - ifelse(effect == 'contrast', oal[a2], 0)
-    pe_grp_diff <- (grp[ , a1] - ifelse(effect == 'contrast', grp[, a2], 0)) - pe
-    U_pe <- Uoal[ , a1] - ifelse(effect == 'contrast', Uoal[ , a2], 0)
-    U_pe_grp <- Ugrp[ , , a1] - ifelse(effect == 'contrast', Ugrp[ , , a2], 0)  
+    pe <- oal[a1] - ifelse(chk, oal[a2], 0)
+    pe_grp_diff <- (grp[ , a1] - ifelse(chk, grp[, a2], 0)) - pe
+    U_pe <- Uoal[ , a1] - ifelse(chk, Uoal[ , a2], 0)
+    U_pe_grp <- Ugrp[ , , a1] - ifelse(chk, Ugrp[ , , a2], 0)  
     U_grp_diff <- -t(t(U_pe_grp) - U_pe)
   } else {
-    pe <- oal[a1, t1] - ifelse(effect == 'contrast', oal[a2, t2], 0)
-    pe_grp_diff <- (grp[ , a1, t1] - ifelse(effect == 'contrast', grp[ , a2, t2], 0)) - pe
-    U_pe <- Uoal[ , a1, t1] - ifelse(effect == 'contrast', Uoal[ , a2, t2], 0)
-    U_pe_grp <- Ugrp[ , , a1, t1] - ifelse(effect == 'contrast', Ugrp[ , , a2, t2], 0)  
+    pe <- oal[a1, t1] - ifelse(chk, oal[a2, t2], 0)
+    pe_grp_diff <- (grp[ , a1, t1] - ifelse(chk, grp[ , a2, t2], 0)) - pe
+    U_pe <- Uoal[ , a1, t1] - ifelse(chk, Uoal[ , a2, t2], 0)
+    U_pe_grp <- Ugrp[ , , a1, t1] - ifelse(chk, Ugrp[ , , a2, t2], 0)  
     U_grp_diff <- -t(t(U_pe_grp) - U_pe)
   }
 
