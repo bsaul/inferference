@@ -12,13 +12,16 @@
 
 lik_integrand <- function(b, theta, B, X, x, pos){  
   n <- length(B)
-  theta[pos] <- x
+
+  if(!is.na(pos)){
+    theta[pos] <- x
+  }
+  
   theta.fix <- theta[1:ncol(X)]
   
   p <- plogis(drop(outer(X %*% theta.fix, b, '+'))) 
-  ans <- dbinom(B, 1, p)
-  
-  ans <- apply(ans, 2, prod)
+  hh <- dbinom(B, 1, p)
+  ans <- apply(hh, 2, prod)
   return(ans * dnorm(b, 0, sqrt(theta[length(theta)])))
 }
 
@@ -35,7 +38,7 @@ lik_integrand <- function(b, theta, B, X, x, pos){
 #' @export
 
 ll <- function(x, pos, theta, B, X){
-  y <- log(integrate(lik_integrand, lower=-Inf,upper=Inf, theta = theta, 
+  y <- log(integrate(lik_integrand, lower= -Inf, upper=Inf, theta = theta, 
                      B = B, X = X, x = x, pos = pos)$value)
   return(y)
 }
