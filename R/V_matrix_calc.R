@@ -14,7 +14,7 @@ V_matrix <- function(scores,
                      trt.lvl2 = NA, 
                      effect, 
                      marginal){
-
+  ## Necessary bits ##
   N <- dim(scores)[1]
   p <- dim(scores)[2]
   a1 <- alpha1
@@ -22,8 +22,9 @@ V_matrix <- function(scores,
   t1 <- trt.lvl1
   t2 <- trt.lvl2
   
+  ## Grab the last element of the psi(O, theta) vector: psi_a, alpha ##
   fff <- ifelse(marginal == TRUE, 'marginal_outcomes', 'outcomes')
-  
+    
   if(effect == 'contrast'){   
     hold_oal <- point_estimates[[fff]]$overall 
     hold_grp <- point_estimates[[fff]]$groups
@@ -31,30 +32,31 @@ V_matrix <- function(scores,
     if(marginal == TRUE){
       pe <- hold_oal[a1] - hold_oal[a2]
       grp.pe <- hold_grp[ , a1] - hold_grp[, a2]
-      x <- grp.pe - pe
+      xx <- grp.pe - pe
     } else {
       pe <- hold_oal[a1, t1] - hold_oal[a2, t2]
       grp.pe <- hold_grp[ ,a1, t1] - hold_grp[, a2, t2]
-      x <- grp.pe - pe
+      xx <- grp.pe - pe
     }
   } 
   else if(effect == 'outcome'){
-    x <- point_estimates[[fff]]$group_resid
     if(marginal == TRUE){
-      x <- x[ , a1]
+      xx <- hold_grp[ , a1] - hold_oal[a1]
     } else {
-      x <- x[  ,a1, t1]
+      xx <- hold_grp[  , a1, t1] - hold_oal[a1, t1]
     }
   }
   
-  tmp <- array(dim = c(p+1, p+1, N))
+  ## Create the V matrix for each group ##
+  V_i <- array(dim = c(p+1, p+1, N))
   
   for(ii in 1:N){
-    hold <- c(scores[ii, ], x[ii])
-    tmp[ , , ii] <- hold %*% t(hold)
+    hold <- c(scores[ii, ], xx[ii])
+    V_i[ , , ii] <- hold %*% t(hold)
   }
   
-  V <- apply(tmp, 1:2, mean, na.rm = T)
+  ## Create final V matrix by taking the mean of each element across groups ##
+  V <- apply(V_i, 1:2, sum, na.rm = T)/N
 
   return(V)
 }
