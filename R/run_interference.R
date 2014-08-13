@@ -109,6 +109,7 @@ run_interference <- function(f.ab,
   out$bscores <- do.call(bscore_calc, args = bscore_args)
   out$weights <- weights
   out$weightd <- weightd
-
+  
+  print('Run_inteference complete')
   return(out)
 }
