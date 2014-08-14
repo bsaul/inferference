@@ -50,7 +50,7 @@ calc_effect <- function(obj,
                         rescale.factor = 1,
                         conf.level = 0.95,
                         print = FALSE){
-  
+  ## Warnings ##
   # Print error if either estimates with alpha1 have been computed 
   # or a constrast is being estimated when estimates for alpha2
   # have not been computed
@@ -61,6 +61,7 @@ calc_effect <- function(obj,
                paste(obj$summary$alphas, collapse = ' ')))
   }
   
+  ## Necessary bits ##
   N <- obj$summary$ngroups
   a1 <- as.character(alpha1)
   a2 <- as.character(alpha2)
@@ -74,18 +75,18 @@ calc_effect <- function(obj,
   Uoal <- obj$Upart[[fff]]$overall 
   Ugrp <- obj$Upart[[fff]]$groups
   
-  chk <- effect == 'contrast'
+  cntrst <- effect == 'contrast'
   if(marginal == TRUE){
-    pe <- oal[a1] - ifelse(chk, oal[a2], 0)
-    pe_grp_diff <- (grp[ , a1] - ifelse(chk, grp[, a2], 0)) - pe
-    U_pe <- Uoal[ , a1] - ifelse(chk, Uoal[ , a2], 0)
-    U_pe_grp <- Ugrp[ , , a1] - ifelse(chk, Ugrp[ , , a2], 0)  
+    pe <- oal[a1] - ifelse(cntrst, oal[a2], 0)
+    pe_grp_diff <- (grp[ , a1] - ifelse(cntrst, grp[, a2], 0)) - pe
+    U_pe <- Uoal[ , a1] - ifelse(cntrst, Uoal[ , a2], 0)
+    U_pe_grp <- Ugrp[ , , a1] - ifelse(cntrst, Ugrp[ , , a2], 0)  
     U_grp_diff <- -t(t(U_pe_grp) - U_pe)
   } else {
-    pe <- oal[a1, t1] - ifelse(chk, oal[a2, t2], 0)
-    pe_grp_diff <- (grp[ , a1, t1] - ifelse(chk, grp[ , a2, t2], 0)) - pe
-    U_pe <- Uoal[ , a1, t1] - ifelse(chk, Uoal[ , a2, t2], 0)
-    U_pe_grp <- Ugrp[ , , a1, t1] - ifelse(chk, Ugrp[ , , a2, t2], 0)  
+    pe <- oal[a1, t1] - ifelse(cntrst, oal[a2, t2], 0)
+    pe_grp_diff <- (grp[ , a1, t1] - ifelse(cntrst, grp[ , a2, t2], 0)) - pe
+    U_pe <- Uoal[ , a1, t1] - ifelse(cntrst, Uoal[ , a2, t2], 0)
+    U_pe_grp <- Ugrp[ , , a1, t1] - ifelse(cntrst, Ugrp[ , , a2, t2], 0)  
     U_grp_diff <- -t(t(U_pe_grp) - U_pe)
   }
 

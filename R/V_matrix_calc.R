@@ -24,11 +24,10 @@ V_matrix <- function(scores,
   
   ## Grab the last element of the psi(O, theta) vector: psi_a, alpha ##
   fff <- ifelse(marginal == TRUE, 'marginal_outcomes', 'outcomes')
-    
+  hold_oal <- point_estimates[[fff]]$overall 
+  hold_grp <- point_estimates[[fff]]$groups
+  
   if(effect == 'contrast'){   
-    hold_oal <- point_estimates[[fff]]$overall 
-    hold_grp <- point_estimates[[fff]]$groups
-
     if(marginal == TRUE){
       pe <- hold_oal[a1] - hold_oal[a2]
       grp.pe <- hold_grp[ , a1] - hold_grp[, a2]
