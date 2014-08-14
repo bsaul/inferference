@@ -3,7 +3,7 @@
 \alias{replicate_sims}
 \title{TBD}
 \usage{
-replicate_sims(base_dt, potential_outcomes, nsims, theta)
+replicate_sims(base_dt, potential_outcomes, nsims, parameters)
 }
 \description{
 TBD
