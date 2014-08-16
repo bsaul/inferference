@@ -1,222 +1,119 @@
 #-----------------------------------------------------------------------------#
-#' Simulate a dataset of N groups
-#' 
-#' Randomly sllocates n units to N groups and randomly samples a group distance
-#' according to the chosen distribution
-#'
-#' @param N the number of groups
-#' @param n the number of subjects
-#' @param distrance.distr a character string defining the distribution from
-#' which group level distances are sampled. Defaults to 'rlnorm'.
-#' @param distr.mean the mean of the chosen distribution. Defaults to 0 as in 
-#' Perez-Heydrich 2014.
-#' @param distr.sd the standard deviation of the chosen distribution. Defaults
-#' to 0.75.
-#' @return a data frame with the size and distance for each group
-#' @export
-#-----------------------------------------------------------------------------#
-sim_groups <- function(N, n, 
-                       distance.distr = 'rlnorm', 
-                       distr.mean = 0, 
-                       distr.sd = 0.75){
-
-  group <- sample(1:N, n, replace = T)
-  grp.sizes <- as.data.frame(table(group))
-   
-  distance_group <- do.call(distance.distr, 
-                            args = list(N, mean = distr.mean, sd = distr.sd))
-
-  groups <- data.frame(group = as.character(grp.sizes[, 1]), 
-                       group_size = grp.sizes[, 2],
-                       distance_group,
-                       stringsAsFactors = F)
-  return(list(assignments = group, groups = groups))
-}
-
-#-----------------------------------------------------------------------------#
 #' Simulate a dataset of n individuals into N groups
 #' 
-#' This is currently not very useful except to simulate a base dataset like in 
-#' Step 0 of Perez et al's simulation
+#' This is currently not very useful except to simulate a dataset like in 
+#' Step 0 of Perez et al's simulation from which potential outcomes 
+#' will be generated.
 #'
-#' @param N the number of groups
-#' @param n the number of subjects
-#' @param X1.args In Perez et al, X1 represents an individual's age in 
-#' decades generated from an exponential distribution with mean 20
-#' @param distr.mean the mean of the chosen distribution. Defaults to 0 as in 
-#' Perez et al 2014.
-#' @param distr.sd the standard deviation of the chosen distribution. Defaults
-#' to 0.75.
-#' @return a data frame with the size and distance for each group
+#' @param N.groups the number of groups
+#' @param n.units the number of subjects (total)
+#' @param X1.distr distribution function of \code{X1} variable. Defaults to
+#' \code{\link{rexp}}
+#' @param X1.args arguments passed to \code{X1.distr} function. In Perez et al, 
+#' X1 represents an individual's age in decades generated from an exponential
+#' distribution with mean 20
+#' @param ind.dist.distr distribution function of individual distances. Defaults
+#' to \code{\link{rnorm}}
+#' @param ind.distr.args arguments passed to \code{ind.dist.distr} function
+#' @param grp.dist.distr distribution function of group level distances. Defaults
+#' to \code{\link{rlnorm}}.
+#' @param grp.distr.args arguments passed to \code{grp.dist.distr} function
+#' @return a data frame 
 #' @export
 #-----------------------------------------------------------------------------#
-sim_units <- function(N, n,
+sim_base_data <- function(N.groups, 
+                      n.units,
                       X1.distr = 'rexp',
                       X1.args  = list(rate = 1/20),
-                      dist.distr = 'rnorm',
-                      dist.args  = list(mean=0, sd=0.05),
+                      ind.dist.distr = 'rnorm',
+                      ind.dist.args  = list(mean=0, sd=0.05),
                       grp.dist.distr = 'rlnorm', 
-                      grp.dist.mean = 0, 
-                      grp.dist.sd = 0.75)
-{
+                      grp.dist.args  = list(meanlog=0, sdlog = 0.75))
+{ 
+  N <- N.groups
+  n <- n.units
+  
+  ## Randomly generate group level distances ##
+  groupdt <- data.frame(group = 1:N, 
+                        group_dist = do.call(grp.dist.distr, 
+                                             args = append(list(n = N), 
+                                                           grp.dist.args)))
+  ## Randomly assign subjects to groups ##
+  out <- data.frame(id = 1:n, group = sample(1:N, n, replace = T))
+  out <- merge(out, groupdt, by = 'group')
+  
+  ## Randomly generate individual level distances ##
+  ind_dist <- do.call(ind.dist.distr, args = append(list(n = n), ind.dist.args))
+  
+  ## Randomly generate X1 (age) variable ##
   X1_ <- do.call(X1.distr, args = append(list(n = n), X1.args))
   
-  ind_dist1 <- do.call(dist.distr, args = append(list(n = n), dist.args))
-  ind_dist  <- ifelse(ind_dist1 < 0, 0, ind_dist1)
-
-  groups.list <- sim_groups(N, n, 
-                       distance.distr = grp.dist.distr, 
-                       distr.mean = grp.dist.mean, 
-                       distr.sd = grp.dist.sd)
-
-  data <- merge(data.frame(id = 1:n, 
-                           group = groups.list$assignments,
-                           X1 = ifelse(X1_ > 100, 100/10, X1_/10)), 
-                groups.list$groups, by="group")
-  data$X2 <- ind_dist + data$distance_group
+  ## Finish up ##
+  out <- within(out, {
+    X1 = ifelse(X1_ > 100, 10, X1_/10)
+    X2 = group_dist + ifelse(ind_dist < 0, 0, ind_dist)})
   
-  return(data[, c('id', 'group', 'X1', 'X2', 'group_size')])
-}
-
-#-----------------------------------------------------------------------------#
-#' Individual Potential outcomes
-#'
-#' @export
-#-----------------------------------------------------------------------------#
-
-po_y_ij <- function(dt, a, k, theta){
-  n <- nrow(dt)
-  alpha <- (a + k)/n
-  X <- cbind(1, a, alpha, dt$X1, dt$X2, a*alpha)
-  p  <- plogis(X %*% theta)
-  return(rbinom(n, 1, p))
-}
-
-#-----------------------------------------------------------------------------#
-#' Group level potential outcomes
-#' 
-#'  @export 
-#-----------------------------------------------------------------------------#
-
-gen_po_ij <- function(dt, theta){
-  n <- nrow(dt)
-  ids <- dt$id
-  po <- array(dim = c(n, n, 2), 
-              dimnames = list(id = ids, k = 0:(n-1), trt = c(0,1)))
-  
-  for(k in 0:(n-1)){
-    po[ , as.character(k), 1] <- po_y_ij(dt, 0, k, theta)
-    po[ , as.character(k), 2] <- po_y_ij(dt, 1, k, theta)
-  }
-  
-  return(po)
+  return(out[ , c('id', 'group', 'X1', 'X2')])
 }
 
 #-----------------------------------------------------------------------------#
 #' Generate Potential Outcomes
+#' 
+#' Create a list of arrays representing potential outcomes \eqn{y_{ij}(a, k)}, 
+#' (where \eqn{a} is the treatment level and \eqn{k} is the number of other
+#' subjects in a group receiving treatment).
+#' 
+#' Potential outcomes are generated as bernoulli random variables with expectation:
+#' \deqn{logit^{-1}(X\psi)}{plogis(X \%*\% parameters)}. \eqn{X_{ij}} is the vector:
+#' \eqn{(1, a, \alpha, X_{1ij}, X_{2ij}, a * \alpha)}{(1, a, \alpha, X_{1ij}, 
+#' X_{2ij}, a * \alpha)} where \eqn{\alpha = (a + k)/n_i}.
+#' 
+#' @param base_data simulated data from \code{\link{sim_base_data}}
+#' @param parameters vector of parameters used to generate potential outcomes. 
+#' Defaults to parameters used in Perez et. al 2014.
+#' @return a list with length(# of groups) where each entry is a n_i x n_i x 2 
+#' array representing potential outcomes for each subject by # of other subject's
+#' treated by 2 treatment levels {0, 1}
 #' @export
 #-----------------------------------------------------------------------------#
 
-make_po <- function(base, po.parameters){
-  po <- lapply(split(base, base$group), gen_po_ij, theta = po.parameters)
+generate_po <- function(base_data, 
+                        parameters = c(.5, -.788, -2.953, -0.098, -0.145, 0.351)){
+  
+  ## Generates a vector of potential outcomes for a given 
+  ## treatment level and number of other subjects in group treated
+  po_y_ij <- function(grpdt, a, k, parameters){
+    n_i <- nrow(grpdt)
+    alpha <- (a + k)/n_i
+    X <- cbind(1, a, alpha, grpdt$X1, grpdt$X2, a*alpha)
+    p <- plogis(X %*% parameters)
+    return(rbinom(n_i, 1, p))
+  }
+  
+  ## Generates a matrix of potential outcomes for all treatment levels in 
+  ## and all numbers of other subjects treated (from 0 to n_i - 1)
+  gen_po_ij <- function(grpdt, parameters){
+    n_i <- nrow(grpdt)
+    ids <- grpdt$id
+    po <- array(dim = c(n_i, n_i, 2), 
+                dimnames = list(id = ids, k = 0:(n_i-1), trt = c(0,1)))
+    
+    for(k in 0:(n_i-1)){
+      po[ , as.character(k), 1] <- po_y_ij(grpdt, 0, k, parameters)
+      po[ , as.character(k), 2] <- po_y_ij(grpdt, 1, k, parameters)
+    }
+    
+    return(po)
+  }
+  
+  ## Generate potential outcomes for each group ##
+  po <- lapply(split(base_data, base_data$group), 
+               gen_po_ij, parameters = parameters)
   return(po)
 }
 
 #-----------------------------------------------------------------------------#
-#' Individual level causal estimand Y(a, alpha)
-#' 
-#' Takes n X n - 1 x 2 array as input
-#' @return n x 2 matrix with values of ybar_ij(a, alpha) 
-#' @export
-#-----------------------------------------------------------------------------#
-
-
-ybar_ij_aalpha <- function(outcomes, alpha){
-  
-  n <- dim(outcomes)[1]
-  
-  # Keep the IDs along for the ride
-  po_ybar <- array(dim = c(n, 2), dimnames = list(id = dimnames(outcomes)$id,
-                                                  trt = dimnames(outcomes)$trt))
-  
-  #TODO: Speed up with apply() functions
-  for(j in 1:n){
-    y0 <- y1 <- 0
-    for(k in 0:(n-1)){
-      y0 <- y0 + outcomes[j, as.character(k), 1] * choose(n - 1, k) * alpha^k*(1-alpha)^(n - k -1)
-      y1 <- y1 + outcomes[j, as.character(k), 2] * choose(n - 1, k) * alpha^k*(1-alpha)^(n - k -1)
-    }
-    po_ybar[j,1] <- y0
-    po_ybar[j,2] <- y1
-  }
-  return(po_ybar)
-}
-
-#-----------------------------------------------------------------------------#
-#' Individual level marginal causal estimand Y(alpha)
-#' Takes the n x 2 matrix returned by ybar_ij_aalpha
-#' 
-#' @return n x 1 vector of ybar_ij(alpha) 
-#' @export
-#-----------------------------------------------------------------------------#
-ybar_ij_alpha <- function(input, alpha){
-  alpha*input[, 2] + (1 - alpha) * input[, 1]
-}
-
-#-----------------------------------------------------------------------------#
-#' Causal estimands
-#' @export
-#-----------------------------------------------------------------------------#
-
-estimands <- function(potential_outcomes, alpha){
-  
-  # --- Individual average potential outcomes --- #  
-  ind_avg_po <- lapply(potential_outcomes, function(x) ybar_ij_aalpha(x, alpha))
-  
-  # --- Group average potential outcomes --- #                
-  grp_avg_po <- lapply(ind_avg_po, function(x) apply(x, 2, mean))
-  grp_avg_po <- matrix(unlist(grp_avg_po), ncol=2, byrow = T)
-  # --- Population average potential outcomes --- # 
-  pop_avg_po <- apply(grp_avg_po, 2, mean)
-  
-  # --- Marginal potential outcomes --- #
-  ind_marg_po <- lapply(ind_avg_po, function(x) ybar_ij_alpha(x, alpha))
-  grp_marg_po <- unlist(lapply(ind_marg_po, mean))
-  pop_marg_po <- mean(grp_marg_po)
-  return(list(alpha = alpha, 
-              pop_avg_po = pop_avg_po, 
-              pop_marg_po = pop_marg_po))
-}
-
-#-----------------------------------------------------------------------------#
-#' Calculate estimands
-#' @export
-#-----------------------------------------------------------------------------#
-
-calc_estimands <- function(potential_outcomes, alphas){
-  true_effects <- lapply(alphas, estimands, 
-                         potential_outcomes = potential_outcomes)
-  
-  nn <- length(alphas)
-  
-  # Create a data.frame of estimands
-  truth <- data.frame(alpha = rep(NA, nn), 
-                      a0 = rep(NA, nn), 
-                      a1 = rep(NA, nn), 
-                      marg = rep(NA, nn))
-  
-  for (i in 1:length(true_effects)){
-    truth[i, 1] <- true_effects[[i]]$alpha
-    truth[i, 2:3] <- true_effects[[i]]$pop_avg_po
-    truth[i, 4] <- true_effects[[i]]$pop_marg_po
-  }
-  
-  return(truth)
-}
-
-
-#-----------------------------------------------------------------------------#
-#' Simulate date
+#' Simulate data
 #' @export
 #-----------------------------------------------------------------------------#
 
