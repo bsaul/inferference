@@ -27,7 +27,7 @@
 #' @export
 
 wght_calc <- function(f.ab, 
-                      type = 'b',
+                      include.alpha,
                       x = NA, 
                       pos = NA, 
                       alpha,
@@ -42,8 +42,8 @@ wght_calc <- function(f.ab,
                  list(f = f.ab, lower = -Inf, upper = Inf))
   
   ## TODO: This could get cleaned up ##
-  if("type" %in% f.ab.names){
-    args$type <- type
+  if("include.alpha" %in% f.ab.names){
+    args$include.alpha <- include.alpha
   }
   if("x" %in% f.ab.names){
     args$x <- x
@@ -62,7 +62,7 @@ wght_calc <- function(f.ab,
   f <- try(do.call("integrate", args = args))
   PrA <- ifelse(is(f, 'try-error'), NA, f$value)
   
-  if (type == 'c'){
+  if(include.alpha == FALSE){
     if(!'A' %in% dot.names){
       stop("If using type 'c', A (treatment assignment) arguments must 
            be specified")
@@ -72,8 +72,7 @@ wght_calc <- function(f.ab,
     
     pp <- prod(alpha^A * (1-alpha)^(1-A))
     weight <- pp/PrA
-  }
-  else if(type == 'b'){
+  } else {
     weight <- 1/PrA
   }
   return(weight)

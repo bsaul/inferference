@@ -3,7 +3,7 @@
 \alias{wght_calc}
 \title{Compute IPW weight}
 \usage{
-wght_calc(f.ab, type = "b", x = NA, pos = NA, alpha, ...)
+wght_calc(f.ab, include.alpha, x = NA, pos = NA, alpha, ...)
 }
 \arguments{
 \item{f.ab}{function to pass to the argument 'f' of \code{\link{integrate}}.}

@@ -8,6 +8,8 @@
 #' \code{predictors} does not need to have a value corresponding to reference parameter. 
 #' The function adds a column of 1s with \code{cbind()} as a first step.
 #'  
+#' @param f.ab the integrand used in the weight calculation. Defaults to 
+#' \code{\link{logit_integrand}}
 #' @param alphas coverage levels in (0, 1), possibly (probably) vector valued
 #' @param data data frame
 #' @param groups quoted string for name of variable in data containing group membership
@@ -20,14 +22,14 @@
 #' @return a length(unique(group)) X length(alphas) matrix of group weights 
 #' @export
 
-wght_matrix <- function(f.ab, 
+wght_matrix <- function(f.ab = logit_integrand, 
                         alphas, 
                         data, 
                         groups, 
                         predictors, 
                         treatment, 
                         theta, 
-                        type, 
+                        include.alpha, 
                         ...){
   ## Gather necessary bits ##
   G  <- data[, groups]
@@ -42,8 +44,10 @@ wght_matrix <- function(f.ab,
     w <- by(cbind(X, A), INDICES = G, simplify = FALSE, 
             FUN = function(x) {
               x <- as.matrix(x) # PrAX expects a matrix
-              wght_calc(f.ab = f.ab, type = type, alpha = alpha, 
-                        A = x[, p+1], X = x[, 1:p], theta = theta, ...)})
+              wght_calc(f.ab = f.ab, include.alpha = include.alpha, 
+                        alpha = alpha, 
+                        A = x[, p+1], X = x[, 1:p], 
+                        theta = theta, ...)})
     as.numeric(w)
   }) 
   

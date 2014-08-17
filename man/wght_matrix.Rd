@@ -3,9 +3,13 @@
 \alias{wght_matrix}
 \title{Create a matrix of group weights}
 \usage{
-wght_matrix(f.ab, alphas, data, groups, predictors, treatment, theta, type, ...)
+wght_matrix(f.ab = logit_integrand, alphas, data, groups, predictors,
+  treatment, theta, include.alpha, ...)
 }
 \arguments{
+\item{f.ab}{the integrand used in the weight calculation. Defaults to
+\code{\link{logit_integrand}}}
+
 \item{alphas}{coverage levels in (0, 1), possibly (probably) vector valued}
 
 \item{data}{data frame}

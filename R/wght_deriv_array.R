@@ -20,7 +20,7 @@ wght_deriv_array <- function(f.ab,
                              predictors, 
                              treatment, 
                              theta, 
-                             type, 
+                             include.alpha, 
                              ...){
   ## Gather necessary bits ##
   G  <- data[, groups]
@@ -42,7 +42,8 @@ wght_deriv_array <- function(f.ab,
     w <- by(cbind(X, A), INDICES = G, simplify = TRUE, 
             FUN = function(x) {
               x <- as.matrix(x) # PrAX expects a matrix
-              wght_deriv_calc(f.ab = f.ab, type = type, alpha = alpha, 
+              wght_deriv_calc(f.ab = f.ab, include.alpha = include.alpha,
+                              alpha = alpha, 
                               A = x[, p+1], X = x[, 1:p], 
                               theta = theta, ...)})
     w2 <- matrix(unlist(w, use.names = FALSE), ncol = p+1, byrow = TRUE)
