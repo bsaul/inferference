@@ -24,20 +24,23 @@
 #' @export
 #-----------------------------------------------------------------------------#
 
-run_interference <- function(f.ab,
+run_interference <- function(f.ab = logit_integrand,
+                             likelihood = logit_integrand,
                              alphas,
                              data,
                              groups,
                              outcome,
                              treatment, 
                              predictors,
-                             type = 'c',
+                             include.alpha = FALSE,
                              propensityB = treatment,
                              family = binomial,
                              known_params = NULL,
                              ...){
   ## Necessary bits ##
   dots <- list(...)
+  f.ab <- match.fun(f.ab)
+  likelihood <- match.fun(likelihood)
   
   ## Reorder data frame by groups ##
   data <- data[order(data[ , groups]), ]
@@ -67,7 +70,7 @@ run_interference <- function(f.ab,
                              predictors = predictors, 
                              treatment = treatment,
                              theta = theta_fit, 
-                             type = type),
+                             include.alpha = include.alpha),
                         get_args(FUN = f.ab, args_list = dots))
 
   weights <- do.call(wght_matrix, args = weight_args)
@@ -82,34 +85,42 @@ run_interference <- function(f.ab,
   args1 <- append(estimate_args, list(weights = weights))
   args2 <- append(estimate_args, list(weights = weightd))
   
-  bscore_args <- append(list(predictors = predictors,
-                             B = propensityB, 
-                             groups = groups,
-                             theta = theta_fit, 
-                             data = data),
-                        get_args(FUN = bscore_calc, args_list = dots))
+  score_args <- append(list(integrand = likelihood,
+                            predictors = predictors,
+                            treatment = propensityB, 
+                            groups = groups,
+                            theta = theta_fit, 
+                            data = data),
+                        get_args(FUN = likelihood, args_list = dots))
+  score_args$r <- 1 # set randomization scheme to 1 for scores
 
   #### Prepare output ####
-  out <- list()
+  out <- list()  
+
+  #### Calculate output ####
+  out$point_estimates <- do.call(ipw_point_estimates, args = args1)
+  out$Upart   <- do.call(ipw_point_estimates, args = args2)
+  out$scores  <- do.call(score_matrix_calc, args = score_args)
+  out$weights <- weights
+  out$weightd <- weightd
   
   ## Summary ##
   trt_lvls <- sort(unique(data[, treatment]))
   N <- length(unique(data[ , groups]))
   k <- length(alphas)
   l <- length(trt_lvls)
+  weights_na <- apply(weights, 2, function(x) sum(is.na(x)))
+  scores_na <- apply(out$scores, 2, function(x) sum(is.na(x)))
   
   out$summary <- list(ngroups = N, 
                       nalphas = k,
                       alphas = alphas,
                       ntreatments = l,
                       treatments = trt_lvls,
-                      predictors = predictors)  
-  out$point_estimates <- do.call(ipw_point_estimates, args = args1)
-  out$Upart   <- do.call(ipw_point_estimates, args = args2)
-  out$bscores <- do.call(bscore_calc, args = bscore_args)
-  out$weights <- weights
-  out$weightd <- weightd
+                      predictors = predictors,
+                      weights_na = weights_na,
+                      scores_na  = scores_na)  
   
-  print('Run_inteference complete')
+  print('Run_interference complete')
   return(out)
 }

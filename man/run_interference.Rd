@@ -3,9 +3,9 @@
 \alias{run_interference}
 \title{Run Interference}
 \usage{
-run_interference(f.ab, alphas, data, groups, outcome, treatment, predictors,
-  type = "c", propensityB = treatment, family = binomial,
-  known_params = NULL, ...)
+run_interference(f.ab = logit_integrand, likelihood = logit_integrand,
+  alphas, data, groups, outcome, treatment, predictors, include.alpha = FALSE,
+  propensityB = treatment, family = binomial, known_params = NULL, ...)
 }
 \arguments{
 \item{f.ab}{f.ab function to pass to the argument 'f' of \code{\link{integrate}}.}

@@ -96,7 +96,7 @@ calc_effect <- function(obj,
   U21 <- (t(as.matrix(apply(U_grp_diff, 2, sum, na.rm = T))))/N
   
   # V matrix
-  V <- V_matrix(scores = obj$bscores, 
+  V <- V_matrix(scores = obj$scores, 
                 point_estimates = obj$point_estimates, 
                 alpha1 = a1, alpha2 = a2, 
                 trt.lvl1 = t1, trt.lvl2 = t2, 
