@@ -87,6 +87,9 @@ generate_po <- function(base_data,
     alpha <- (a + k)/n_i
     X <- cbind(1, a, alpha, grpdt$X1, grpdt$X2, a*alpha)
     p <- plogis(X %*% parameters)
+    
+    if(length(p) != n_i){stop('Problem in po_y_ij(): length(p) != n_i')}
+    
     return(rbinom(n_i, 1, p))
   }
   
@@ -117,7 +120,7 @@ generate_po <- function(base_data,
 #' @export
 #-----------------------------------------------------------------------------#
 
-sim_data <- function(base_dt, potential_outcomes, parameters){
+sim_interference_data <- function(base_dt, potential_outcomes, parameters){
 
   N <- length(unique(base_dt$group))
   n <- nrow(base_dt)
@@ -153,37 +156,31 @@ sim_data <- function(base_dt, potential_outcomes, parameters){
 }
 
 #-----------------------------------------------------------------------------#
-#' TBD
-#' @export 
-#-----------------------------------------------------------------------------#
-
-replicate_sims <- function(base_dt, 
-                           potential_outcomes, 
-                           nsims,
-                           parameters){
-  
-  out <- list(nsims)
-  for(sim in 1:nsims){
-    out[[sim]] <- sim_data(base_dt, potential_outcomes, parameters)
-  }
-  return(out)
-}
-
-#-----------------------------------------------------------------------------#
 #' Interference Simulations
+#' 
+#' Combines \code{\link{sim_base_data}}, \code{\link{generate_po}}, and 
+#' \code{\link{sim_interference_data}} into one function.
+#' 
 #' @export 
 #-----------------------------------------------------------------------------#
 
-interference_sims <- function(n, N, nsims, base.parameters, parameters, alphas){
-  basedt  <- sim_units(n = n, N = N)
-  this.po <- make_po(basedt, base.parameters)
+sim_interference <- function(n, 
+                             N, 
+                             nsims, 
+                             base.parameters = c(.5, -.788, -2.953, -0.098, -0.145, 0.351), 
+                             parameters = c(0.2727, -0.0387, 0.2179, 1.0859), 
+                             alphas){
+  
+  basedt  <- sim_base_data(n = n, N = N)
+  this.po <- generate_po(basedt, base.parameters)
   
   out <- list()
-  out$truth <- calc_estimands(this.po, alphas)  
-  out$sims  <- replicate_sims(base_dt = basedt, 
-                              potential_outcomes = this.po, 
-                              nsims = nsims, 
-                              parameters = parameters)
   out$base  <- basedt
+  out$truth <- calc_estimands(this.po, alphas)  
+  out$sims  <- replicate(nsims, sim_interference_data(basedt, 
+                                                      this.po, 
+                                                      parameters),
+                         simplify = FALSE)
+
   return(out)
 }

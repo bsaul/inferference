@@ -5,8 +5,8 @@
 \usage{
 sim_base_data(N.groups, n.units, X1.distr = "rexp", X1.args = list(rate =
   1/20), ind.dist.distr = "rnorm", ind.dist.args = list(mean = 0, sd =
-  0.05), grp.dist.distr = "rlnorm", grp.dist.args = list(mean = 0, sd =
-  0.75))
+  0.05), grp.dist.distr = "rlnorm", grp.dist.args = list(meanlog = 0, sdlog
+  = 0.75))
 }
 \arguments{
 \item{N.groups}{the number of groups}
