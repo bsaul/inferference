@@ -15,14 +15,31 @@
 #' @param X n by length(theta) - 1 matrix of covariates. Make sure the order of columns in X corresponds to theta
 #' @param theta p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be the last element.
 #' @param A vector of observed treatments (0,1)
-#' @param alpha The allocation strategy. Required if type == 'b'. Defaults to NA.
+#' @param alpha The allocation strategy. Required if include.alpha == TRUE. 
+#' Defaults to NA.
 #' @param r Randomization probability. Defaults to 2/3.
-#' @param type Either 'b' for including alpha in the product or 'c' does not include alpha.
+#' @param include.alpha Either TRUE for including alpha in the product or FALSE 
+#' does not include alpha.
 #' 
 #' @return value of the integrand
 #' @export
 #' 
-PrAX_integrand <- function(b, x, pos = NA, X, A, theta, alpha = NA, r = 2/3, type){
+
+logit_integrand <- function(b, 
+                           x, 
+                           pos = NA, 
+                           X, 
+                           A, 
+                           theta, 
+                           alpha = NA, 
+                           r = 1, 
+                           include.alpha = FALSE){
+  
+  ## Warnings ##
+  if(length(theta) - 1 != ncol(X)){
+    stop('The number of fixed effect parameters is not equal to the number \n
+         of columns in the covariate matrix')
+  }
   
   if(!is.na(pos)){
     theta[pos] <- x
@@ -36,10 +53,10 @@ PrAX_integrand <- function(b, x, pos = NA, X, A, theta, alpha = NA, r = 2/3, typ
   
   pr.b <- r * (plogis(drop(outer(X %*% theta.fix, b, '+'))))  
   
-  if(type == 'c'){
-    hh <- pr.b^A * (1 - pr.b)^(1 - A)
-  }
-  else if(type == 'b'){
+  if(include.alpha == FALSE){
+    #hh <- pr.b^A * (1 - pr.b)^(1 - A)
+    hh <- dbinom(A, 1, pr.b)
+  } else {
     hh <- (pr.b/alpha)^A * ((1-pr.b)/(1 - alpha))^(1-A)
   }
   
