@@ -112,14 +112,15 @@ run_interference <- function(f.ab = logit_integrand,
   weights_na <- apply(weights, 2, function(x) sum(is.na(x)))
   scores_na <- apply(out$scores, 2, function(x) sum(is.na(x)))
   
-  out$summary <- list(ngroups = N, 
-                      nalphas = k,
-                      alphas = alphas,
+  out$summary <- list(ngroups     = N, 
+                      nalphas     = k,
+                      alphas      = alphas,
                       ntreatments = l,
-                      treatments = trt_lvls,
-                      predictors = predictors,
-                      weights_na = weights_na,
-                      scores_na  = scores_na)  
+                      treatments  = trt_lvls,
+                      predictors  = predictors,
+                      weights_na  = weights_na,
+                      scores_na   = scores_na,
+                      oracle      = !is.null(known_params))  
   
   print('Run_interference complete')
   return(out)

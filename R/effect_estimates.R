@@ -91,33 +91,33 @@ calc_effect <- function(obj,
   }
 
   #### VARIANCE ESTIMATION ####
-  
-  # U matrix
-  U21 <- (t(as.matrix(apply(U_grp_diff, 2, sum, na.rm = T))))/N
-  
-  # V matrix
-  V <- V_matrix(scores = obj$scores, 
-                point_estimates = obj$point_estimates, 
-                alpha1 = a1, alpha2 = a2, 
-                trt.lvl1 = t1, trt.lvl2 = t2, 
-                effect = effect, marginal = marginal)
-  
-  vdim <- dim(V)[1]
-  
-  V21 <- V[vdim, 1:(vdim - 1)] # Last row, up to last column
-  V11 <- V[1:(vdim - 1), 1:(vdim - 1)] # up to last row, up to last column
-  V22 <- V[vdim, vdim] # bottom right element
- 
-  ## Sandwich Variance Estimate ##
-  sve <- ((U21 - 2*V21) %*% solve(V11) %*% t(U21) + V22)/N * rescale.factor^2
-  
-  ## Empirical Variance Estimate ##
-  eve <- (1/(N^2)) * (sum((pe_grp_diff)^2, na.rm = T)) * rescale.factor^2
+  if(obj$summary$oracle == FALSE){
+    # U matrix
+    U21 <- (t(as.matrix(apply(U_grp_diff, 2, sum, na.rm = T))))/N
+    
+    # V matrix
+    V <- V_matrix(scores = obj$scores, 
+                  point_estimates = obj$point_estimates, 
+                  alpha1 = a1, alpha2 = a2, 
+                  trt.lvl1 = t1, trt.lvl2 = t2, 
+                  effect = effect, marginal = marginal)
+    
+    vdim <- dim(V)[1]
+    
+    V21 <- V[vdim, 1:(vdim - 1)] # Last row, up to last column
+    V11 <- V[1:(vdim - 1), 1:(vdim - 1)] # up to last row, up to last column
+    V22 <- V[vdim, vdim] # bottom right element
+    
+    ## Sandwich Variance Estimate ##
+    ave <- ((U21 - 2*V21) %*% solve(V11) %*% t(U21) + V22)/N * rescale.factor^2
+  } else {
+    ave <- (1/(N^2)) * (sum((pe_grp_diff)^2, na.rm = T)) * rescale.factor^2
+  }
   
   ## Confidence Intervals ##
-  qq <- conf.level + (1 - conf.level)/2
-  me <- qnorm(qq) * sqrt(sve)
-  
+  qq <- qnorm(conf.level + (1 - conf.level)/2)
+  me <- qq * sqrt(ave)
+ 
   ## Prepare Output ##
   pe <- pe * rescale.factor
   
@@ -129,10 +129,9 @@ calc_effect <- function(obj,
   }
   
   out <- data.frame(point = pe,
-                    sandwich_variance = sve, 
+                    variance = ave, 
                     ll = pe - me, 
-                    ul = pe + me,
-                    empirical_variance = eve)
+                    ul = pe + me)
   return(out)
 }
 
