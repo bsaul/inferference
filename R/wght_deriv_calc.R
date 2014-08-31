@@ -14,11 +14,13 @@
 wght_deriv_calc <- function(f.ab,
                             theta, 
                             alpha,
-                            include.alpha, 
-                            method = "Richardson", 
-                            method.args = list(eps=1e-4, d=0.0001, 
-                                                zero.tol=sqrt(.Machine$double.eps/7e-7), 
-                                                r=4, v=2, show.details=FALSE),
+                            include.alpha,
+                            method = "simple",
+                            method.args = list(eps = 1e-4),
+#                             method = "Richardson", 
+#                             method.args = list(eps=1e-4, d=0.0001, 
+#                                                 zero.tol=sqrt(.Machine$double.eps/7e-7), 
+#                                                 r=4, v=2, show.details=FALSE),
                             hide.errors = TRUE,
                             ...)
 {  

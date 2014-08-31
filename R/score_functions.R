@@ -6,6 +6,7 @@
 #' @param pos
 #' @param integrand Defaults to logit_integrand
 #' @return value of log likelihood
+#' @export
 
 log_likelihood <- function(x, pos, integrand = logit_integrand, ...){
   integrand <- match.fun(integrand)
@@ -31,6 +32,7 @@ log_likelihood <- function(x, pos, integrand = logit_integrand, ...){
 #' @param theta See \code{\link{logit_integrand}}.
 #' @param ... additional arguments pass to the integrand function
 #' @return length(theta) vector of scores
+#' @export
 
 score_calc <- function(integrand = logit_integrand,
                        hide.errors = TRUE,
@@ -43,7 +45,8 @@ score_calc <- function(integrand = logit_integrand,
   ## Compute the derivative of the log likelihood for each parameter ##
   scores <- sapply(1:length(theta), function(i){
     args <- append(get_args(integrand, dots),
-                   list(func = log_likelihood, theta = theta, x = theta[i], pos = i))
+                   list(func = log_likelihood, theta = theta, x = theta[i], pos = i,
+                        method = 'simple'))
     attempt <- try(do.call('grad', args = args), silent = hide.errors)
     return(ifelse(is(attempt, 'try-error'), NA, attempt))
   })
