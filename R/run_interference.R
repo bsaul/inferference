@@ -34,7 +34,7 @@ run_interference <- function(f.ab = logit_integrand,
                              predictors,
                              include.alpha = FALSE,
                              propensityB = treatment,
-                             family = binomial,
+                             family = binomial(link = 'logit'),
                              known_params = NULL,
                              ...){
   ## Necessary bits ##
@@ -56,7 +56,7 @@ run_interference <- function(f.ab = logit_integrand,
     
     fit <- do.call(glmer, args = glmer_args)
     
-    theta_fit <- c(fixef(fit), random.var = VarCorr(fit)[groups][[1]])
+    theta_fit <- c(fixef(fit), random.eff = sqrt(VarCorr(fit)[groups][[1]]))
   } else {
     theta_fit <- known_params
   }
@@ -112,14 +112,16 @@ run_interference <- function(f.ab = logit_integrand,
   weights_na <- apply(weights, 2, function(x) sum(is.na(x)))
   scores_na <- apply(out$scores, 2, function(x) sum(is.na(x)))
   
-  out$summary <- list(ngroups     = N, 
+  out$summary <- list(formula     = form,
+                      ngroups     = N, 
                       nalphas     = k,
                       alphas      = alphas,
                       ntreatments = l,
                       treatments  = trt_lvls,
                       predictors  = predictors,
-                      weights_na  = weights_na,
-                      scores_na   = scores_na,
+                      weights_na_count  = weights_na,
+                      scores_na_count   = scores_na,
+                      parameters  = theta_fit,
                       oracle      = !is.null(known_params))  
   
   print('Run_interference complete')

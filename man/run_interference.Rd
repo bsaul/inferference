@@ -5,7 +5,8 @@
 \usage{
 run_interference(f.ab = logit_integrand, likelihood = logit_integrand,
   alphas, data, groups, outcome, treatment, predictors, include.alpha = FALSE,
-  propensityB = treatment, family = binomial, known_params = NULL, ...)
+  propensityB = treatment, family = binomial(link = "logit"),
+  known_params = NULL, ...)
 }
 \arguments{
 \item{f.ab}{f.ab function to pass to the argument 'f' of \code{\link{integrate}}.}

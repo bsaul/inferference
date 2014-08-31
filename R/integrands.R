@@ -62,5 +62,5 @@ logit_integrand <- function(b,
   
   hh_ <- apply(hh, 2, prod)
   
-  return(hh_ * dnorm(b, mean=0, sqrt(theta[length(theta)])))
+  return(hh_ * dnorm(b, mean=0, theta[length(theta)]))
 }
