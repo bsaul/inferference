@@ -13,8 +13,7 @@ ipw_point_estimates <- function(y,
                                 G, 
                                 A, 
                                 data, 
-                                weights,
-                                set.NA.to.0 = TRUE){
+                                weights){
   
   ## DEFINE OBJECTS NEEDED FOR FUNCTION ##
   out <- list()
@@ -36,10 +35,6 @@ ipw_point_estimates <- function(y,
     predictors <- dimnames(weights)[[2]]
   }
   
-  ## replace any missing weights with 0 ##
-  if(set.NA.to.0 == TRUE) {
-    weights[is.na(weights)] <- 0
-  }
   
   ## CALCULATE MARGINAL ESTIMATES ####
   ybar <- group_means(Y = y, A = A, G = G, a = NA, data = data)
