@@ -57,7 +57,7 @@ run_interference <- function(f.ab = logit_integrand,
     
     fit <- do.call(glmer, args = glmer_args)
     
-    theta_fit <- c(fixef(fit), random.eff = sqrt(VarCorr(fit)[groups][[1]]))
+    theta_fit <- c(fixef(fit), random.eff = log(sqrt(VarCorr(fit)[groups][[1]])))
   } else {
     theta_fit <- known_params
   }
