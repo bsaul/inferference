@@ -4,7 +4,7 @@
 \title{Calculate matrix of log Likelihood derivatives}
 \usage{
 score_matrix_calc(integrand = logit_integrand, predictors, treatment, groups,
-  theta, data, set.NA.to.0 = TRUE, ...)
+  params, data, ...)
 }
 \arguments{
 \item{integrand}{function passed to \code{\link{log_likelihood}}. Defaults to
@@ -23,11 +23,11 @@ of the Perez paper.}
 
 \item{groups}{character string of the group variable in data}
 
-\item{theta}{p + 1 vector of fixed effects plus the random effect variance.
+\item{params}{p + 1 vector of fixed effects plus the random effect variance.
 The variance estimate must be last.}
 }
 \value{
-N X length(theta) matrix of scores
+N X length(params) matrix of scores
 }
 \description{
 Calculate matrix of log Likelihood derivatives

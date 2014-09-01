@@ -7,7 +7,7 @@
 #' @param groups quoted string for name of variable in data containing group membership
 #' @param predictors character vector of names of predictor variables in data
 #' @param A character vector of name of treatment variable in data
-#' @param theta p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be last.
+#' @param params p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be last.
 #' @param type type of weight to compute. See \code{\link{wght_calc}}
 #' @param ... additional arguments passed to f.ab
 #' @return a length(unique(group)) X length(alphas) matrix of group weights 
@@ -19,7 +19,7 @@ wght_deriv_array <- function(f.ab,
                              groups, 
                              predictors, 
                              treatment, 
-                             theta, 
+                             params, 
                              include.alpha, 
                              ...){
   ## Gather necessary bits ##
@@ -33,8 +33,8 @@ wght_deriv_array <- function(f.ab,
   N  <- length(unique(G))
 
   ## Warnings ##
-  if(length(theta) != (p + 1)){
-    stop("The length of theta is not equal to the number of predictors + 2 ")
+  if(length(params) != (p + 1)){
+    stop("The length of params is not equal to the number of predictors + 2 ")
   }
   
   ## Compute weight (derivative) for each group, parameter, and alpha level ##
@@ -45,14 +45,14 @@ wght_deriv_array <- function(f.ab,
               wght_deriv_calc(f.ab = f.ab, include.alpha = include.alpha,
                               alpha = alpha, 
                               A = x[, p+1], X = x[, 1:p], 
-                              theta = theta, ...)})
+                              params = params, ...)})
     w2 <- matrix(unlist(w, use.names = FALSE), ncol = p+1, byrow = TRUE)
     return(w2)}) 
   
   ## Reshape list into array ##
   out <- array(unlist(w.list, use.names = FALSE), 
                dim = c(N, p+1, k),
-               dimnames = list(gg, names(theta), aa))
+               dimnames = list(gg, names(params), aa))
   
   return(out)
 }

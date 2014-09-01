@@ -3,7 +3,7 @@
 \alias{wght_deriv_array}
 \title{Create an array of group weight derivative}
 \usage{
-wght_deriv_array(f.ab, alphas, data, groups, predictors, treatment, theta,
+wght_deriv_array(f.ab, alphas, data, groups, predictors, treatment, params,
   include.alpha, ...)
 }
 \arguments{
@@ -17,7 +17,7 @@ wght_deriv_array(f.ab, alphas, data, groups, predictors, treatment, theta,
 
 \item{A}{character vector of name of treatment variable in data}
 
-\item{theta}{p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be last.}
+\item{params}{p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be last.}
 
 \item{type}{type of weight to compute. See \code{\link{wght_calc}}}
 

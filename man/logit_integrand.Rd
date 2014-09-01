@@ -3,7 +3,7 @@
 \alias{logit_integrand}
 \title{Integrand of Pr(A|X)}
 \usage{
-logit_integrand(b, x, pos = NA, X, A, theta, alpha = NA, r = 1,
+logit_integrand(b, x, pos = NA, X, A, params, alpha = NA, r = 1,
   include.alpha = FALSE)
 }
 \arguments{
@@ -15,7 +15,7 @@ logit_integrand(b, x, pos = NA, X, A, theta, alpha = NA, r = 1,
 
 \item{X}{n by length(theta) - 1 matrix of covariates. Make sure the order of columns in X corresponds to theta}
 
-\item{theta}{p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be the last element.}
+\item{params}{p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be the last element.}
 
 \item{A}{vector of observed treatments (0,1)}
 

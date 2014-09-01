@@ -15,7 +15,7 @@
 #' @param type see \code{\link{wght_calc}}
 #' @param propensityB. Defaults to \code{treatment}
 #' @param family passed to \code{\link{glmer}}. See \code{\link{family}}
-#' @param theta_known if the parameter vector is known (e.g. for simulated data), 
+#' @param known_params if the parameter vector is known (e.g. for simulated data), 
 #' this argument can be used to pass the known parameters to \code{\link{wght_calc}} 
 #' and related functions. If this argument is given, fixed effect parameter estimation
 #' is skipped. Defaults to NULL.
@@ -36,6 +36,7 @@ run_interference <- function(f.ab = logit_integrand,
                              propensityB = treatment,
                              family = binomial(link = 'logit'),
                              known_params = NULL,
+                             set.NA.to.0 = TRUE,
                              ...){
   ## Necessary bits ##
   dots <- list(...)
@@ -46,11 +47,11 @@ run_interference <- function(f.ab = logit_integrand,
   data <- data[order(data[ , groups]), ]
   
   #### Unless parameter values are provided, use glmer() for estimates ####
+  form <- paste(propensityB, '~',
+                paste(predictors, collapse=' + '), 
+                '+ (1|', groups, ')')
+  
   if (is.null(known_params)){
-    form <- paste(propensityB, '~',
-                  paste(predictors, collapse=' + '), 
-                  '+ (1|', groups, ')')
-    
     glmer_args <- append(list(formula = form, data = data, family = family),
                          get_args(FUN = glmer, args_list = dots))
     
@@ -69,12 +70,18 @@ run_interference <- function(f.ab = logit_integrand,
                              groups = groups, 
                              predictors = predictors, 
                              treatment = treatment,
-                             theta = theta_fit, 
+                             params = theta_fit, 
                              include.alpha = include.alpha),
                         get_args(FUN = f.ab, args_list = dots))
 
   weights <- do.call(wght_matrix, args = weight_args)
   weightd <- do.call(wght_deriv_array, args = weight_args)
+  
+  ## replace any missing weights with 0 ##
+  if(set.NA.to.0 == TRUE) {
+    weights[is.na(weights)] <- 0
+    weightd[is.na(weightd)] <- 0
+  }
   
   #### COMPUTE ESTIMATES AND OUTPUT ####
   estimate_args <- append(list(y = outcome, 
@@ -89,7 +96,7 @@ run_interference <- function(f.ab = logit_integrand,
                             predictors = predictors,
                             treatment = propensityB, 
                             groups = groups,
-                            theta = theta_fit, 
+                            params = theta_fit, 
                             data = data),
                         get_args(FUN = likelihood, args_list = dots))
   score_args$r <- 1 # set randomization scheme to 1 for scores
@@ -101,6 +108,10 @@ run_interference <- function(f.ab = logit_integrand,
   out$point_estimates <- do.call(ipw_point_estimates, args = args1)
   out$Upart   <- do.call(ipw_point_estimates, args = args2)
   out$scores  <- do.call(score_matrix_calc, args = score_args)
+  ## replace any Bscores with 0 ##
+  if(set.NA.to.0 == TRUE) {
+    out$scores[is.na(out$scores)] <- 0
+  }
   out$weights <- weights
   out$weightd <- weightd
   
@@ -112,7 +123,7 @@ run_interference <- function(f.ab = logit_integrand,
   weights_na <- apply(weights, 2, function(x) sum(is.na(x)))
   scores_na <- apply(out$scores, 2, function(x) sum(is.na(x)))
   
-  out$summary <- list(formula     = form,
+  out$summary <- list(formula     = ifelse(is.null(known_params), form, NA),
                       ngroups     = N, 
                       nalphas     = k,
                       alphas      = alphas,

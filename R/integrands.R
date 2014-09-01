@@ -13,7 +13,7 @@
 #' @param x The argument passed to be \code{\link{grad}}. Only used if \code{pos} is not NA.
 #' @param pos The position of theta for which to take the derivative. Defaults to NA.
 #' @param X n by length(theta) - 1 matrix of covariates. Make sure the order of columns in X corresponds to theta
-#' @param theta p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be the last element.
+#' @param params p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be the last element.
 #' @param A vector of observed treatments (0,1)
 #' @param alpha The allocation strategy. Required if include.alpha == TRUE. 
 #' Defaults to NA.
@@ -30,31 +30,31 @@ logit_integrand <- function(b,
                            pos = NA, 
                            X, 
                            A, 
-                           theta, 
+                           params, 
                            alpha = NA, 
                            r = 1, 
                            include.alpha = FALSE){
   
   ## Warnings ##
-  if(length(theta) - 1 != ncol(X)){
+  if(length(params) - 1 != ncol(X)){
     stop('The number of fixed effect parameters is not equal to the number \n
          of columns in the covariate matrix')
   }
   
   if(!is.na(pos)){
-    theta[pos] <- x
+    params[pos] <- x
   }
   
   if(!is.matrix(X)){
     X <- as.matrix(X)
   }
   
-  theta.fix <- theta[1:ncol(X)]
+  theta.fix <- params[1:ncol(X)]
+  theta.ran <- params[length(params)]
   
   pr.b <- r * (plogis(drop(outer(X %*% theta.fix, b, '+'))))  
   
   if(include.alpha == FALSE){
-    #hh <- pr.b^A * (1 - pr.b)^(1 - A)
     hh <- dbinom(A, 1, pr.b)
   } else {
     hh <- (pr.b/alpha)^A * ((1-pr.b)/(1 - alpha))^(1-A)
@@ -62,5 +62,5 @@ logit_integrand <- function(b,
   
   hh_ <- apply(hh, 2, prod)
   
-  return(hh_ * dnorm(b, mean=0, theta[length(theta)]))
+  return(hh_ * dnorm(b, mean=0, theta.ran))
 }

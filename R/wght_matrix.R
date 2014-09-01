@@ -15,7 +15,7 @@
 #' @param groups quoted string for name of variable in data containing group membership
 #' @param predictors character vector of names of predictor variables in data
 #' @param A character vector of name of treatment variable in data
-#' @param theta p + 1 vector of fixed effects plus the random effect variance. 
+#' @param params p + 1 vector of fixed effects plus the random effect variance. 
 #' The variance estimate must be last.
 #' @param type type of weight to compute. See \code{\link{wght_calc}}
 #' @param ... additional arguments passed to \code{f.ab}
@@ -28,7 +28,7 @@ wght_matrix <- function(f.ab = logit_integrand,
                         groups, 
                         predictors, 
                         treatment, 
-                        theta, 
+                        params, 
                         include.alpha, 
                         ...){
   ## Gather necessary bits ##
@@ -47,7 +47,7 @@ wght_matrix <- function(f.ab = logit_integrand,
               wght_calc(f.ab = f.ab, include.alpha = include.alpha, 
                         alpha = alpha, 
                         A = x[, p+1], X = x[, 1:p], 
-                        theta = theta, ...)})
+                        params = params, ...)})
     as.numeric(w)
   }) 
   

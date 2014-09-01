@@ -3,14 +3,14 @@
 \alias{wght_deriv_calc}
 \title{Compute the derivative(s) of a weight}
 \usage{
-wght_deriv_calc(f.ab, theta, alpha, include.alpha, method = "simple",
+wght_deriv_calc(f.ab, params, alpha, include.alpha, method = "simple",
   method.args = list(eps = 1e-04), hide.errors = TRUE, ...)
 }
 \arguments{
 \item{f.ab}{the function to passed to the argument 'f' of \code{\link{integrate}},
 which is part of \code{\link{wght_calc}}.}
 
-\item{theta}{parameters with which to take derivatives with respect to}
+\item{params}{parameters with which to take derivatives with respect to}
 
 \item{type}{see \code{\link{wght_calc}}. Defaults to 'b'.}
 
@@ -23,7 +23,7 @@ which is part of \code{\link{wght_calc}}.}
 \item{...}{additional arguments passed to f.ab}
 }
 \value{
-vector of derivatives with respect to element of theta
+vector of derivatives with respect to element of params
 }
 \description{
 Compute the derivative(s) of a weight

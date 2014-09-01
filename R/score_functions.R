@@ -36,16 +36,16 @@ log_likelihood <- function(x, pos, integrand = logit_integrand, ...){
 
 score_calc <- function(integrand = logit_integrand,
                        hide.errors = TRUE,
-                       theta,
+                       params,
                        ...){
   ## Necessary bits ##
   integrand <- match.fun(integrand)
   dots <- list(...)
   
   ## Compute the derivative of the log likelihood for each parameter ##
-  scores <- sapply(1:length(theta), function(i){
+  scores <- sapply(1:length(params), function(i){
     args <- append(get_args(integrand, dots),
-                   list(func = log_likelihood, theta = theta, x = theta[i], pos = i,
+                   list(func = log_likelihood, params = params, x = params[i], pos = i,
                         method = 'simple'))
     attempt <- try(do.call('grad', args = args), silent = hide.errors)
     return(ifelse(is(attempt, 'try-error'), NA, attempt))

@@ -12,9 +12,9 @@
 #' of the Perez paper.
 #' @param data data frame
 #' @param groups character string of the group variable in data 
-#' @param theta p + 1 vector of fixed effects plus the random effect variance. 
+#' @param params p + 1 vector of fixed effects plus the random effect variance. 
 #' The variance estimate must be last.
-#' @return N X length(theta) matrix of scores
+#' @return N X length(params) matrix of scores
 #' @export
 #-----------------------------------------------------------------------------#
 
@@ -22,13 +22,12 @@ score_matrix_calc <- function(integrand = logit_integrand,
                               predictors, 
                               treatment, 
                               groups, 
-                              theta, 
+                              params, 
                               data,
-                              set.NA.to.0 = TRUE, 
                               ...){
   ## Warnings ##
-  if(length(theta) != (length(predictors) + 2)){
-    stop("The length of theta is not equal to the number of predictors + 2 ")
+  if(length(params) != (length(predictors) + 2)){
+    stop("The length of params is not equal to the number of predictors + 2 ")
   }
   
   ## Necessary bits ##
@@ -43,7 +42,7 @@ score_matrix_calc <- function(integrand = logit_integrand,
   s.list <- by(XX, INDICES = G, simplify = TRUE, 
                FUN = function(xx) {
                xx <- as.matrix(xx)
-               args <- append(list(integrand = integrand, theta = theta,
+               args <- append(list(integrand = integrand, params = params,
                             A = xx[ , (p + 1)],
                             X = xx[ , 1:p]), 
                             get_args(integrand, dots))
@@ -53,12 +52,7 @@ score_matrix_calc <- function(integrand = logit_integrand,
   out <- matrix(unlist(s.list, use.names = FALSE), 
                 ncol = p + 1, 
                 byrow = TRUE,
-                dimnames = list(gg, names(theta)))
-  
-  ## replace any Bscores with 0 ##
-  if(set.NA.to.0 == TRUE) {
-    out[is.na(out)] <- 0
-  }
+                dimnames = list(gg, names(params)))
   
   return(out)
 }

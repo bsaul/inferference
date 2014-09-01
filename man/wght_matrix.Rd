@@ -4,7 +4,7 @@
 \title{Create a matrix of group weights}
 \usage{
 wght_matrix(f.ab = logit_integrand, alphas, data, groups, predictors,
-  treatment, theta, include.alpha, ...)
+  treatment, params, include.alpha, ...)
 }
 \arguments{
 \item{f.ab}{the integrand used in the weight calculation. Defaults to
@@ -20,7 +20,7 @@ wght_matrix(f.ab = logit_integrand, alphas, data, groups, predictors,
 
 \item{A}{character vector of name of treatment variable in data}
 
-\item{theta}{p + 1 vector of fixed effects plus the random effect variance.
+\item{params}{p + 1 vector of fixed effects plus the random effect variance.
 The variance estimate must be last.}
 
 \item{type}{type of weight to compute. See \code{\link{wght_calc}}}

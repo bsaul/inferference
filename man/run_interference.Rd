@@ -6,7 +6,7 @@
 run_interference(f.ab = logit_integrand, likelihood = logit_integrand,
   alphas, data, groups, outcome, treatment, predictors, include.alpha = FALSE,
   propensityB = treatment, family = binomial(link = "logit"),
-  known_params = NULL, ...)
+  known_params = NULL, set.NA.to.0 = TRUE, ...)
 }
 \arguments{
 \item{f.ab}{f.ab function to pass to the argument 'f' of \code{\link{integrate}}.}
@@ -29,7 +29,7 @@ run_interference(f.ab = logit_integrand, likelihood = logit_integrand,
 
 \item{family}{passed to \code{\link{glmer}}. See \code{\link{family}}}
 
-\item{theta_known}{if the parameter vector is known (e.g. for simulated data),
+\item{known_params}{if the parameter vector is known (e.g. for simulated data),
 this argument can be used to pass the known parameters to \code{\link{wght_calc}}
 and related functions. If this argument is given, fixed effect parameter estimation
 is skipped. Defaults to NULL.}
