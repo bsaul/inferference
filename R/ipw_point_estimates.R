@@ -42,15 +42,14 @@ ipw_point_estimates <- function(y,
   grp_est <- apply(weights, 2:3, function(x) x * ybar) 
   dimnames(grp_est) <- list(groups, predictors, alphas)
   
-  oa_est <- apply(grp_est, 2:3, mean, na.rm = TRUE)
+  oa_est <- apply(grp_est, 2:3, sum, na.rm = TRUE)/N
 
   out$marginal_outcomes$groups <- drop(grp_est)
   out$marginal_outcomes$overall <- drop(oa_est)
   
   ## CALCULATE OUTCOME ESTIMATES PER TREATMENT LEVEL####
   
-  hold_grp <- hold_grp_diff <- array(dim = c(N, p, k, l),
-                                     dimnames = list(groups, predictors, 
+  hold_grp <- array(dim = c(N, p, k, l), dimnames = list(groups, predictors, 
                                                      alphas, trt_lvls))
   hold_oal <- array(dim = c(p, k, l),
                     dimnames = list(predictors, alphas, trt_lvls))
@@ -70,7 +69,7 @@ ipw_point_estimates <- function(y,
     
     # Compute estimates
     grp_est <- apply(weights_trt, 2:3, function(x) x * ybar_trt) 
-    oal_est <- apply(grp_est, 2:3, mean, na.rm = TRUE)
+    oal_est <- apply(grp_est, 2:3, sum, na.rm = TRUE)/N
     
     hold_grp[ , , , ll] <- grp_est
     hold_oal[ , , ll]   <- oal_est
