@@ -78,17 +78,17 @@ calc_effect <- function(obj,
   cntrst <- effect == 'contrast'
   if(marginal == TRUE){
     pe          <- oal[a1] - ifelse(cntrst, oal[a2], 0)
-    pe_grp_diff <- (grp[ , a1] - ifelse(cntrst, grp[, a2], 0)) - pe
+    pe_grp_diff <- (grp[ , a1] - oal[a1]) - ifelse(cntrst, grp[, a2] - oal[a2], 0)
     U_pe_grp    <- Ugrp[ , , a1] - ifelse(cntrst, Ugrp[ , , a2], 0)  
   } else {
     pe          <- oal[a1, t1] - ifelse(cntrst, oal[a2, t2], 0)
-    pe_grp_diff <- (grp[ , a1, t1] - ifelse(cntrst, grp[ , a2, t2], 0)) - pe
+    pe_grp_diff <- (grp[ , a1, t1] - oal[a1, t1]) - ifelse(cntrst, grp[ , a2, t2] - oal[a2, t2], 0)
     U_pe_grp    <- Ugrp[ , , a1, t1] - ifelse(cntrst, Ugrp[ , , a2, t2], 0)  
   }
   
   #### VARIANCE ESTIMATION ####
   if(obj$summary$oracle == FALSE){
-    # U matrix
+    # partial U matrix
     U21 <- (t(as.matrix(apply(-U_pe_grp, 2, sum, na.rm = T))))/N
     
     # V matrix

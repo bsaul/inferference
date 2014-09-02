@@ -29,13 +29,9 @@ V_matrix <- function(scores,
   
   if(effect == 'contrast'){   
     if(marginal == TRUE){
-      pe <- hold_oal[a1] - hold_oal[a2]
-      grp.pe <- hold_grp[ , a1] - hold_grp[, a2]
-      xx <- grp.pe - pe
+      xx <- (hold_grp[ , a1] - hold_oal[a1]) - (hold_grp[, a2] - hold_oal[a2])
     } else {
-      pe <- hold_oal[a1, t1] - hold_oal[a2, t2]
-      grp.pe <- hold_grp[ ,a1, t1] - hold_grp[, a2, t2]
-      xx <- grp.pe - pe
+      xx <- (hold_grp[ , a1, t1] - hold_oal[a1, t1]) - (hold_grp[, a2, t2] - hold_oal[a2, t2])
     }
   } 
   else if(effect == 'outcome'){
