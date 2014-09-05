@@ -66,10 +66,10 @@ compare_truth <- function(a1,
 summarize_comparisons <- function(estimates, truth, alphas){
   
   ## Build list of arguments ##
-  args1 <- expand.grid(a1 = alphaz, t1 = c(0,1), a2 = NA, t2 = NA, 
+  args1 <- expand.grid(a1 = alphas, t1 = c(0,1), a2 = NA, t2 = NA, 
               effect = c('outcome'), marginal = c(TRUE, FALSE))
   args1 <- args1[-which(args1$marginal == TRUE & args1$t1 == 1), ]
-  args2 <- expand.grid(a1 = alphaz, t1 = c(0,1), a2 = alphaz, t2 = c(0,1), 
+  args2 <- expand.grid(a1 = alphas, t1 = c(0,1), a2 = alphas, t2 = c(0,1), 
               effect = c('contrast'), marginal = c(TRUE, FALSE) )
   args2 <- args2[-which((args2$marginal == TRUE & (args2$t1 == 1 | args2$t2 == 1)) |
                           args2$a2 < args2$a1 | (args2$a1 == args2$a2 & args2$t1 == args2$t2) |
