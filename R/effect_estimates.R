@@ -75,22 +75,33 @@ calc_effect <- function(obj,
   Uoal <- obj$Upart[[fff]]$overall 
   Ugrp <- obj$Upart[[fff]]$groups
   
-  cntrst <- effect == 'contrast'
-  if(marginal == TRUE){
-    pe          <- oal[a1] - ifelse(cntrst, oal[a2], 0)
-    pe_grp_diff <- (grp[ , a1] - oal[a1]) - ifelse(cntrst, grp[, a2] - oal[a2], 0)
-    U_pe_grp    <- Ugrp[ , , a1] - ifelse(cntrst, Ugrp[ , , a2], 0)  
+  if(effect == 'contrast'){
+    if(marginal == TRUE){
+      pe          <- oal[a1] - oal[a2]
+      pe_grp_diff <- (grp[ , a1] - oal[a1]) - (grp[, a2] - oal[a2])
+      U_pe_grp    <- Ugrp[ , , a1] - Ugrp[ , , a2]  
+    } else {
+      pe          <- oal[a1, t1] - oal[a2, t2]
+      pe_grp_diff <- (grp[ , a1, t1] - oal[a1, t1]) - (grp[ , a2, t2] - oal[a2, t2])
+      U_pe_grp    <- Ugrp[ , , a1, t1] - Ugrp[ , , a2, t2]
+    }
   } else {
-    pe          <- oal[a1, t1] - ifelse(cntrst, oal[a2, t2], 0)
-    pe_grp_diff <- (grp[ , a1, t1] - oal[a1, t1]) - ifelse(cntrst, grp[ , a2, t2] - oal[a2, t2], 0)
-    U_pe_grp    <- Ugrp[ , , a1, t1] - ifelse(cntrst, Ugrp[ , , a2, t2], 0)  
+    if(marginal == TRUE){
+      pe          <- oal[a1] 
+      pe_grp_diff <- (grp[ , a1] - oal[a1]) 
+      U_pe_grp    <- Ugrp[ , , a1] 
+    } else {
+      pe          <- oal[a1, t1] 
+      pe_grp_diff <- (grp[ , a1, t1] - oal[a1, t1]) 
+      U_pe_grp    <- Ugrp[ , , a1, t1] - Ugrp[ , , a2, t2]
+    }
   }
   
   #### VARIANCE ESTIMATION ####
   if(obj$summary$oracle == FALSE){
     # partial U matrix
     U21 <- (t(as.matrix(apply(-U_pe_grp, 2, sum, na.rm = T))))/N
-    
+
     # V matrix
     V <- V_matrix(scores = obj$scores, 
                   point_estimates = obj$point_estimates, 
