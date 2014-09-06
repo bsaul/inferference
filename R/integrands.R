@@ -50,7 +50,7 @@ logit_integrand <- function(b,
   }
   
   theta.fix <- params[1:ncol(X)]
-  theta.ran <- exp(params[length(params)])
+  theta.ran <- params[length(params)]
   
   pr.b <- r * (plogis(drop(outer(X %*% theta.fix, b, '+'))))  
   
