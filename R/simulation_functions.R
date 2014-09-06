@@ -125,11 +125,11 @@ sim_interference_data <- function(base_dt, potential_outcomes, parameters){
   N <- length(unique(base_dt$group))
   n <- nrow(base_dt)
   theta_fix <- parameters[-length(parameters)]
-  rvar <- parameters[length(parameters)]
+  rse <- parameters[length(parameters)]
   ## hood random effect ##
   # neighborhood level random effect from N(0, variance = 1.0859)
   group_effect <- data.frame(group = 1:N, 
-                             b = rnorm(N, mean = 0, sd = sqrt(rvar)))
+                             b = rnorm(N, mean = 0, sd = rse))
   
   dt <- merge(base_dt, group_effect, by='group')
   dt <- within(dt, {
