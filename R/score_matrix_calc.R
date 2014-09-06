@@ -35,22 +35,22 @@ score_matrix_calc <- function(integrand = logit_integrand,
   dots <- list(...)
   G  <- data[, groups]
   XX <- cbind(1, data[, c(predictors, treatment)])
-  p  <- ncol(XX) - 1
-  gg <- unique(G)
+  pp <- ncol(XX) - 1
+  gg <- sort(unique(G))
   
   ## Compute score for each group and parameter ##
   s.list <- by(XX, INDICES = G, simplify = TRUE, 
                FUN = function(xx) {
                xx <- as.matrix(xx)
                args <- append(list(integrand = integrand, params = params,
-                            A = xx[ , (p + 1)],
-                            X = xx[ , 1:p]), 
+                            A = xx[ , (pp + 1)],
+                            X = xx[ , 1:pp]), 
                             get_args(integrand, dots))
-               return(do.call('score_calc', args = args))})
+               return(do.call(score_calc, args = args))})
   
   ## Reshape list into matrix ##
   out <- matrix(unlist(s.list, use.names = FALSE), 
-                ncol = p + 1, 
+                ncol = pp + 1, 
                 byrow = TRUE,
                 dimnames = list(gg, names(params)))
   

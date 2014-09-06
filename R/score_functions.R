@@ -14,7 +14,7 @@ log_likelihood <- function(x, pos, integrand = logit_integrand, ...){
   args <- append(get_args(integrand, dots), 
                  list(f = integrand, lower = -Inf, upper = Inf, x = x, pos = pos))
   
-  attempt <- try(do.call("integrate", args = args))
+  attempt <- try(do.call(integrate, args = args))
   val <- ifelse(is(attempt, 'try-error'), NA, attempt$value)
 
   return(log(val))
@@ -47,7 +47,7 @@ score_calc <- function(integrand = logit_integrand,
     args <- append(get_args(integrand, dots),
                    list(func = log_likelihood, params = params, x = params[i], pos = i,
                         method = 'simple'))
-    attempt <- try(do.call('grad', args = args), silent = hide.errors)
+    attempt <- try(do.call(grad, args = args), silent = hide.errors)
     return(ifelse(is(attempt, 'try-error'), NA, attempt))
   })
   
