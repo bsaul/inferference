@@ -93,7 +93,7 @@ calc_effect <- function(obj,
     } else {
       pe          <- oal[a1, t1] 
       pe_grp_diff <- (grp[ , a1, t1] - oal[a1, t1]) 
-      U_pe_grp    <- Ugrp[ , , a1, t1] - Ugrp[ , , a2, t2]
+      U_pe_grp    <- Ugrp[ , , a1, t1]
     }
   }
   
