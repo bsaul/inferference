@@ -39,6 +39,9 @@ this argument can be used to pass the known parameters to \code{\link{wght_calc}
 and related functions. If this argument is given, fixed effect parameter estimation
 is skipped. Defaults to NULL.}
 
+\item{set.NA.to.0}{if TRUE, sets any weights that returned an NA value to 0.
+Defaults to TRUE.}
+
 \item{additional}{arguments passed to other functions such as
 \code{\link{glmer}}, \code{\link{grad}}, and \code{\integrand} or \code{likelihood}.}
 }

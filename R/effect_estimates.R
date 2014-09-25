@@ -105,7 +105,7 @@ calc_effect <- function(obj,
     # V matrix
     V <- V_matrix(scores = obj$scores, 
                   point_estimates = obj$point_estimates, 
-                  alpha1 = a1, alpha2 = a2, 
+                  allocation1 = a1, allocation2 = a2, 
                   trt.lvl1 = t1, trt.lvl2 = t2, 
                   effect = effect, marginal = marginal)
     

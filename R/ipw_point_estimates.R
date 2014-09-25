@@ -16,15 +16,11 @@ ipw_point_estimates <- function(outcome,
                                 treatment, 
                                 data, 
                                 weights){
-  
-  ## DEFINE OBJECTS NEEDED FOR FUNCTION ##
-  out <- list()
-  
-  groups <- dimnames(weights)[[1]]
-  alphas <- as.numeric(dimnames(weights)[[length(dim(weights))]])
+  ## Necessary Bits ##
+  grps     <- dimnames(weights)[[1]]
+  alphas   <- as.numeric(dimnames(weights)[[length(dim(weights))]])
   trt_lvls <- sort(unique(data[, treatment]))
-  
-  N <- length(groups)
+  N <- length(grps)
   k <- length(alphas)
   l <- length(trt_lvls)
   p <- ifelse(is.matrix(weights), 1, dim(weights)[2])
@@ -37,11 +33,13 @@ ipw_point_estimates <- function(outcome,
     predictors <- dimnames(weights)[[2]]
   }
   
+  out <- list()
   ## CALCULATE MARGINAL ESTIMATES ####
   ybar <- group_means(Y = outcome, A = treatment, G = groups, a = NA, data = data)
+
   
   grp_est <- apply(weights, 2:3, function(x) x * ybar) 
-  dimnames(grp_est) <- list(groups, predictors, alphas)
+  dimnames(grp_est) <- list(grps, predictors, alphas)
   
   oa_est <- apply(grp_est, 2:3, sum, na.rm = TRUE)/N
 
@@ -50,7 +48,7 @@ ipw_point_estimates <- function(outcome,
   
   ## CALCULATE OUTCOME ESTIMATES PER TREATMENT LEVEL####
   
-  hold_grp <- array(dim = c(N, p, k, l), dimnames = list(groups, predictors, 
+  hold_grp <- array(dim = c(N, p, k, l), dimnames = list(grps, predictors, 
                                                      alphas, trt_lvls))
   hold_oal <- array(dim = c(p, k, l),
                     dimnames = list(predictors, alphas, trt_lvls))
