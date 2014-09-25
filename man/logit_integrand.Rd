@@ -3,8 +3,8 @@
 \alias{logit_integrand}
 \title{Integrand of Pr(A|X)}
 \usage{
-logit_integrand(b, x, pos = NA, X, A, params, alpha = NA, r = 1,
-  include.alpha = FALSE)
+logit_integrand(b, X, A, params, x = NULL, pos = NULL, allocation = NULL,
+  r = 1, include.allocation = FALSE)
 }
 \arguments{
 \item{b}{vector argument of values necessary for \code{\link{integrate}}}
@@ -19,7 +19,7 @@ logit_integrand(b, x, pos = NA, X, A, params, alpha = NA, r = 1,
 
 \item{A}{vector of observed treatments (0,1)}
 
-\item{alpha}{The allocation strategy. Required if include.alpha == TRUE.
+\item{allocation}{The allocation strategy. Required if include.alpha == TRUE.
 Defaults to NA.}
 
 \item{r}{Randomization probability. Defaults to 2/3.}

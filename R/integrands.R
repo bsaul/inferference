@@ -15,7 +15,7 @@
 #' @param X n by length(theta) - 1 matrix of covariates. Make sure the order of columns in X corresponds to theta
 #' @param params p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be the last element.
 #' @param A vector of observed treatments (0,1)
-#' @param alpha The allocation strategy. Required if include.alpha == TRUE. 
+#' @param allocation The allocation strategy. Required if include.alpha == TRUE. 
 #' Defaults to NA.
 #' @param r Randomization probability. Defaults to 2/3.
 #' @param include.alpha Either TRUE for including alpha in the product or FALSE 
@@ -26,14 +26,14 @@
 #' 
 
 logit_integrand <- function(b, 
-                           x, 
-                           pos = NA, 
-                           X, 
-                           A, 
-                           params, 
-                           alpha = NA, 
-                           r = 1, 
-                           include.alpha = FALSE){
+                            X, 
+                            A, 
+                            params, 
+                            x = NULL, 
+                            pos = NULL, 
+                            allocation = NULL, 
+                            r = 1, 
+                            include.allocation = FALSE){
   
   ## Warnings ##
   if(length(params) - 1 != ncol(X)){
@@ -41,10 +41,11 @@ logit_integrand <- function(b,
          of columns in the covariate matrix')
   }
   
-  if(!is.na(pos)){
+  if(!is.null(pos)){
     params[pos] <- x
   }
   
+  # X needs to be a matrix
   if(!is.matrix(X)){
     X <- as.matrix(X)
   }
@@ -54,13 +55,13 @@ logit_integrand <- function(b,
   
   pr.b <- r * (plogis(drop(outer(X %*% theta.fix, b, '+'))))  
   
-  if(include.alpha == FALSE){
+  if(include.allocation == FALSE){
     hh <- dbinom(A, 1, pr.b)
   } else {
-    hh <- (pr.b/alpha)^A * ((1-pr.b)/(1 - alpha))^(1-A)
+    hh <- (pr.b/allocation)^A * ((1-pr.b)/(1 - allocation))^(1-A)
   }
   
-  hh_ <- apply(hh, 2, prod)
+  hha <- apply(hh, 2, prod)
   
-  return(hh_ * dnorm(b, mean=0, theta.ran))
+  return(hha * dnorm(b, mean=0, theta.ran))
 }
