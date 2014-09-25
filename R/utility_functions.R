@@ -28,7 +28,6 @@ get_args <- function(FUN, args_list = NULL, ...){
 #' @param G name of grouping variable in data
 #' @param a value of treatment level, defaults to NA.
 #' @return data dataset to use
-#' @export
 #'
 
 group_means <- function(Y, A, G, a = NA, data){

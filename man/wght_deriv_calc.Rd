@@ -11,11 +11,7 @@ which is part of \code{\link{wght_calc}}.}
 
 \item{params}{parameters with which to take derivatives with respect to}
 
-\item{type}{see \code{\link{wght_calc}}. Defaults to 'b'.}
-
-\item{method}{see \code{\link{grad}}.}
-
-\item{method.args}{see \code{\link{grad}}}
+\item{allocation}{the allocation ratio for which to compute the weights}
 
 \item{hide.errors}{print \code{grad} error messages. Defaults to TRUE.}
 
@@ -25,6 +21,7 @@ which is part of \code{\link{wght_calc}}.}
 vector of derivatives with respect to element of params
 }
 \description{
-Compute the derivative(s) of a weight
+Takes the derivative of the \code{\link{wght_calc}} function with respect to each
+parameter in \code{params}.
 }
 

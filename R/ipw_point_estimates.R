@@ -1,17 +1,19 @@
 #-----------------------------------------------------------------------------#
 #' Calculate IPW point estimates
 #'  
-#' @param y vector of unweighted group means (i.e. output from \code{\link{group_means}}
-#' @param a treatment level (0,1) for which to compute weights. Defaults to NULL which returns marginal.
-#' @param weights weight matrix/array to use
-#' @param na.rm exclude groups missing weights? defaults to FALSE.
-#' @return length(alpha) vector of IPW estimates
+#' @param outcome quoted name of outcome variable in \code{data}
+#' @param groups quoted name of group variable in \code{data}
+#' @param treatment quoted name of treatment variable in \code{data}
+#' @param weights weight matrix/array to use from either \code{\link{wght_matrix}}
+#' or \code{\link{wght_deriv_array}}
+#' @return list containing point estimates for marginal outcomes and estimates
+#' per treatment level
 #' @export
 #-----------------------------------------------------------------------------#
 
-ipw_point_estimates <- function(y, 
-                                G, 
-                                A, 
+ipw_point_estimates <- function(outcome, 
+                                groups, 
+                                treatment, 
                                 data, 
                                 weights){
   
@@ -20,7 +22,7 @@ ipw_point_estimates <- function(y,
   
   groups <- dimnames(weights)[[1]]
   alphas <- as.numeric(dimnames(weights)[[length(dim(weights))]])
-  trt_lvls <- sort(unique(data[, A]))
+  trt_lvls <- sort(unique(data[, treatment]))
   
   N <- length(groups)
   k <- length(alphas)
@@ -35,9 +37,8 @@ ipw_point_estimates <- function(y,
     predictors <- dimnames(weights)[[2]]
   }
   
-  
   ## CALCULATE MARGINAL ESTIMATES ####
-  ybar <- group_means(Y = y, A = A, G = G, a = NA, data = data)
+  ybar <- group_means(Y = outcome, A = treatment, G = groups, a = NA, data = data)
   
   grp_est <- apply(weights, 2:3, function(x) x * ybar) 
   dimnames(grp_est) <- list(groups, predictors, alphas)
@@ -58,7 +59,7 @@ ipw_point_estimates <- function(y,
     a <- trt_lvls[ll]
     
     # Compute means per group
-    ybar_trt <- group_means(Y = y, A = A, G = G, a = a, data = data)
+    ybar_trt <- group_means(Y = outcome, A = treatment, G = groups, a = a, data = data)
     
     # Modify weights per treatment level
     weights_trt <- array(dim= c(N, p, k))

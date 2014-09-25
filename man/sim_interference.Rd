@@ -6,6 +6,24 @@
 sim_interference(n, N, nsims, base.parameters = c(0.5, -0.788, -2.953, -0.098,
   -0.145, 0.351), parameters = c(0.2727, -0.0387, 0.2179, 1.0859), alphas)
 }
+\arguments{
+\item{n}{number of units}
+
+\item{N}{number of groups}
+
+\item{nsims}{number of simulations}
+
+\item{base.parameters}{passed to \code{\link{sim_base_data}}}
+
+\item{parameters}{passed to \code{\link{sim_interference_data}}}
+
+\item{alphas}{allocation (coverage) levels to calculate estimand with
+\code{\link{calc_estimands}}}
+}
+\value{
+a list with 3 elements: (1) the base dataset, (2) sims, a list of
+\code{nsims} datasets (3) truth: the estimands computed from the sims.
+}
 \description{
 Combines \code{\link{sim_base_data}}, \code{\link{generate_po}}, and
 \code{\link{sim_interference_data}} into one function.

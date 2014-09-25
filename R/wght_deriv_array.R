@@ -1,16 +1,18 @@
-#' Create an array of group weight derivative 
+#' Create an array of group weight derivatives 
 #' 
-#' - creates a length(group) X length(theta) X length(alphas) array 
+#' Uses \code{\link{wght_deriv_calc}} to compute the weight derivatives for each 
+#' group per coverage level
 #'  
-#' @param alphas coverage levels in (0, 1), possibly (probably) vector valued
+#' @param allocations coverage levels in (0, 1), possibly (probably) vector valued
 #' @param data data frame
 #' @param groups quoted string for name of variable in data containing group membership
 #' @param predictors character vector of names of predictor variables in data
-#' @param A character vector of name of treatment variable in data
-#' @param params p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be last.
-#' @param type type of weight to compute. See \code{\link{wght_calc}}
+#' @param treatment character vector of name of treatment variable in data
+#' @param params p + 1 vector of fixed effects plus the random effect variance. 
+#' The variance estimate must be last.
 #' @param ... additional arguments passed to integrand
-#' @return a length(unique(group)) X length(alphas) matrix of group weights 
+#' @return a length(unique(group)) X length(params) X length(alphas) array of 
+#' group weight derivatives
 #' @export
 
 wght_deriv_array <- function(integrand, 
@@ -20,9 +22,9 @@ wght_deriv_array <- function(integrand,
                              predictors, 
                              treatment, 
                              params, 
-                             include.alpha, 
                              ...){
   ## Gather necessary bits ##
+  integrand <- match.fun(integrand)
   G  <- data[, groups]
   X  <- cbind(1, data[, predictors])
   A  <- data[, treatment]
@@ -44,7 +46,8 @@ wght_deriv_array <- function(integrand,
               x <- as.matrix(x) # PrAX expects a matrix
               wght_deriv_calc(integrand = integrand, 
                               allocation = allocation, 
-                              A = x[, p+1], X = x[, 1:p], 
+                              A = x[, p+1], 
+                              X = x[, 1:p], 
                               params = params, ...)})
     w2 <- matrix(unlist(w, use.names = FALSE), ncol = p+1, byrow = TRUE)
     return(w2)}) 

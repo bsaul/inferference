@@ -8,14 +8,14 @@ wght_calc(integrand, allocation, x = NULL, pos = NULL, ...)
 \arguments{
 \item{integrand}{function to pass to the argument 'f' of \code{\link{integrate}}.}
 
-\item{type}{see description. Defaults to 'b'.}
+\item{allocation}{the allocation ratio for which to compute the weight}
 
-\item{x}{necessary argument for \code{\link{grad}}. Defaults to NA, so if
+\item{x}{necessary argument for \code{\link{grad}}. Defaults to NULL, so if
 not evaluting a derivative with \code{\link{wght_deriv_calc}}, this can be
 ignored.}
 
 \item{pos}{necessary taking a derivative when using to \code{\link{PrAX_integrand}}
-Defaults to NA, so if not evaluting a derivative with \code{\link{wght_deriv_calc}},
+Defaults to NULL, so if not evaluting a derivative with \code{\link{wght_deriv_calc}},
 this can be ignored.}
 
 \item{...}{other arguments passed to integrand.}
@@ -28,14 +28,13 @@ Calculates the IPW for a single group. Used by \code{\link{wght_matrix}} to
 create a matrix of weights for each group and allocation scheme.
 }
 \details{
-Type c =
-\deqn{\frac{\prod_{j=1}^n \alpha^A_j (1 - \alpha)^(1-
-A_j)}{Pr(A|X)}}{prod(alpha^A(1 - alpha)^A) / integrate(PrAX_integrand)}
-Type b =
-\deqn{\frac{1}{Pr(A|X)}}{1 / integrate(PrAX_integrand)}
+If \code{include.allocation} is an argument in the integrand function and
+\code{include.allocation == TRUE}, then the weight is calcuated as:
 
-Type b incorporates the numerator of type c into the \eqn{Pr(A|X)} integral,
-resulting in a slower computation but more accurate results (especially
-for large groups)
+\deqn{\frac{1}{Pr(A|X)}}{1 / integrate(integrand)}
+
+Otherwise, the weight is computed by:
+\deqn{\frac{\prod_{j=1}^n \alpha^A_j (1 - \alpha)^(1-
+A_j)}{Pr(A|X)}}{prod(allocation^A(1 - allocation)^A) / integrate(integrand)}
 }
 

@@ -12,7 +12,7 @@ Defaults to \code{\link{logit_integrand}}}
 \item{hide.errors}{Hide errors printed from \code{\link{grad}}.
 Defaults to true}
 
-\item{theta}{See \code{\link{logit_integrand}}.}
+\item{params}{See \code{\link{logit_integrand}}.}
 
 \item{...}{additional arguments pass to the integrand function}
 }

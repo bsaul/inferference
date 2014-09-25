@@ -3,16 +3,21 @@
 \alias{V_matrix}
 \title{V Matrix}
 \usage{
-V_matrix(scores, point_estimates, alpha1, trt.lvl1, alpha2 = NA,
+V_matrix(scores, point_estimates, allocation1, trt.lvl1, allocation2 = NA,
   trt.lvl2 = NA, effect, marginal)
 }
 \arguments{
-\item{scores}{}
+\item{scores}{the output of \code{\link{score_calc_matrix}}}
+
+\item{point_estimates}{output of \code{\link{ipw_point_estimates}}}
+
+\item{allocation1}{for this and remaining arguments see details in \code{\link{calc_effects}}}
 }
 \value{
 V matrix
 }
 \description{
-V Matrix
+Computes the V matrix necessary for variance estimates. Used in
+\code{\link{calc_effects}}. See web appendix of Perez et al. 2014 for more details.
 }
 

@@ -16,15 +16,17 @@ score_matrix_calc(integrand = logit_integrand, predictors, treatment, groups,
 2014, this does not necessarily need to be the same 'treatment' used to compute
 the weights as in \code{\link{wght_matrix_calc}}. The \code{propensityB}
 argument in \code{\link{run_interference}} may be used to pass a different
-indicator variable other than the actual treatment or exposure. In the case
-of the Perez paper.}
-
-\item{data}{data frame}
+indicator variable other than the actual treatment or exposure.}
 
 \item{groups}{character string of the group variable in data}
 
 \item{params}{p + 1 vector of fixed effects plus the random effect variance.
 The variance estimate must be last.}
+
+\item{data}{data frame containing analysis variable}
+
+\item{...}{additional arguments passed to \code{integrand} or \code{\link{grad}}.
+For example, one can change the \code{method} argument in \code{grad}.}
 }
 \value{
 N X length(params) matrix of scores

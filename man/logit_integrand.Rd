@@ -9,11 +9,12 @@ logit_integrand(b, X, A, params, x = NULL, pos = NULL, allocation = NULL,
 \arguments{
 \item{b}{vector argument of values necessary for \code{\link{integrate}}}
 
-\item{x}{The argument passed to be \code{\link{grad}}. Only used if \code{pos} is not NA.}
+\item{x}{Used by \code{\line{grad}} for taking the derivative with respect an element of
+params. Only used if \code{pos} is not NULL.}
 
-\item{pos}{The position of theta for which to take the derivative. Defaults to NA.}
+\item{pos}{The position of theta for which to take the derivative. Defaults to NULL.}
 
-\item{X}{n by length(theta) - 1 matrix of covariates. Make sure the order of columns in X corresponds to theta}
+\item{X}{n by length(params) - 1 matrix of covariates. Make sure the order of columns in X corresponds to params.}
 
 \item{params}{p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be the last element.}
 
@@ -22,10 +23,10 @@ logit_integrand(b, X, A, params, x = NULL, pos = NULL, allocation = NULL,
 \item{allocation}{The allocation strategy. Required if include.alpha == TRUE.
 Defaults to NA.}
 
-\item{r}{Randomization probability. Defaults to 2/3.}
+\item{r}{Randomization probability. Defaults to 1.}
 
-\item{include.alpha}{Either TRUE for including alpha in the product or FALSE
-does not include alpha.}
+\item{include.allocation}{Either TRUE for including allocation in the product or FALSE
+does not include allocation. See \code{\link{wght_calc}} for more information.}
 }
 \value{
 value of the integrand
@@ -38,6 +39,7 @@ f_b(b; \theta_b)}{ prod(r * plogis(X * fixef + b)^A *
 dnorm(sd = sqrt(ranef))}
 where \eqn{r} is the randomization scheme. \eqn{X} is the covariate(s) vectors.
 \eqn{fixef} is the vector of fixed effects. \eqn{b} is the random (group-level) effect.
-\eqn{ranef} is the random effect variance.
+\eqn{ranef} is the random effect variance. Used by \code{\link{wght_calc}} and
+\code{\link{score_calc}}.
 }
 

@@ -3,19 +3,21 @@
 \alias{ipw_point_estimates}
 \title{Calculate IPW point estimates}
 \usage{
-ipw_point_estimates(y, G, A, data, weights)
+ipw_point_estimates(outcome, groups, treatment, data, weights)
 }
 \arguments{
-\item{y}{vector of unweighted group means (i.e. output from \code{\link{group_means}}}
+\item{outcome}{quoted name of outcome variable in \code{data}}
 
-\item{a}{treatment level (0,1) for which to compute weights. Defaults to NULL which returns marginal.}
+\item{groups}{quoted name of group variable in \code{data}}
 
-\item{weights}{weight matrix/array to use}
+\item{treatment}{quoted name of treatment variable in \code{data}}
 
-\item{na.rm}{exclude groups missing weights? defaults to FALSE.}
+\item{weights}{weight matrix/array to use from either \code{\link{wght_matrix}}
+or \code{\link{wght_deriv_array}}}
 }
 \value{
-length(alpha) vector of IPW estimates
+list containing point estimates for marginal outcomes and estimates
+per treatment level
 }
 \description{
 Calculate IPW point estimates

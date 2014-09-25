@@ -9,9 +9,14 @@ run_interference(integrand = logit_integrand, likelihood = logit_integrand,
   known_params = NULL, set.NA.to.0 = TRUE, ...)
 }
 \arguments{
-\item{integrand}{function to pass to the argument 'f' of \code{\link{integrate}}.}
+\item{integrand}{function used as the integrand in computing the IPW weights.
+Defaults to \code{\link{logit_integrand}}.}
 
-\item{allocations}{the allocation schemes for which to estimate effects. Must be in (0, 1].}
+\item{likelihood}{function used as the integrand in computing the scores in
+\code{\link{score_calc}}. Defaults to \code{\link{logit_integrand}}.}
+
+\item{allocations}{the allocation (coverage) schemes for which to estimate effects.
+Must be in (0, 1].}
 
 \item{data}{the analysis data.frame}
 
@@ -23,21 +28,26 @@ run_interference(integrand = logit_integrand, likelihood = logit_integrand,
 
 \item{predictors}{character vector of predictor variables in \code{data}}
 
-\item{type}{see \code{\link{wght_calc}}}
+\item{propensityB}{Optional. If the treatment variable is different for
+\code{integrand} and \code{likelihood}, include the quote name of the variable
+to be passed to \code{likelihood}. Defaults to \code{treatment}.}
 
-\item{propensityB.}{Defaults to \code{treatment}}
-
-\item{family}{passed to \code{\link{glmer}}. See \code{\link{family}}}
+\item{family}{passed to \code{\link{glmer}}. See \code{\link{family}}.}
 
 \item{known_params}{if the parameter vector is known (e.g. for simulated data),
 this argument can be used to pass the known parameters to \code{\link{wght_calc}}
 and related functions. If this argument is given, fixed effect parameter estimation
 is skipped. Defaults to NULL.}
 
-\item{additional}{arguments passed to other functions. See \code{\link{glmer}}}
+\item{additional}{arguments passed to other functions such as
+\code{\link{glmer}}, \code{\link{grad}}, and \code{\integrand} or \code{likelihood}.}
 }
 \value{
-Returns a list of ..
+Returns a list of overall and group-level IPW point estimates
+(the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW
+point estimates (using the weight derivatives), scores (the output of
+\code{\link{score_matrix_calc}}), the computed weight matrix, the computed
+weight derivative array, and a summary.
 }
 \description{
 Prepares the object necessary to compute IPW effect estimates with

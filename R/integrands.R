@@ -7,19 +7,21 @@
 #' dnorm(sd = sqrt(ranef))} 
 #' where \eqn{r} is the randomization scheme. \eqn{X} is the covariate(s) vectors. 
 #' \eqn{fixef} is the vector of fixed effects. \eqn{b} is the random (group-level) effect.
-#' \eqn{ranef} is the random effect variance.
+#' \eqn{ranef} is the random effect variance. Used by \code{\link{wght_calc}} and
+#' \code{\link{score_calc}}.
 #' 
 #' @param b vector argument of values necessary for \code{\link{integrate}}
-#' @param x The argument passed to be \code{\link{grad}}. Only used if \code{pos} is not NA.
-#' @param pos The position of theta for which to take the derivative. Defaults to NA.
-#' @param X n by length(theta) - 1 matrix of covariates. Make sure the order of columns in X corresponds to theta
+#' @param x Used by \code{\line{grad}} for taking the derivative with respect an element of
+#' params. Only used if \code{pos} is not NULL.
+#' @param pos The position of theta for which to take the derivative. Defaults to NULL.
+#' @param X n by length(params) - 1 matrix of covariates. Make sure the order of columns in X corresponds to params.
 #' @param params p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be the last element.
 #' @param A vector of observed treatments (0,1)
 #' @param allocation The allocation strategy. Required if include.alpha == TRUE. 
 #' Defaults to NA.
-#' @param r Randomization probability. Defaults to 2/3.
-#' @param include.alpha Either TRUE for including alpha in the product or FALSE 
-#' does not include alpha.
+#' @param r Randomization probability. Defaults to 1.
+#' @param include.allocation Either TRUE for including allocation in the product or FALSE 
+#' does not include allocation. See \code{\link{wght_calc}} for more information.
 #' 
 #' @return value of the integrand
 #' @export

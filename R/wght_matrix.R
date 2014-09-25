@@ -1,6 +1,6 @@
 #' Create a matrix of group weights 
 #' 
-#' Creates a number of groups by number of allocation scheme matrix of group weights.
+#' Creates a number of groups by number of allocation schemes matrix of group weights.
 #' Allocation schemes are selected by the user. 
 #' 
 #' Groups should be numbered 1, ..., N
@@ -10,14 +10,13 @@
 #'  
 #' @param integrand the function used in the weight calculation. Defaults to 
 #' \code{\link{logit_integrand}}
-#' @param alphas coverage levels in (0, 1), possibly (probably) vector valued
+#' @param allocations coverage levels in (0, 1), possibly (probably) vector valued
 #' @param data data frame
 #' @param groups quoted string for name of variable in data containing group membership
 #' @param predictors character vector of names of predictor variables in data
 #' @param A character vector of name of treatment variable in data
 #' @param params p + 1 vector of fixed effects plus the random effect variance. 
 #' The variance estimate must be last.
-#' @param type type of weight to compute. See \code{\link{wght_calc}}
 #' @param ... additional arguments passed to \code{integrand}
 #' @return a length(unique(group)) X length(alphas) matrix of group weights 
 #' @export

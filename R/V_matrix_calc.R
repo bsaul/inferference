@@ -1,24 +1,30 @@
 #-----------------------------------------------------------------------------#
 #' V Matrix
+#' 
+#' Computes the V matrix necessary for variance estimates. Used in 
+#' \code{\link{calc_effects}}. See web appendix of Perez et al. 2014 for more details.
 #'  
-#' @param scores
+#' @param scores the output of \code{\link{score_calc_matrix}}
+#' @param point_estimates output of \code{\link{ipw_point_estimates}}
+#' @param allocation1 for this and remaining arguments see details in \code{\link{calc_effects}}
+#' 
 #' @return V matrix
 #' @export
 #' 
 #-----------------------------------------------------------------------------#
 V_matrix <- function(scores, 
                      point_estimates, 
-                     alpha1, 
+                     allocation1, 
                      trt.lvl1, 
-                     alpha2   = NA, 
-                     trt.lvl2 = NA, 
+                     allocation2 = NA, 
+                     trt.lvl2    = NA, 
                      effect, 
                      marginal){
   ## Necessary bits ##
-  N <- dim(scores)[1]
-  p <- dim(scores)[2]
-  a1 <- alpha1
-  a2 <- alpha2
+  N  <- dim(scores)[1]
+  p  <- dim(scores)[2]
+  a1 <- allocation1
+  a2 <- allocation2
   t1 <- trt.lvl1
   t2 <- trt.lvl2
   

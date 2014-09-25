@@ -2,8 +2,10 @@
 #' 
 #' Used by \code{\link{score_matrix_calc}} to compute the log likelihood.
 #' 
-#' @param x
-#' @param pos
+#' @param x used by \code{\link{grad}} to take the derivative of the 
+#' \code{\link{integrate}}(\code{integrand}) with respect to each value of the 
+#' \code{param} argument in \code{integrand} 
+#' @param pos 
 #' @param integrand Defaults to logit_integrand
 #' @return value of log likelihood
 #' @export
@@ -37,7 +39,7 @@ log_likelihood <- function(x, pos, integrand = logit_integrand, ...){
 #' Defaults to \code{\link{logit_integrand}}
 #' @param hide.errors Hide errors printed from \code{\link{grad}}. 
 #' Defaults to true
-#' @param theta See \code{\link{logit_integrand}}.
+#' @param params See \code{\link{logit_integrand}}.
 #' @param ... additional arguments pass to the integrand function
 #' @return length(theta) vector of scores
 #' @export

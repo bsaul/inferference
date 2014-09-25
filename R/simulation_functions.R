@@ -117,6 +117,13 @@ generate_po <- function(base_data,
 
 #-----------------------------------------------------------------------------#
 #' Simulate data
+#' 
+#' Simulate a single dataset as in Step 1 of 2014 Perez et al.
+#' 
+#' @param base_dt dataset created from \code{\link{sim_base_data}}
+#' @param potential_outcomes array created from \code{\link{generate_po}}
+#' @param parameters parameters used to generate simulated data.
+#' @return single dataset with \code{nrow(base_dt)} observations.
 #' @export
 #-----------------------------------------------------------------------------#
 
@@ -160,6 +167,16 @@ sim_interference_data <- function(base_dt, potential_outcomes, parameters){
 #' 
 #' Combines \code{\link{sim_base_data}}, \code{\link{generate_po}}, and 
 #' \code{\link{sim_interference_data}} into one function.
+#' 
+#' @param n number of units
+#' @param N number of groups
+#' @param nsims number of simulations
+#' @param base.parameters passed to \code{\link{sim_base_data}}
+#' @param parameters passed to \code{\link{sim_interference_data}}
+#' @param alphas allocation (coverage) levels to calculate estimand with 
+#' \code{\link{calc_estimands}}
+#' @return a list with 3 elements: (1) the base dataset, (2) sims, a list of 
+#' \code{nsims} datasets (3) truth: the estimands computed from the sims.
 #' 
 #' @export 
 #-----------------------------------------------------------------------------#

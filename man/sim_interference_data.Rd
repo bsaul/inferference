@@ -5,7 +5,17 @@
 \usage{
 sim_interference_data(base_dt, potential_outcomes, parameters)
 }
+\arguments{
+\item{base_dt}{dataset created from \code{\link{sim_base_data}}}
+
+\item{potential_outcomes}{array created from \code{\link{generate_po}}}
+
+\item{parameters}{parameters used to generate simulated data.}
+}
+\value{
+single dataset with \code{nrow(base_dt)} observations.
+}
 \description{
-Simulate data
+Simulate a single dataset as in Step 1 of 2014 Perez et al.
 }
 

@@ -6,7 +6,9 @@
 log_likelihood(x, pos, integrand = logit_integrand, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{used by \code{\link{grad}} to take the derivative of the
+\code{\link{integrate}}(\code{integrand}) with respect to each value of the
+\code{param} argument in \code{integrand}}
 
 \item{pos}{}
 

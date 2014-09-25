@@ -143,10 +143,10 @@ calc_effect <- function(obj,
 }
 
 #-----------------------------------------------------------------------------#
-#' Calculate Direct Effect estimates
+#' Calculate Direct Effect Estimates
 #'  
-#' @description By default, this function computes:
-#' \eqn{\hat{Y}(0, alpha) - \hat{Y}(1, alpha)}{Yhat(0, alpha) - Yhat(1, alpha)}
+#' @description Computes the population average direct causal effect:
+#' \eqn{\hat{Y}(0, alpha) - \hat{Y}(1, alpha)}{Yhat(0, alpha) - Yhat(1, alpha)}.
 #'  
 #' @param obj the name of the object created by \code{\link{run_interference}}
 #' @param alpha the allocation scheme for which to estimate direct effects
@@ -160,13 +160,13 @@ calc_effect <- function(obj,
 #-----------------------------------------------------------------------------#
 
 direct_effect <- function(obj, 
-                          alpha, 
+                          allocation, 
                           trt.lvl1 = 0, 
                           trt.lvl2 = 1,
                           print = FALSE, 
                           conf.level = 0.95,
                           rescale.factor = 1){
-  out <- calc_effect(obj, alpha, trt.lvl1, alpha, trt.lvl2,
+  out <- calc_effect(obj, allocation, trt.lvl1, allocation, trt.lvl2,
                      effect = 'contrast', marginal = FALSE,
                      print = print, conf.level = conf.level,
                      rescale.factor = rescale.factor)
@@ -174,14 +174,15 @@ direct_effect <- function(obj,
 }
 
 #-----------------------------------------------------------------------------#
-#' Calculate indirect effect estimates
+#' Calculate Indirect Effect Estimates
 #'  
-#' @description By default, this function computes:
-#' \eqn{\hat{Y}(0, alpha1) - \hat{Y}(0, alpha2)}{Yhat(0, alpha1) - Yhat(0, alpha2)}
+#' @description Computes the population average indirect causal effect:
+#' \eqn{\hat{Y}(0, alpha1) - \hat{Y}(0, alpha2)}{Yhat(0, alpha1) - Yhat(0, alpha2)}. 
+#' This is the effect due to the coverage (allocation) levels.
 #'  
 #' @param obj the name of the object created by \code{\link{run_interference}}
-#' @param alpha1 the allocation scheme for which to estimate indirect effects
-#' @param alpha2 the allocation scheme for which to estimate indirect effects
+#' @param allocation1 the allocation scheme for which to estimate indirect effects
+#' @param allocation2 the allocation scheme for which to estimate indirect effects
 #' @param trt.lvl Defaults to 0.
 #' @param rescale.factor factor by which to rescale values. Defaults to 1.
 #' @param print see \code{\link{calc_effect}}
@@ -191,14 +192,14 @@ direct_effect <- function(obj,
 #-----------------------------------------------------------------------------#
 
 indirect_effect <- function(obj, 
-                            alpha1, 
-                            alpha2, 
+                            allocation1, 
+                            allocation2, 
                             trt.lvl = 0, 
                             print = FALSE, 
                             rescale.factor = 1,
                             conf.level = 0.95){
   
-  out <- calc_effect(obj, alpha1, trt.lvl, alpha2, trt.lvl,
+  out <- calc_effect(obj, allocation1, trt.lvl, allocation2, trt.lvl,
                      effect = 'contrast', marginal = FALSE,
                      print = print, conf.level = conf.level,
                      rescale.factor = rescale.factor)
@@ -206,14 +207,14 @@ indirect_effect <- function(obj,
 }
 
 #-----------------------------------------------------------------------------#
-#' Calculate Total effect estimates
+#' Calculate Total Effect Estimates
 #'
-#' @description By default, this function computes:
+#' @description Compute the population average total causal effect:
 #' \eqn{\hat{Y}(0, alpha1) - \hat{Y}(1, alpha2)}{Yhat(0, alpha1) - Yhat(1, alpha2)}
 #'  
 #' @param obj the name of the object created by \code{\link{run_interference}}
-#' @param alpha1 the allocation scheme for which to estimate total effects
-#' @param alpha2 the allocation scheme for which to estimate total effects
+#' @param allocation1 the allocation scheme for which to estimate total effects
+#' @param allocation2 the allocation scheme for which to estimate total effects
 #' @param trt.lvl1 Defaults to 0.
 #' @param trt.lvl2 Defaults to 1.
 #' @param rescale.factor factor by which to rescale values. Defaults to 1.
@@ -224,15 +225,15 @@ indirect_effect <- function(obj,
 #-----------------------------------------------------------------------------#
 
 total_effect <- function(obj, 
-                         alpha1, 
-                         alpha2, 
+                         allocation1, 
+                         allocation2, 
                          trt.lvl1 = 0, 
                          trt.lvl2 = 1, 
                          print = FALSE, 
                          rescale.factor = 1,
                          conf.level = 0.95){
   
-  out <- calc_effect(obj, alpha1, trt.lvl1, alpha2, trt.lvl2,
+  out <- calc_effect(obj, allocation1, trt.lvl1, allocation2, trt.lvl2,
                      effect = 'contrast', marginal = FALSE,
                      print = print, conf.level = conf.level,
                      rescale.factor = rescale.factor)
@@ -240,14 +241,14 @@ total_effect <- function(obj,
 }
 
 #-----------------------------------------------------------------------------#
-#' Calculate Overall effect estimates
+#' Calculate Overall Effect Estimates
 #' 
-#' @description By default, this function computes:
+#' @description Computes the population average overall causal effect:
 #' \eqn{\hat{Y}(alpha1) - \hat{Y}(lpha2)}{Yhat(alpha1) - Yhat(alpha2)}
 #' 
 #' @param obj the name of the object created by \code{\link{run_interference}}
-#' @param alpha1 the allocation scheme for which to estimate overall effects
-#' @param alpha2 the allocation scheme for which to estimate overall effects
+#' @param allocation1 the allocation scheme for which to estimate overall effects
+#' @param allocation2 the allocation scheme for which to estimate overall effects
 #' @param rescale.factor factor by which to rescale values. Defaults to 1.
 #' @param print see \code{\link{calc_effect}}
 #' @param conf.level see \code{\link{calc_effect}}
@@ -256,13 +257,13 @@ total_effect <- function(obj,
 #-----------------------------------------------------------------------------#
 
 overall_effect <- function(obj, 
-                           alpha1, 
-                           alpha2, 
+                           allocation1, 
+                           allocation2, 
                            print = FALSE, 
                            rescale.factor = 1,
                            conf.level = 0.95){
   
-  out <- calc_effect(obj, alpha1, trt.lvl1 = NA, alpha2, trt.lvl2 = NA,
+  out <- calc_effect(obj, allocation1, trt.lvl1 = NA, allocation2, trt.lvl2 = NA,
                      effect = 'contrast', marginal = TRUE,
                      print = print, conf.level = conf.level,
                      rescale.factor = rescale.factor)

@@ -10,7 +10,7 @@ wght_matrix(integrand = logit_integrand, allocations, data, groups,
 \item{integrand}{the function used in the weight calculation. Defaults to
 \code{\link{logit_integrand}}}
 
-\item{alphas}{coverage levels in (0, 1), possibly (probably) vector valued}
+\item{allocations}{coverage levels in (0, 1), possibly (probably) vector valued}
 
 \item{data}{data frame}
 
@@ -23,15 +23,13 @@ wght_matrix(integrand = logit_integrand, allocations, data, groups,
 \item{params}{p + 1 vector of fixed effects plus the random effect variance.
 The variance estimate must be last.}
 
-\item{type}{type of weight to compute. See \code{\link{wght_calc}}}
-
 \item{...}{additional arguments passed to \code{integrand}}
 }
 \value{
 a length(unique(group)) X length(alphas) matrix of group weights
 }
 \description{
-Creates a number of groups by number of allocation scheme matrix of group weights.
+Creates a number of groups by number of allocation schemes matrix of group weights.
 Allocation schemes are selected by the user.
 }
 \details{
