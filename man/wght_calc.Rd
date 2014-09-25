@@ -3,10 +3,10 @@
 \alias{wght_calc}
 \title{Compute IPW weight}
 \usage{
-wght_calc(f.ab, include.alpha, x = NA, pos = NA, alpha, ...)
+wght_calc(integrand, allocation, x = NULL, pos = NULL, ...)
 }
 \arguments{
-\item{f.ab}{function to pass to the argument 'f' of \code{\link{integrate}}.}
+\item{integrand}{function to pass to the argument 'f' of \code{\link{integrate}}.}
 
 \item{type}{see description. Defaults to 'b'.}
 
@@ -18,8 +18,7 @@ ignored.}
 Defaults to NA, so if not evaluting a derivative with \code{\link{wght_deriv_calc}},
 this can be ignored.}
 
-\item{...}{other arguments passed to f.ab. If type = 'c', then arguments A
-and alpha must be defined here}
+\item{...}{other arguments passed to integrand.}
 }
 \value{
 scalar result of the integral

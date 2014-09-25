@@ -13,7 +13,7 @@
 #' resulting in a slower computation but more accurate results (especially 
 #' for large groups)
 #' 
-#' @param f.ab function to pass to the argument 'f' of \code{\link{integrate}}.
+#' @param integrand function to pass to the argument 'f' of \code{\link{integrate}}.
 #' @param type see description. Defaults to 'b'.
 #' @param x necessary argument for \code{\link{grad}}. Defaults to NA, so if 
 #' not evaluting a derivative with \code{\link{wght_deriv_calc}}, this can be
@@ -21,59 +21,63 @@
 #' @param pos necessary taking a derivative when using to \code{\link{PrAX_integrand}} 
 #' Defaults to NA, so if not evaluting a derivative with \code{\link{wght_deriv_calc}}, 
 #' this can be ignored.
-#' @param ... other arguments passed to f.ab. If type = 'c', then arguments A 
-#' and alpha must be defined here
+#' @param ... other arguments passed to integrand. 
 #' @return scalar result of the integral
 #' @export
 
-wght_calc <- function(f.ab, 
-                      include.alpha,
-                      x = NA, 
-                      pos = NA, 
-                      alpha,
-                      ...)
-{  
+wght_calc <- function(integrand, 
+                      allocation,
+                      x = NULL, 
+                      pos = NULL, 
+                      ...){  
+
+  # Necessary pieces
+  integrand         <- match.fun(integrand)
+  integrand.formals <- names(formals(integrand))
+  dots              <- list(...)
+  dot.names         <- names(dots)
+  A                 <- dots[[match.arg('A', dot.names)]]
+  pp                <- prod(allocation^A * (1-allocation)^(1-A))
   
-  f.ab <- match.fun(f.ab)
-  f.ab.names <- names(formals(f.ab))
-  dots <- list(...)
-  dot.names <- names(dots)
-  args <- append(get_args(f.ab, ...), 
-                 list(f = f.ab, lower = -Inf, upper = Inf))
+  # Warnings #
+  if(!'A' %in% dot.names){
+    stop("The argument 'A' (treatment assignment) must be specified")
+  }
   
-  ## TODO: This could get cleaned up ##
-  if("include.alpha" %in% f.ab.names){
-    args$include.alpha <- include.alpha
+  # Integration arguments
+  args <- append(get_args(integrand, dots), 
+                 list(f = integrand, lower = -Inf, upper = Inf,
+                      x = x, pos = pos))
+  
+  # Allocation is optional in user-defined integrands
+  # include this arguments when necessary: 
+  if("allocation" %in% integrand.formals){
+    args$allocation <- allocation
   }
-  if("x" %in% f.ab.names){
-    args$x <- x
-  }
-  if("pos" %in% f.ab.names){
-    args$pos <- pos
-  }
-  if("alpha" %in% f.ab.names){
-    args$alpha <- alpha
-  }
-  # END TODO ##
-    
+  
+  ## Compute the integral
   # if any of the products within the integrand return Inf, then return NA
   # else return the result of integration
   
-  f <- try(do.call("integrate", args = args))
+  f <- try(do.call("integrate", args = args), silent = TRUE)
   PrA <- ifelse(is(f, 'try-error'), NA, f$value)
   
-  if(include.alpha == FALSE){
-    if(!'A' %in% dot.names){
-      stop("If using type 'c', A (treatment assignment) arguments must 
-           be specified")
-    }
-    A <- dots[[match.arg('A', dot.names)]]
-    #alpha <- dots[[match.arg('alpha', dot.names)]]
-    
-    pp <- prod(alpha^A * (1-alpha)^(1-A))
+
+  # Compute the weight
+  # TODO: the if-else logic is clunky. Basically, there are 3 options:
+  # 1) include.allocation is not included in the formals of a user-defined 
+  # integrand 2) include.alloction is set to FALSE # 3) include.allocation 
+  # is set to TRUE.
+
+  if(!'include.allocation' %in% dot.names){
     weight <- pp/PrA
   } else {
-    weight <- 1/PrA
+    if(args$include.allocation == TRUE){
+      # In this case the pp term is included in PrA (if using logit_integrand)
+      weight <- 1/PrA
+      } else {
+      weight <- pp/PrA
+    }
   }
   return(weight)
 }
