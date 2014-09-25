@@ -11,8 +11,16 @@
 log_likelihood <- function(x, pos, integrand = logit_integrand, ...){
   integrand <- match.fun(integrand)
   dots <- list(...)
+  
+  # If include.allocation is used in the integrand (as in logit_integrand)
+  # set this argument to FALSE
+  if('include.allocation' %in% names(formals(integrand))){
+    dots$include.allocation <- FALSE
+  }
+  
   args <- append(get_args(integrand, dots), 
-                 list(f = integrand, lower = -Inf, upper = Inf, x = x, pos = pos))
+                 list(f = integrand, lower = -Inf, upper = Inf, 
+                      x = x, pos = pos))
   
   attempt <- try(do.call(integrate, args = args))
   val <- ifelse(is(attempt, 'try-error'), NA, attempt$value)
@@ -41,12 +49,17 @@ score_calc <- function(integrand = logit_integrand,
   ## Necessary bits ##
   integrand <- match.fun(integrand)
   dots <- list(...)
+  fargs <- append(get_args(integrand, dots),
+                  get_args(grad, dots))
   
   ## Compute the derivative of the log likelihood for each parameter ##
   scores <- sapply(1:length(params), function(i){
-    args <- append(get_args(integrand, dots),
-                   list(func = log_likelihood, params = params, x = params[i], pos = i,
-                        method = 'simple'))
+    args <- append(fargs,
+                   list(func = log_likelihood, 
+                        params = params,
+                        x = params[i], 
+                        pos = i))
+    
     attempt <- try(do.call(grad, args = args), silent = hide.errors)
     return(ifelse(is(attempt, 'try-error'), NA, attempt))
   })

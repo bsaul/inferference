@@ -39,13 +39,17 @@ score_matrix_calc <- function(integrand = logit_integrand,
   gg <- sort(unique(G))
   
   ## Compute score for each group and parameter ##
+  fargs <- append(get_args(integrand, dots),
+                  get_args(grad, dots))
+  
   s.list <- by(XX, INDICES = G, simplify = TRUE, 
                FUN = function(xx) {
                xx <- as.matrix(xx)
-               args <- append(list(integrand = integrand, params = params,
-                            A = xx[ , (pp + 1)],
-                            X = xx[ , 1:pp]), 
-                            get_args(integrand, dots))
+               args <- append(fargs, 
+                              list(integrand = integrand, 
+                                   params = params,
+                                   A = xx[ , (pp + 1)],
+                                   X = xx[ , 1:pp]))
                return(do.call(score_calc, args = args))})
   
   ## Reshape list into matrix ##
