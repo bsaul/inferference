@@ -3,11 +3,10 @@
 \alias{wght_deriv_calc}
 \title{Compute the derivative(s) of a weight}
 \usage{
-wght_deriv_calc(f.ab, params, alpha, include.alpha, method = "simple",
-  method.args = list(eps = 1e-04), hide.errors = TRUE, ...)
+wght_deriv_calc(integrand, params, allocation, hide.errors = TRUE, ...)
 }
 \arguments{
-\item{f.ab}{the function to passed to the argument 'f' of \code{\link{integrate}},
+\item{integrand}{the function to passed to the argument 'f' of \code{\link{integrate}},
 which is part of \code{\link{wght_calc}}.}
 
 \item{params}{parameters with which to take derivatives with respect to}
@@ -20,7 +19,7 @@ which is part of \code{\link{wght_calc}}.}
 
 \item{hide.errors}{print \code{grad} error messages. Defaults to TRUE.}
 
-\item{...}{additional arguments passed to f.ab}
+\item{...}{additional arguments passed to integrand}
 }
 \value{
 vector of derivatives with respect to element of params

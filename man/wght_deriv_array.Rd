@@ -3,8 +3,8 @@
 \alias{wght_deriv_array}
 \title{Create an array of group weight derivative}
 \usage{
-wght_deriv_array(f.ab, alphas, data, groups, predictors, treatment, params,
-  include.alpha, ...)
+wght_deriv_array(integrand, allocations, data, groups, predictors, treatment,
+  params, include.alpha, ...)
 }
 \arguments{
 \item{alphas}{coverage levels in (0, 1), possibly (probably) vector valued}
@@ -21,7 +21,7 @@ wght_deriv_array(f.ab, alphas, data, groups, predictors, treatment, params,
 
 \item{type}{type of weight to compute. See \code{\link{wght_calc}}}
 
-\item{...}{additional arguments passed to f.ab}
+\item{...}{additional arguments passed to integrand}
 }
 \value{
 a length(unique(group)) X length(alphas) matrix of group weights

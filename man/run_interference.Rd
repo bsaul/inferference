@@ -3,15 +3,15 @@
 \alias{run_interference}
 \title{Run Interference}
 \usage{
-run_interference(f.ab = logit_integrand, likelihood = logit_integrand,
-  alphas, data, groups, outcome, treatment, predictors, include.alpha = FALSE,
+run_interference(integrand = logit_integrand, likelihood = logit_integrand,
+  allocations, data, groups, outcome, treatment, predictors,
   propensityB = treatment, family = binomial(link = "logit"),
   known_params = NULL, set.NA.to.0 = TRUE, ...)
 }
 \arguments{
-\item{f.ab}{f.ab function to pass to the argument 'f' of \code{\link{integrate}}.}
+\item{integrand}{function to pass to the argument 'f' of \code{\link{integrate}}.}
 
-\item{alphas}{the allocation schemes for which to estimate effects. Must be in (0, 1].}
+\item{allocations}{the allocation schemes for which to estimate effects. Must be in (0, 1].}
 
 \item{data}{the analysis data.frame}
 

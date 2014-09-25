@@ -3,11 +3,11 @@
 \alias{wght_matrix}
 \title{Create a matrix of group weights}
 \usage{
-wght_matrix(f.ab = logit_integrand, alphas, data, groups, predictors,
-  treatment, params, include.alpha, ...)
+wght_matrix(integrand = logit_integrand, allocations, data, groups,
+  predictors, treatment, params, ...)
 }
 \arguments{
-\item{f.ab}{the integrand used in the weight calculation. Defaults to
+\item{integrand}{the function used in the weight calculation. Defaults to
 \code{\link{logit_integrand}}}
 
 \item{alphas}{coverage levels in (0, 1), possibly (probably) vector valued}
@@ -25,7 +25,7 @@ The variance estimate must be last.}
 
 \item{type}{type of weight to compute. See \code{\link{wght_calc}}}
 
-\item{...}{additional arguments passed to \code{f.ab}}
+\item{...}{additional arguments passed to \code{integrand}}
 }
 \value{
 a length(unique(group)) X length(alphas) matrix of group weights
