@@ -6,6 +6,7 @@
 #' @param treatment quoted name of treatment variable in \code{data}
 #' @param weights weight matrix/array to use from either \code{\link{wght_matrix}}
 #' or \code{\link{wght_deriv_array}}
+#' @param data data.frame with above variables
 #' @return list containing point estimates for marginal outcomes and estimates
 #' per treatment level
 #' @export

@@ -14,7 +14,7 @@
 #' @param data data frame
 #' @param groups quoted string for name of variable in data containing group membership
 #' @param predictors character vector of names of predictor variables in data
-#' @param A character vector of name of treatment variable in data
+#' @param treatment character vector of name of treatment variable in data
 #' @param params p + 1 vector of fixed effects plus the random effect variance. 
 #' The variance estimate must be last.
 #' @param ... additional arguments passed to \code{integrand}

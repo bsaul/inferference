@@ -26,8 +26,8 @@
 #' is skipped. Defaults to NULL.
 #' @param set.NA.to.0 if TRUE, sets any weights that returned an NA value to 0. 
 #' Defaults to TRUE.
-#' @param additional arguments passed to other functions such as 
-#' \code{\link{glmer}}, \code{\link{grad}}, and \code{\integrand} or \code{likelihood}.
+#' @param ... additional arguments passed to other functions such as 
+#' \code{\link{glmer}}, \code{\link{grad}}, and \code{integrand} or \code{likelihood}.
 #' @return Returns a list of overall and group-level IPW point estimates 
 #' (the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW 
 #' point estimates (using the weight derivatives), scores (the output of 

@@ -14,10 +14,10 @@
 #' distribution with mean 20
 #' @param ind.dist.distr distribution function of individual distances. Defaults
 #' to \code{\link{rnorm}}
-#' @param ind.distr.args arguments passed to \code{ind.dist.distr} function
+#' @param ind.dist.args arguments passed to \code{ind.dist.distr} function
 #' @param grp.dist.distr distribution function of group level distances. Defaults
 #' to \code{\link{rlnorm}}.
-#' @param grp.distr.args arguments passed to \code{grp.dist.distr} function
+#' @param grp.dist.args arguments passed to \code{grp.dist.distr} function
 #' @return a data frame 
 #' @export
 #-----------------------------------------------------------------------------#

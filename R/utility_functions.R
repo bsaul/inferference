@@ -4,6 +4,7 @@
 #' of those arguments where they exist in ... . 
 #' 
 #' @param FUN function for which to find arguments
+#' @param arg_list a list of arguments. Defaults to NULL.
 #' @param ... any arguments. Those necessary for FUN must be named as appropriate for FUN
 #' @return list of arguments for FUN
 #' @export
@@ -27,6 +28,7 @@ get_args <- function(FUN, args_list = NULL, ...){
 #' @param A name of treatment variable
 #' @param G name of grouping variable in data
 #' @param a value of treatment level, defaults to NA.
+#' @param data data.frame with variables
 #' @return data dataset to use
 #'
 

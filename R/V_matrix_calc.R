@@ -3,10 +3,15 @@
 #' 
 #' Computes the V matrix necessary for variance estimates. Used in 
 #' \code{\link{calc_effects}}. See web appendix of Perez et al. 2014 for more details.
-#'  
-#' @param scores the output of \code{\link{score_calc_matrix}}
+#' 
+#' @param scores the output of \code{\link{score_matrix_calc}}
 #' @param point_estimates output of \code{\link{ipw_point_estimates}}
-#' @param allocation1 for this and remaining arguments see details in \code{\link{calc_effects}}
+#' @param allocation1 See details in \code{\link{calc_effect}}.
+#' @param trt.lvl1 See details in \code{\link{calc_effect}}.
+#' @param allocation2 See details in \code{\link{calc_effect}}.
+#' @param trt.lvl2 See details in \code{\link{calc_effect}}.
+#' @param effect See details in \code{\link{calc_effect}}.
+#' @param marginal See details in \code{\link{calc_effect}}.
 #' 
 #' @return V matrix
 #' @export

@@ -149,7 +149,7 @@ calc_effect <- function(obj,
 #' \eqn{\hat{Y}(0, alpha) - \hat{Y}(1, alpha)}{Yhat(0, alpha) - Yhat(1, alpha)}.
 #'  
 #' @param obj the name of the object created by \code{\link{run_interference}}
-#' @param alpha the allocation scheme for which to estimate direct effects
+#' @param allocation the allocation scheme for which to estimate direct effects
 #' @param trt.lvl1 Defaults to 0.
 #' @param trt.lvl2 Defaults to 1.
 #' @param rescale.factor factor by which to rescale values. Defaults to 1.

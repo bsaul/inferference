@@ -2,7 +2,9 @@
 #' 
 #' Uses \code{\link{wght_deriv_calc}} to compute the weight derivatives for each 
 #' group per coverage level
-#'  
+#' 
+#' @param integrand the function used in the weight calculation. Defaults to 
+#' \code{\link{logit_integrand}} 
 #' @param allocations coverage levels in (0, 1), possibly (probably) vector valued
 #' @param data data frame
 #' @param groups quoted string for name of variable in data containing group membership
@@ -15,7 +17,7 @@
 #' group weight derivatives
 #' @export
 
-wght_deriv_array <- function(integrand, 
+wght_deriv_array <- function(integrand = logit_integrand, 
                              allocations, 
                              data, 
                              groups, 

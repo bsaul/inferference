@@ -11,7 +11,7 @@
 #' \code{\link{score_calc}}.
 #' 
 #' @param b vector argument of values necessary for \code{\link{integrate}}
-#' @param x Used by \code{\line{grad}} for taking the derivative with respect an element of
+#' @param x Used by \code{\link{grad}} for taking the derivative with respect an element of
 #' params. Only used if \code{pos} is not NULL.
 #' @param pos The position of theta for which to take the derivative. Defaults to NULL.
 #' @param X n by length(params) - 1 matrix of covariates. Make sure the order of columns in X corresponds to params.

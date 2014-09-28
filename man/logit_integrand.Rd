@@ -9,7 +9,7 @@ logit_integrand(b, X, A, params, x = NULL, pos = NULL, allocation = NULL,
 \arguments{
 \item{b}{vector argument of values necessary for \code{\link{integrate}}}
 
-\item{x}{Used by \code{\line{grad}} for taking the derivative with respect an element of
+\item{x}{Used by \code{\link{grad}} for taking the derivative with respect an element of
 params. Only used if \code{pos} is not NULL.}
 
 \item{pos}{The position of theta for which to take the derivative. Defaults to NULL.}
