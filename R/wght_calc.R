@@ -17,7 +17,7 @@
 #' @param x necessary argument for \code{\link{grad}}. Defaults to NULL, so if 
 #' not evaluting a derivative with \code{\link{wght_deriv_calc}}, this can be
 #' ignored.
-#' @param pos necessary taking a derivative when using to \code{\link{PrAX_integrand}} 
+#' @param pos necessary taking a derivative when using to \code{\link{logit_integrand}} 
 #' Defaults to NULL, so if not evaluting a derivative with \code{\link{wght_deriv_calc}}, 
 #' this can be ignored.
 #' @param ... other arguments passed to integrand. 

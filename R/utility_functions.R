@@ -4,7 +4,7 @@
 #' of those arguments where they exist in ... . 
 #' 
 #' @param FUN function for which to find arguments
-#' @param arg_list a list of arguments. Defaults to NULL.
+#' @param args_list a list of arguments. Defaults to NULL.
 #' @param ... any arguments. Those necessary for FUN must be named as appropriate for FUN
 #' @return list of arguments for FUN
 #' @export

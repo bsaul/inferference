@@ -2,7 +2,7 @@
 #' V Matrix
 #' 
 #' Computes the V matrix necessary for variance estimates. Used in 
-#' \code{\link{calc_effects}}. See web appendix of Perez et al. 2014 for more details.
+#' \code{\link{calc_effect}}. See web appendix of Perez et al. 2014 for more details.
 #' 
 #' @param scores the output of \code{\link{score_matrix_calc}}
 #' @param point_estimates output of \code{\link{ipw_point_estimates}}
