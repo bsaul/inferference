@@ -3,10 +3,13 @@
 \alias{wght_deriv_array}
 \title{Create an array of group weight derivatives}
 \usage{
-wght_deriv_array(integrand, allocations, data, groups, predictors, treatment,
-  params, ...)
+wght_deriv_array(integrand = logit_integrand, allocations, data, groups,
+  predictors, treatment, params, ...)
 }
 \arguments{
+\item{integrand}{the function used in the weight calculation. Defaults to
+\code{\link{logit_integrand}}}
+
 \item{allocations}{coverage levels in (0, 1), possibly (probably) vector valued}
 
 \item{data}{data frame}

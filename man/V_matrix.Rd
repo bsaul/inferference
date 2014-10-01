@@ -7,11 +7,21 @@ V_matrix(scores, point_estimates, allocation1, trt.lvl1, allocation2 = NA,
   trt.lvl2 = NA, effect, marginal)
 }
 \arguments{
-\item{scores}{the output of \code{\link{score_calc_matrix}}}
+\item{scores}{the output of \code{\link{score_matrix_calc}}}
 
 \item{point_estimates}{output of \code{\link{ipw_point_estimates}}}
 
-\item{allocation1}{for this and remaining arguments see details in \code{\link{calc_effects}}}
+\item{allocation1}{See details in \code{\link{calc_effect}}.}
+
+\item{trt.lvl1}{See details in \code{\link{calc_effect}}.}
+
+\item{allocation2}{See details in \code{\link{calc_effect}}.}
+
+\item{trt.lvl2}{See details in \code{\link{calc_effect}}.}
+
+\item{effect}{See details in \code{\link{calc_effect}}.}
+
+\item{marginal}{See details in \code{\link{calc_effect}}.}
 }
 \value{
 V matrix

@@ -10,9 +10,11 @@ log_likelihood(x, pos, integrand = logit_integrand, ...)
 \code{\link{integrate}}(\code{integrand}) with respect to each value of the
 \code{param} argument in \code{integrand}}
 
-\item{pos}{}
+\item{pos}{The position of theta for which to take the derivative.}
 
 \item{integrand}{Defaults to logit_integrand}
+
+\item{...}{additional arguments passed to \code{integrand} function.}
 }
 \value{
 value of log likelihood

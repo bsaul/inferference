@@ -18,7 +18,7 @@ wght_matrix(integrand = logit_integrand, allocations, data, groups,
 
 \item{predictors}{character vector of names of predictor variables in data}
 
-\item{A}{character vector of name of treatment variable in data}
+\item{treatment}{character vector of name of treatment variable in data}
 
 \item{params}{p + 1 vector of fixed effects plus the random effect variance.
 The variance estimate must be last.}

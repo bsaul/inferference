@@ -9,7 +9,7 @@ direct_effect(obj, allocation, trt.lvl1 = 0, trt.lvl2 = 1, print = FALSE,
 \arguments{
 \item{obj}{the name of the object created by \code{\link{run_interference}}}
 
-\item{alpha}{the allocation scheme for which to estimate direct effects}
+\item{allocation}{the allocation scheme for which to estimate direct effects}
 
 \item{trt.lvl1}{Defaults to 0.}
 

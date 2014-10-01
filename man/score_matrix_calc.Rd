@@ -14,7 +14,7 @@ score_matrix_calc(integrand = logit_integrand, predictors, treatment, groups,
 
 \item{treatment}{character string naming treatment variable in data. As in Perez
 2014, this does not necessarily need to be the same 'treatment' used to compute
-the weights as in \code{\link{wght_matrix_calc}}. The \code{propensityB}
+the weights as in \code{\link{wght_matrix}}. The \code{propensityB}
 argument in \code{\link{run_interference}} may be used to pass a different
 indicator variable other than the actual treatment or exposure.}
 

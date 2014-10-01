@@ -8,6 +8,8 @@ get_args(FUN, args_list = NULL, ...)
 \arguments{
 \item{FUN}{function for which to find arguments}
 
+\item{arg_list}{a list of arguments. Defaults to NULL.}
+
 \item{...}{any arguments. Those necessary for FUN must be named as appropriate for FUN}
 }
 \value{

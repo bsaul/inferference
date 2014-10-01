@@ -13,6 +13,8 @@ group_means(Y, A, G, a = NA, data)
 \item{G}{name of grouping variable in data}
 
 \item{a}{value of treatment level, defaults to NA.}
+
+\item{data}{data.frame with variables}
 }
 \value{
 data dataset to use

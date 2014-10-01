@@ -14,6 +14,8 @@ ipw_point_estimates(outcome, groups, treatment, data, weights)
 
 \item{weights}{weight matrix/array to use from either \code{\link{wght_matrix}}
 or \code{\link{wght_deriv_array}}}
+
+\item{data}{data.frame with above variables}
 }
 \value{
 list containing point estimates for marginal outcomes and estimates
