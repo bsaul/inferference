@@ -14,7 +14,7 @@ wght_calc(integrand, allocation, x = NULL, pos = NULL, ...)
 not evaluting a derivative with \code{\link{wght_deriv_calc}}, this can be
 ignored.}
 
-\item{pos}{necessary taking a derivative when using to \code{\link{PrAX_integrand}}
+\item{pos}{necessary taking a derivative when using to \code{\link{logit_integrand}}
 Defaults to NULL, so if not evaluting a derivative with \code{\link{wght_deriv_calc}},
 this can be ignored.}
 

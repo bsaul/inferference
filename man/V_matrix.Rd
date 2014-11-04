@@ -28,6 +28,6 @@ V matrix
 }
 \description{
 Computes the V matrix necessary for variance estimates. Used in
-\code{\link{calc_effects}}. See web appendix of Perez et al. 2014 for more details.
+\code{\link{calc_effect}}. See web appendix of Perez et al. 2014 for more details.
 }
 
