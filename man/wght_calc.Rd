@@ -3,7 +3,8 @@
 \alias{wght_calc}
 \title{Compute IPW weight}
 \usage{
-wght_calc(integrand, allocation, x = NULL, pos = NULL, ...)
+wght_calc(integrand = logit_integrand, allocation, x = NULL, pos = NULL,
+  ...)
 }
 \arguments{
 \item{integrand}{function to pass to the argument 'f' of \code{\link{integrate}}.}

@@ -24,11 +24,12 @@
 #' @return scalar result of the integral
 #' @export
 
-wght_calc <- function(integrand, 
+wght_calc <- function(integrand = logit_integrand, 
                       allocation,
                       x = NULL, 
                       pos = NULL, 
-                      ...){  
+                      ...)
+{  
 
   # Necessary pieces
   integrand         <- match.fun(integrand)
@@ -36,47 +37,42 @@ wght_calc <- function(integrand,
   dots              <- list(...)
   dot.names         <- names(dots)
   A                 <- dots[[match.arg('A', dot.names)]]
-  pp                <- prod(allocation^A * (1-allocation)^(1-A))
   
-  # Warnings #
+  ## Warnings ##
   if(!'A' %in% dot.names){
     stop("The argument 'A' (treatment assignment) must be specified")
   }
   
-  # Integration arguments
+  ## Integrate() arguments ##
   args <- append(get_args(integrand, dots), 
                  list(f = integrand, lower = -Inf, upper = Inf,
                       x = x, pos = pos))
   
-  # Allocation is optional in user-defined integrands
-  # include this arguments when necessary: 
+  # Allocation is optional in user-defined integrands. Include this argument 
+  # when necessary. Note that allocation will either be used in this function
+  # or passed to the integrand function.
   if("allocation" %in% integrand.formals){
     args$allocation <- allocation
   }
   
-  ## Compute the integral
+  # Integrate.allocation argument in logit_integrand() defines
+  # where allocation term is computed: in the numerator or denominator
+  allocation.denom <- ifelse(!'integrate.allocation' %in% dot.names, FALSE,
+                             ifelse(args$integrate.allocation == TRUE, TRUE, FALSE))
+  
+  ## Compute the integral ##
   # if any of the products within the integrand return Inf, then return NA
   # else return the result of integration
-  
   f <- try(do.call("integrate", args = args), silent = TRUE)
   PrA <- ifelse(is(f, 'try-error'), NA, f$value)
-  
-
-  # Compute the weight
-  # TODO: the if-else logic is clunky. Basically, there are 3 options:
-  # 1) include.allocation is not included in the formals of a user-defined 
-  # integrand 2) include.alloction is set to FALSE # 3) include.allocation 
-  # is set to TRUE.
-
-  if(!'include.allocation' %in% dot.names){
-    weight <- pp/PrA
+ 
+  ## Compute the weight ##
+  if(allocation.denom == TRUE){
+    weight <- 1/PrA
   } else {
-    if(args$include.allocation == TRUE){
-      # In this case the pp term is included in PrA (if using logit_integrand)
-      weight <- 1/PrA
-      } else {
-      weight <- pp/PrA
-    }
+    ppp    <- prod(allocation^A * (1-allocation)^(1-A))
+    weight <- ppp/PrA
   }
+
   return(weight)
 }
