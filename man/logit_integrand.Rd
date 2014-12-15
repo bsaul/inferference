@@ -3,8 +3,9 @@
 \alias{logit_integrand}
 \title{Integrand of Pr(A|X)}
 \usage{
-logit_integrand(b, X, A, params, x = NULL, pos = NULL, allocation = NULL,
-  r = 1, include.allocation = FALSE)
+logit_integrand(b, X, A, fixed.effects, random.effect = NULL, x = NULL,
+  pos = NULL, allocation = NULL, randomization = 1,
+  integrate.allocation = FALSE)
 }
 \arguments{
 \item{b}{vector argument of values necessary for \code{\link{integrate}}}

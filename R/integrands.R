@@ -27,43 +27,58 @@
 #' @export
 #' 
 
+
 logit_integrand <- function(b, 
-                            X, 
-                            A, 
-                            params, 
-                            x = NULL, 
-                            pos = NULL, 
-                            allocation = NULL, 
-                            r = 1, 
-                            include.allocation = FALSE){
-  
+                             X, 
+                             A, 
+                             fixed.effects,
+                             random.effect = NULL,
+                             x = NULL, 
+                             pos = NULL, 
+                             allocation = NULL, 
+                             randomization = 1, 
+                             integrate.allocation = FALSE)
+{
   ## Warnings ##
-  if(length(params) - 1 != ncol(X)){
+  if(length(fixed.effects) != ncol(X)){
     stop('The number of fixed effect parameters is not equal to the number \n
          of columns in the covariate matrix')
   }
   
+  if(length(A) != nrow(X)){
+    stop('Length of treatment vector is not equal to number of observations')
+  }
+  
+  ## For taking derivative w.r.t. a parameter ##
   if(!is.null(pos)){
     params[pos] <- x
   }
   
-  # X needs to be a matrix
+  ## X needs to be a matrix ##
   if(!is.matrix(X)){
     X <- as.matrix(X)
   }
   
-  theta.fix <- params[1:ncol(X)]
-  theta.ran <- params[length(params)]
+  if(is.null(random.effect) || random.effect <= 0){
+    pr.b <- randomization * (plogis(X %*% fixed.effects))
+  } else {
+    pr.b <- randomization * (plogis(drop(outer(X %*% fixed.effects, b, '+'))))
+  }
   
-  pr.b <- r * (plogis(drop(outer(X %*% theta.fix, b, '+'))))  
-  
-  if(include.allocation == FALSE){
+  if(integrate.allocation == FALSE){
     hh <- dbinom(A, 1, pr.b)
   } else {
     hh <- (pr.b/allocation)^A * ((1-pr.b)/(1 - allocation))^(1-A)
   }
   
-  hha <- apply(hh, 2, prod)
+  if(is.null(random.effect) || random.effect <= 0){
+    # in this way dnorm integrates to one when integrating from -Inf to Inf
+    out <- prod(hh) * dnorm(b, mean=0, sd = 1) 
+  } else {
+    hha <- apply(hh, 2, prod)
+    out <- hha * dnorm(b, mean=0, sd = random.effect)
+  }
   
-  return(hha * dnorm(b, mean=0, theta.ran))
+  return(out)
 }
+
