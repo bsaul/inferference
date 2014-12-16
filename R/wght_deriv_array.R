@@ -17,45 +17,41 @@
 
 wght_deriv_array <- function(integrand, 
                              allocations, 
-                             data, 
-                             groups, 
-                             predictors, 
-                             treatment, 
-                             params, 
-                             ...){
+                             X, A, G,
+                             fixed.effects,
+                             random.effect,
+                             ...)
+{
   ## Gather necessary bits ##
   integrand <- match.fun(integrand)
-  G  <- data[, groups]
-  X  <- cbind(1, data[, predictors])
-  A  <- data[, treatment]
-  p  <- ncol(X) # number of predictors
+  XX <- cbind(X, A)
+  p  <- length(fixed.effects) # number of predictors
   aa <- sort(allocations) # Make sure alphas are sorted
   gg <- sort(unique(G))
   k  <- length(allocations) 
   N  <- length(unique(G))
 
   ## Warnings ##
-  if(length(params) != (p + 1)){
-    stop("The length of params is not equal to the number of predictors + 2 ")
-  }
+
   
   ## Compute weight (derivative) for each group, parameter, and alpha level ##
   w.list <- lapply(aa, function(allocation){
-    w <- by(cbind(X, A), INDICES = G, simplify = TRUE, 
+    w <- by(XX, INDICES = G, simplify = TRUE, 
             FUN = function(x) {
-              x <- as.matrix(x) # PrAX expects a matrix
               wght_deriv_calc(integrand = integrand, 
                               allocation = allocation, 
                               A = x[, p+1], 
                               X = x[, 1:p], 
-                              params = params, ...)})
+                              fixed.effects = fixed.effects, 
+                              random.effect = random.effect,
+                              ...)})
     w2 <- matrix(unlist(w, use.names = FALSE), ncol = p+1, byrow = TRUE)
     return(w2)}) 
   
   ## Reshape list into array ##
   out <- array(unlist(w.list, use.names = FALSE), 
                dim = c(N, p+1, k),
-               dimnames = list(gg, names(params), aa))
+               dimnames = list(gg, names(c(fixed.effects, random.effect)), aa))
   
   return(out)
 }

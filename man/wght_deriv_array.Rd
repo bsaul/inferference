@@ -3,8 +3,8 @@
 \alias{wght_deriv_array}
 \title{Create an array of group weight derivatives}
 \usage{
-wght_deriv_array(integrand, allocations, data, groups, predictors, treatment,
-  params, ...)
+wght_deriv_array(integrand, allocations, X, A, G, fixed.effects, random.effect,
+  ...)
 }
 \arguments{
 \item{allocations}{coverage levels in (0, 1), possibly (probably) vector valued}
