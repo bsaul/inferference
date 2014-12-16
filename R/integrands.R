@@ -28,9 +28,7 @@
 #' 
 
 
-logit_integrand <- function(b, 
-                             X, 
-                             A, 
+logit_integrand <- function(b, X, A, 
                              fixed.effects,
                              random.effect = NULL,
                              x = NULL, 
@@ -39,6 +37,8 @@ logit_integrand <- function(b,
                              randomization = 1, 
                              integrate.allocation = FALSE)
 {
+  p <- length(fixed.effects)
+  
   ## Warnings ##
   if(length(fixed.effects) != ncol(X)){
     stop('The number of fixed effect parameters is not equal to the number \n
@@ -55,15 +55,11 @@ logit_integrand <- function(b,
     params[pos] <- x
   }
   
-  ## X needs to be a matrix ##
-  if(!is.matrix(X)){
-    X <- as.matrix(X)
-  }
-  
+  ## Calculations ## 
   if(is.null(random.effect) || random.effect <= 0){
-    pr.b <- randomization * (plogis(X %*% fixed.effects))
+    pr.b <- randomization * (plogis(X %*% params[1:p]))
   } else {
-    pr.b <- randomization * (plogis(drop(outer(X %*% params[1:length(fixed.effects)], b, '+'))))
+    pr.b <- randomization * (plogis(drop(outer(X %*% params[1:p], b, '+'))))
   }
   
   if(integrate.allocation == FALSE){
@@ -77,7 +73,7 @@ logit_integrand <- function(b,
     out <- prod(hh) * dnorm(b, mean=0, sd = 1) 
   } else {
     hha <- apply(hh, 2, prod)
-    out <- hha * dnorm(b, mean=0, sd = params[length(fixed.effects) + 1])
+    out <- hha * dnorm(b, mean=0, sd = params[p + 1])
   }
   
   return(out)
