@@ -50,6 +50,7 @@ logit_integrand <- function(b,
   }
   
   ## For taking derivative w.r.t. a parameter ##
+  params <- c(fixed.effects, random.effect)
   if(!is.null(pos)){
     params[pos] <- x
   }
@@ -62,7 +63,7 @@ logit_integrand <- function(b,
   if(is.null(random.effect) || random.effect <= 0){
     pr.b <- randomization * (plogis(X %*% fixed.effects))
   } else {
-    pr.b <- randomization * (plogis(drop(outer(X %*% fixed.effects, b, '+'))))
+    pr.b <- randomization * (plogis(drop(outer(X %*% params[1:length(fixed.effects)], b, '+'))))
   }
   
   if(integrate.allocation == FALSE){
@@ -76,7 +77,7 @@ logit_integrand <- function(b,
     out <- prod(hh) * dnorm(b, mean=0, sd = 1) 
   } else {
     hha <- apply(hh, 2, prod)
-    out <- hha * dnorm(b, mean=0, sd = random.effect)
+    out <- hha * dnorm(b, mean=0, sd = params[length(fixed.effects) + 1])
   }
   
   return(out)
