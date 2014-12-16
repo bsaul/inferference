@@ -10,9 +10,15 @@
 #' @return value of log likelihood
 #' @export
 
-log_likelihood <- function(x, pos, integrand = logit_integrand, ...){
+log_likelihood <- function(x, 
+                           pos, 
+                           integrand = logit_integrand, 
+                           ...)
+{
+  ## Necessary pieces ##
   integrand <- match.fun(integrand)
-  dots <- list(...)
+  dots      <- list(...)
+  dot.names <- names(dots)
   
   # If include.allocation is used in the integrand (as in logit_integrand)
   # set this argument to FALSE
@@ -20,10 +26,20 @@ log_likelihood <- function(x, pos, integrand = logit_integrand, ...){
     dots$include.allocation <- FALSE
   }
   
-  args <- append(get_args(integrand, dots), 
-                 list(f = integrand, lower = -Inf, upper = Inf, 
-                      x = x, pos = pos))
+  ## Integrate() arguments ##
+  if(!'lower' %in% dot.names){
+    dots$lower <- -Inf
+  }
   
+  if(!'upper' %in% dot.names){
+    dots$upper <- Inf
+  }
+  
+  int.args <- append(get_args(integrate, dots),
+                     get_args(integrand, dots))
+  args <- append(int.args, list(f = integrand, x = x, pos = pos))
+  
+  ## Calculuation ##
   attempt <- try(do.call(integrate, args = args))
   val <- ifelse(is(attempt, 'try-error'), NA, attempt$value)
 
@@ -46,19 +62,26 @@ log_likelihood <- function(x, pos, integrand = logit_integrand, ...){
 
 score_calc <- function(integrand = logit_integrand,
                        hide.errors = TRUE,
-                       params,
-                       ...){
+                       fixed.effects,
+                       random.effect,
+                       ...)
+{
   ## Necessary bits ##
+  params <- c(fixed.effects, random.effect)
   integrand <- match.fun(integrand)
   dots <- list(...)
-  fargs <- append(get_args(integrand, dots),
-                  get_args(grad, dots))
+  
+  ## Function arguments ##
+  int.args <- append(get_args(integrand, dots),
+                     get_args(integrate, dots))
+  fargs    <- append(int.args, get_args(grad, dots))
   
   ## Compute the derivative of the log likelihood for each parameter ##
   scores <- sapply(1:length(params), function(i){
     args <- append(fargs,
                    list(func = log_likelihood, 
-                        params = params,
+                        fixed.effects = fixed.effects,
+                        random.effect = random.effect,
                         x = params[i], 
                         pos = i))
     

@@ -20,44 +20,43 @@
 #-----------------------------------------------------------------------------#
 
 score_matrix_calc <- function(integrand = logit_integrand,
-                              predictors, 
-                              treatment, 
-                              groups, 
-                              params, 
-                              data,
-                              ...){
+                              X, A, G, 
+                              fixed.effects,
+                              random.effect,
+                              ...)
+{
   ## Warnings ##
-  if(length(params) != (length(predictors) + 2)){
-    stop("The length of params is not equal to the number of predictors + 2 ")
+  if(length(fixed.effects) != ncol(X)){
+    stop("The length of params is not equal to the number of predictors")
   }
   
   ## Necessary bits ##
   integrand <- match.fun(integrand)
   dots <- list(...)
-  G  <- data[, groups]
-  XX <- cbind(1, data[, c(predictors, treatment)])
-  pp <- ncol(XX) - 1
+  XX <- cbind(X, A)
+  pp <- length(fixed.effects)
   gg <- sort(unique(G))
   
   ## Compute score for each group and parameter ##
-  fargs <- append(get_args(integrand, dots),
-                  get_args(grad, dots))
+  int.args <- append(get_args(integrand, dots),
+                     get_args(integrate, dots))
+  fargs <- append(int.args, get_args(grad, dots))
   
   s.list <- by(XX, INDICES = G, simplify = TRUE, 
                FUN = function(xx) {
-               xx <- as.matrix(xx)
                args <- append(fargs, 
                               list(integrand = integrand, 
-                                   params = params,
+                                   fixed.effects = fixed.effects,
+                                   random.effect = random.effect,
                                    A = xx[ , (pp + 1)],
                                    X = xx[ , 1:pp]))
                return(do.call(score_calc, args = args))})
-  
+
   ## Reshape list into matrix ##
   out <- matrix(unlist(s.list, use.names = FALSE), 
-                ncol = pp + 1, 
+                ncol = pp + length(random.effect), 
                 byrow = TRUE,
-                dimnames = list(gg, names(params)))
+                dimnames = list(gg, names(c(fixed.effects, random.effect))))
   
   return(out)
 }

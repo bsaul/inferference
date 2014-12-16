@@ -3,7 +3,8 @@
 \alias{score_calc}
 \title{Compute scores for a single group}
 \usage{
-score_calc(integrand = logit_integrand, hide.errors = TRUE, params, ...)
+score_calc(integrand = logit_integrand, hide.errors = TRUE, fixed.effects,
+  random.effect, ...)
 }
 \arguments{
 \item{integrand}{function to used for the integrand.
