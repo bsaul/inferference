@@ -23,17 +23,14 @@
 
 wght_matrix <- function(integrand = logit_integrand, 
                         allocations, 
-                        data, 
-                        groups, 
-                        predictors, 
-                        treatment, 
-                        params, 
-                        ...){
+                        X, A, G,
+                        fixed.effects,
+                        random.effect = NULL,
+                        ...)
+{
   ## Gather necessary bits ##
-  G  <- data[, groups]
-  X  <- cbind(1, data[, predictors])
-  A  <- data[, treatment]
-  p  <- ncol(X) # number of predictors
+  XX <- cbind(X, A)
+  p  <- length(fixed.effects)
   aa <- sort(allocations) # Make sure alphas are sorted
   gg <- sort(unique(G))
   
@@ -41,11 +38,11 @@ wght_matrix <- function(integrand = logit_integrand,
   w.list <- lapply(aa, function(allocation){
     w <- by(cbind(X, A), INDICES = G, simplify = FALSE, 
             FUN = function(x) {
-              x <- as.matrix(x) # PrAX expects a matrix
               wght_calc(integrand = integrand, 
                         allocation = allocation, 
                         A = x[, p+1], X = x[, 1:p], 
-                        params = params, ...)})
+                        fixed.effects = fixed.effects, 
+                        random.effect = random.effect, ...)})
     as.numeric(w)
   }) 
   
