@@ -12,24 +12,31 @@
 #' @return vector of derivatives with respect to element of params
 #' @export
 
-wght_deriv_calc <- function(integrand,
-                            params, 
+wght_deriv_calc <- function(integrand = logit_integrand,
+                            fixed.effects,
+                            random.effect = NULL,
                             allocation,
                             hide.errors = TRUE,
                             ...)
 {  
+  ## Necessary pieces ##
   integrand <- match.fun(integrand)
   dots <- list(...)
   
-  fargs <- append(get_args(integrand, dots),
-                  get_args(grad, dots))
+  ## Integrand and  arguments ##
+  int.args <- append(get_args(integrand, dots),
+                     get_args(integrate, dots))
   
-  args <- append(fargs,
-                 list(func   = wght_calc, 
-                      integrand   = integrand, 
-                      allocation  = allocation,
-                      params  = params))
+  args <- append(append(int.args, get_args(grad, dots)),
+                 list(func          = wght_calc, 
+                      integrand     = integrand, 
+                      allocation    = allocation,
+                      fixed.effects = fixed.effects,
+                      random.effect = random.effect))
   
+  params <- c(fixed.effects, random.effect)
+  
+  ## Compute Derivatives ##
   dervs <- sapply(1:length(params), function(i){
     args$x <- params[i]; args$pos <- i
     f <- try(do.call('grad', args = args), silent = hide.errors)
