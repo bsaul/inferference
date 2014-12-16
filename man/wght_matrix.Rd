@@ -3,8 +3,8 @@
 \alias{wght_matrix}
 \title{Create a matrix of group weights}
 \usage{
-wght_matrix(integrand = logit_integrand, allocations, data, groups,
-  predictors, treatment, params, ...)
+wght_matrix(integrand = logit_integrand, allocations, X, A, G, fixed.effects,
+  random.effect = NULL, ...)
 }
 \arguments{
 \item{integrand}{the function used in the weight calculation. Defaults to

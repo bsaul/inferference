@@ -30,8 +30,7 @@ wght_calc <- function(integrand = logit_integrand,
                       pos = NULL, 
                       ...)
 {  
-
-  # Necessary pieces
+  ## Necessary pieces ##
   integrand         <- match.fun(integrand)
   integrand.formals <- names(formals(integrand))
   dots              <- list(...)
@@ -44,9 +43,18 @@ wght_calc <- function(integrand = logit_integrand,
   }
   
   ## Integrate() arguments ##
-  args <- append(get_args(integrand, dots), 
-                 list(f = integrand, lower = -Inf, upper = Inf,
-                      x = x, pos = pos))
+  if(!'lower' %in% dot.names){
+    dots$lower <- -Inf
+  }
+  
+  if(!'upper' %in% dot.names){
+    dots$upper <- Inf
+  }
+  
+  int.args <- append(get_args(integrate, dots),
+                     list(f = integrand, x = x, pos = pos))
+  
+  args <- append(get_args(integrand, dots), int.args)
   
   # Allocation is optional in user-defined integrands. Include this argument 
   # when necessary. Note that allocation will either be used in this function
