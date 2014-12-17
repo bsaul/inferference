@@ -4,9 +4,10 @@
 \title{Run Interference}
 \usage{
 run_interference(integrand = logit_integrand, likelihood = logit_integrand,
-  allocations, data, groups, outcome, treatment, predictors,
-  propensityB = treatment, family = binomial(link = "logit"),
-  known_params = NULL, set.NA.to.0 = TRUE, ...)
+  allocations, data, groups, outcome, treatment, propensityB = treatment,
+  propensity_formula, estimation_method = "glmer",
+  estimation_options = list(family = binomial(link = "logit")),
+  set.NA.to.0 = TRUE, ...)
 }
 \arguments{
 \item{integrand}{function used as the integrand in computing the IPW weights.
