@@ -26,14 +26,15 @@ wght_deriv_array <- function(integrand,
   integrand <- match.fun(integrand)
   XX <- cbind(X, A)
   p  <- length(fixed.effects) # number of predictors
+  pp <- p + length(random.effect)
   aa <- sort(allocations) # Make sure alphas are sorted
   gg <- sort(unique(G))
   k  <- length(allocations) 
   N  <- length(unique(G))
+  dots <- list(...)
 
   ## Warnings ##
 
-  
   ## Compute weight (derivative) for each group, parameter, and alpha level ##
   w.list <- lapply(aa, function(allocation){
     w <- by(XX, INDICES = G, simplify = TRUE, 
@@ -45,12 +46,12 @@ wght_deriv_array <- function(integrand,
                               fixed.effects = fixed.effects, 
                               random.effect = random.effect,
                               ...)})
-    w2 <- matrix(unlist(w, use.names = FALSE), ncol = p+1, byrow = TRUE)
+    w2 <- matrix(unlist(w, use.names = FALSE), ncol = pp, byrow = TRUE)
     return(w2)}) 
   
   ## Reshape list into array ##
   out <- array(unlist(w.list, use.names = FALSE), 
-               dim = c(N, p+1, k),
+               dim = c(N, pp, k),
                dimnames = list(gg, names(c(fixed.effects, random.effect)), aa))
   
   return(out)

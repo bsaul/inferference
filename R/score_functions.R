@@ -20,12 +20,6 @@ log_likelihood <- function(x,
   dots      <- list(...)
   dot.names <- names(dots)
   
-  # If include.allocation is used in the integrand (as in logit_integrand)
-  # set this argument to FALSE
-  if('include.allocation' %in% names(formals(integrand))){
-    dots$include.allocation <- FALSE
-  }
-  
   ## Integrate() arguments ##
   if(!'lower' %in% dot.names){
     dots$lower <- -Inf

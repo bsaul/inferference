@@ -27,7 +27,6 @@
 #' @export
 #' 
 
-
 logit_integrand <- function(b, X, A, 
                              fixed.effects,
                              random.effect = NULL,
@@ -49,6 +48,9 @@ logit_integrand <- function(b, X, A,
     stop('Length of treatment vector is not equal to number of observations')
   }
   
+  if(!is.matrix(X)){
+    X <- as.matrix(X)
+  }
   ## For taking derivative w.r.t. a parameter ##
   params <- c(fixed.effects, random.effect)
   if(!is.null(pos)){
