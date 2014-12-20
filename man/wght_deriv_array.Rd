@@ -3,22 +3,24 @@
 \alias{wght_deriv_array}
 \title{Create an array of group weight derivatives}
 \usage{
-wght_deriv_array(integrand, allocations, X, A, G, fixed.effects, random.effect,
+wght_deriv_array(integrand, allocations, X, A, G, fixed.effects, random.effects,
   ...)
 }
 \arguments{
+\item{integrand}{the function to passed to the argument 'f' of \code{\link{integrate}},
+which is part of \code{\link{wght_calc}}.}
+
 \item{allocations}{coverage levels in (0, 1), possibly (probably) vector valued}
 
-\item{data}{data frame}
+\item{X}{covariate matrix}
 
-\item{groups}{quoted string for name of variable in data containing group membership}
+\item{A}{vector of treatment assignments}
 
-\item{predictors}{character vector of names of predictor variables in data}
+\item{G}{vector of group assignments}
 
-\item{treatment}{character vector of name of treatment variable in data}
+\item{fixed.effects}{vector of fixed effect parameters}
 
-\item{params}{p + 1 vector of fixed effects plus the random effect variance.
-The variance estimate must be last.}
+\item{random.effects}{OPTIONAL vector random effect parameters}
 
 \item{...}{additional arguments passed to integrand}
 }

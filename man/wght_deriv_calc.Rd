@@ -4,13 +4,15 @@
 \title{Compute the derivative(s) of a weight}
 \usage{
 wght_deriv_calc(integrand = logit_integrand, fixed.effects,
-  random.effect = NULL, allocation, hide.errors = TRUE, ...)
+  random.effects = NULL, allocation, hide.errors = TRUE, ...)
 }
 \arguments{
 \item{integrand}{the function to passed to the argument 'f' of \code{\link{integrate}},
 which is part of \code{\link{wght_calc}}.}
 
-\item{params}{parameters with which to take derivatives with respect to}
+\item{fixed.effects}{vector of fixed effect parameters}
+
+\item{random.effects}{vector random effect parameters}
 
 \item{allocation}{the allocation ratio for which to compute the weights}
 

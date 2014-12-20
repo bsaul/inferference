@@ -3,16 +3,11 @@
 #'
 #' @param integrand function passed to \code{\link{log_likelihood}}. Defaults to
 #' \code{\link{logit_integrand}}
-#' @param predictors character vector of predictors from model
-#' @param treatment character string naming treatment variable in data. As in Perez
-#' 2014, this does not necessarily need to be the same 'treatment' used to compute 
-#' the weights as in \code{\link{wght_matrix_calc}}. The \code{propensityB}
-#' argument in \code{\link{run_interference}} may be used to pass a different 
-#' indicator variable other than the actual treatment or exposure. 
-#' @param groups character string of the group variable in data 
-#' @param params p + 1 vector of fixed effects plus the random effect variance. 
-#' The variance estimate must be last.
-#' @param data data frame containing analysis variable
+#' @param X covariate matrix
+#' @param A vector of treatment assignments
+#' @param G vector of group assignments
+#' @param fixed.effects vector of fixed effect parameters
+#' @param random.effects OPTIONAL vector random effect parameters
 #' @param ... additional arguments passed to \code{integrand} or \code{\link{grad}}. 
 #' For example, one can change the \code{method} argument in \code{grad}.
 #' @return N X length(params) matrix of scores
@@ -22,7 +17,7 @@
 score_matrix_calc <- function(integrand = logit_integrand,
                               X, A, G, 
                               fixed.effects,
-                              random.effect,
+                              random.effects,
                               ...)
 {
   ## Warnings ##
@@ -47,16 +42,16 @@ score_matrix_calc <- function(integrand = logit_integrand,
                args <- append(fargs, 
                               list(integrand = integrand, 
                                    fixed.effects = fixed.effects,
-                                   random.effect = random.effect,
+                                   random.effects = random.effects,
                                    A = xx[ , (pp + 1)],
                                    X = xx[ , 1:pp]))
                return(do.call(score_calc, args = args))})
 
   ## Reshape list into matrix ##
   out <- matrix(unlist(s.list, use.names = FALSE), 
-                ncol = pp + length(random.effect), 
+                ncol = pp + length(random.effects), 
                 byrow = TRUE,
-                dimnames = list(gg, names(c(fixed.effects, random.effect))))
+                dimnames = list(gg, names(c(fixed.effects, random.effects))))
   
   return(out)
 }

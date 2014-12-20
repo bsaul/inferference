@@ -18,7 +18,7 @@
 #' @param predictors character vector of predictor variables in \code{data}
 #' @param propensityB Optional. If the treatment variable is different for 
 #' \code{integrand} and \code{likelihood}, include the quote name of the variable
-#' to be passed to \code{likelihood}. Defaults to \code{treatment}.
+#' to be passed to \code{likelihood}. Defaults to \code{treatment}. 
 #' @param family passed to \code{\link{glmer}}. See \code{\link{family}}.
 #' @param known_params if the parameter vector is known (e.g. for simulated data), 
 #' this argument can be used to pass the known parameters to \code{\link{wght_calc}} 
@@ -27,7 +27,7 @@
 #' @param set.NA.to.0 if TRUE, sets any weights that returned an NA value to 0. 
 #' Defaults to TRUE.
 #' @param additional arguments passed to other functions such as 
-#' \code{\link{glmer}}, \code{\link{grad}}, and \code{\integrand} or \code{likelihood}.
+#' \code{\link{glmer}}, \code{\link{grad}}, and \code{integrand} or \code{likelihood}.
 #' @return Returns a list of overall and group-level IPW point estimates 
 #' (the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW 
 #' point estimates (using the weight derivatives), scores (the output of 

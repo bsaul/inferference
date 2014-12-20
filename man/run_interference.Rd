@@ -44,7 +44,7 @@ is skipped. Defaults to NULL.}
 Defaults to TRUE.}
 
 \item{additional}{arguments passed to other functions such as
-\code{\link{glmer}}, \code{\link{grad}}, and \code{\integrand} or \code{likelihood}.}
+\code{\link{glmer}}, \code{\link{grad}}, and \code{integrand} or \code{likelihood}.}
 }
 \value{
 Returns a list of overall and group-level IPW point estimates

@@ -46,22 +46,23 @@ log_likelihood <- function(x,
 #' a single group.
 #' 
 #' @param integrand function to used for the integrand. 
-#' Defaults to \code{\link{logit_integrand}}
+#' Defaults to \code{\link{logit_integrand}}.
 #' @param hide.errors Hide errors printed from \code{\link{grad}}. 
-#' Defaults to true
-#' @param params See \code{\link{logit_integrand}}.
-#' @param ... additional arguments pass to the integrand function
+#' Defaults to true.
+#' @param fixed.effects vector of fixed effect parameters.
+#' @param random.effects OPTIONAL vector random effect parameters.
+#' @param ... additional arguments pass to the integrand function.
 #' @return length(theta) vector of scores
 #' @export
 
 score_calc <- function(integrand = logit_integrand,
                        hide.errors = TRUE,
                        fixed.effects,
-                       random.effect,
+                       random.effects,
                        ...)
 {
   ## Necessary bits ##
-  params <- c(fixed.effects, random.effect)
+  params <- c(fixed.effects, random.effects)
   integrand <- match.fun(integrand)
   dots <- list(...)
   
@@ -75,7 +76,7 @@ score_calc <- function(integrand = logit_integrand,
     args <- append(fargs,
                    list(func = log_likelihood, 
                         fixed.effects = fixed.effects,
-                        random.effect = random.effect,
+                        random.effects = random.effects,
                         x = params[i], 
                         pos = i))
     

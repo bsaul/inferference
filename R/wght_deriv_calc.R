@@ -5,7 +5,8 @@
 #' 
 #' @param integrand the function to passed to the argument 'f' of \code{\link{integrate}},
 #' which is part of \code{\link{wght_calc}}.
-#' @param params parameters with which to take derivatives with respect to
+#' @param fixed.effects vector of fixed effect parameters
+#' @param random.effects vector random effect parameters
 #' @param allocation the allocation ratio for which to compute the weights
 #' @param hide.errors print \code{grad} error messages. Defaults to TRUE.
 #' @param ... additional arguments passed to integrand
@@ -14,7 +15,7 @@
 
 wght_deriv_calc <- function(integrand = logit_integrand,
                             fixed.effects,
-                            random.effect = NULL,
+                            random.effects = NULL,
                             allocation,
                             hide.errors = TRUE,
                             ...)
@@ -28,13 +29,13 @@ wght_deriv_calc <- function(integrand = logit_integrand,
                      get_args(integrate, dots))
   
   args <- append(append(int.args, get_args(grad, dots)),
-                 list(func          = wght_calc, 
-                      integrand     = integrand, 
-                      allocation    = allocation,
-                      fixed.effects = fixed.effects,
-                      random.effect = random.effect))
+                 list(func           = wght_calc, 
+                      integrand      = integrand, 
+                      allocation     = allocation,
+                      fixed.effects  = fixed.effects,
+                      random.effects = random.effects))
   
-  params <- c(fixed.effects, random.effect)
+  params <- c(fixed.effects, random.effects)
   
   ## Compute Derivatives ##
   dervs <- sapply(1:length(params), function(i){

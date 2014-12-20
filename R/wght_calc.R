@@ -3,8 +3,8 @@
 #' Calculates the IPW for a single group. Used by \code{\link{wght_matrix}} to 
 #' create a matrix of weights for each group and allocation scheme.
 #' 
-#' If \code{include.allocation} is an argument in the integrand function and 
-#' \code{include.allocation == TRUE}, then the weight is calcuated as:
+#' If \code{integrate.allocation} is an argument in the integrand function and 
+#' \code{integrate.allocation == TRUE}, then the weight is calcuated as:
 #' 
 #' \deqn{\frac{1}{Pr(A|X)}}{1 / integrate(integrand)}
 #' 
@@ -14,12 +14,8 @@
 #' 
 #' @param integrand function to pass to the argument 'f' of \code{\link{integrate}}.
 #' @param allocation the allocation ratio for which to compute the weight
-#' @param x necessary argument for \code{\link{grad}}. Defaults to NULL, so if 
-#' not evaluting a derivative with \code{\link{wght_deriv_calc}}, this can be
-#' ignored.
-#' @param pos necessary taking a derivative when using to \code{\link{PrAX_integrand}} 
-#' Defaults to NULL, so if not evaluting a derivative with \code{\link{wght_deriv_calc}}, 
-#' this can be ignored.
+#' @param x OPTIONAL argument necessary for \code{\link{grad}} when using \code{\link{wght_deriv_calc}}.
+#' @param pos OPTIONAL argument necessary for \code{\link{logit_integrand}} when using \code{\link{wght_deriv_calc}}. 
 #' @param ... other arguments passed to integrand. 
 #' @return scalar result of the integral
 #' @export
