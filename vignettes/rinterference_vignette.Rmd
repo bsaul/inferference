@@ -80,12 +80,12 @@ Here's a quick sample of `run_interference()` based on the data provided:
 ```{r, echo=TRUE}
 sample_run <- run_interference(
   allocations = c(.3, .45, .6),
-  data = sample_data, # name of the data frame
+  data = interference_sample, # name of the data frame
   groups = 'group',   # quoted string with group variable
   outcome = 'y',      # quoted string with outcome variable
   treatment = 'A', # quote string of treatment variable
   propensityB = 'B', # quoted string for 'first stage' variable. OPTIONAL.
-  propensity_model = B ~ X1 + X2 + (1|group),
+  propensity_formula = B ~ X1 + X2 + (1|group),
   randomization = 2/3,
   method = 'simple')
 ```
@@ -112,7 +112,7 @@ sample_run <- run_interference(
   outcome = 'y',      # quoted string with outcome variable
   treatment = 'A', # quote string of treatment variable
   propensityB = 'B', # quoted string for 'first stage' variable. OPTIONAL.
-  propensity_model = B ~ X1 + X2 + (1|group)
+  propensity_formula = B ~ X1 + X2 + (1|group)
   randomization = 2/3,
   estimation_method = 'oracle',
   estimate_options = (fixed.effects = c(0.2727, -0.0387, .2719), 
