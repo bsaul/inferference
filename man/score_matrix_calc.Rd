@@ -3,27 +3,22 @@
 \alias{score_matrix_calc}
 \title{Calculate matrix of log Likelihood derivatives}
 \usage{
-score_matrix_calc(integrand = logit_integrand, predictors, treatment, groups,
-  params, data, ...)
+score_matrix_calc(integrand = logit_integrand, X, A, G, fixed.effects,
+  random.effects, ...)
 }
 \arguments{
 \item{integrand}{function passed to \code{\link{log_likelihood}}. Defaults to
 \code{\link{logit_integrand}}}
 
-\item{predictors}{character vector of predictors from model}
+\item{X}{covariate matrix}
 
-\item{treatment}{character string naming treatment variable in data. As in Perez
-2014, this does not necessarily need to be the same 'treatment' used to compute
-the weights as in \code{\link{wght_matrix}}. The \code{propensityB}
-argument in \code{\link{run_interference}} may be used to pass a different
-indicator variable other than the actual treatment or exposure.}
+\item{A}{vector of treatment assignments}
 
-\item{groups}{character string of the group variable in data}
+\item{G}{vector of group assignments}
 
-\item{params}{p + 1 vector of fixed effects plus the random effect variance.
-The variance estimate must be last.}
+\item{fixed.effects}{vector of fixed effect parameters}
 
-\item{data}{data frame containing analysis variable}
+\item{random.effects}{OPTIONAL vector random effect parameters}
 
 \item{...}{additional arguments passed to \code{integrand} or \code{\link{grad}}.
 For example, one can change the \code{method} argument in \code{grad}.}

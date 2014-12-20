@@ -3,20 +3,18 @@
 \alias{wght_calc}
 \title{Compute IPW weight}
 \usage{
-wght_calc(integrand, allocation, x = NULL, pos = NULL, ...)
+wght_calc(integrand = logit_integrand, allocation, x = NULL, pos = NULL,
+  ...)
 }
 \arguments{
 \item{integrand}{function to pass to the argument 'f' of \code{\link{integrate}}.}
 
 \item{allocation}{the allocation ratio for which to compute the weight}
 
-\item{x}{necessary argument for \code{\link{grad}}. Defaults to NULL, so if
-not evaluting a derivative with \code{\link{wght_deriv_calc}}, this can be
-ignored.}
+\item{x}{OPTIONAL argument necessary for \code{\link{grad}} when using \code{\link{wght_deriv_calc}}.}
 
-\item{pos}{necessary taking a derivative when using to \code{\link{logit_integrand}}
-Defaults to NULL, so if not evaluting a derivative with \code{\link{wght_deriv_calc}},
-this can be ignored.}
+
+\item{pos}{OPTIONAL argument necessary for \code{\link{logit_integrand}} when using \code{\link{wght_deriv_calc}}.}
 
 \item{...}{other arguments passed to integrand.}
 }
@@ -28,8 +26,8 @@ Calculates the IPW for a single group. Used by \code{\link{wght_matrix}} to
 create a matrix of weights for each group and allocation scheme.
 }
 \details{
-If \code{include.allocation} is an argument in the integrand function and
-\code{include.allocation == TRUE}, then the weight is calcuated as:
+If \code{integrate.allocation} is an argument in the integrand function and
+\code{integrate.allocation == TRUE}, then the weight is calcuated as:
 
 \deqn{\frac{1}{Pr(A|X)}}{1 / integrate(integrand)}
 

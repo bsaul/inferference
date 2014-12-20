@@ -1,9 +1,48 @@
 ---
-title: "Rinterference Vignette"
-author: "Bradley Saul"
-date: "November 3, 2014"
-output: pdf_document
+title: "RInterference Vignette"
+author: 
+- name : "Bradley Saul"
+  affiliation: "University of North Carolina"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{RInterference Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+abstract:  A vaccine may protect the treated person as well as others in their social network. In causal inference, this phenomena is known as interference: the treatment of one unit affects the outcomes of other units. Stratified interference is the assumption that (a) individuals can be grouped such that no interference occurs between groups and (b) an individual's outcome depends on the proportion treated within their group. The R package described in this paper, rinterference, uses group-level inverse probability weights (IPW) to compute causal effect estimates. Examples from political sciences and infectious disease illustrate use of the package. Out-of-the-box tools offer a range of options, but researchers can also define their own functions to define the group-level propensity score.
 ---
+
+
+# Introduction
+
+When Donald Rubin laid the groundwork for the potential outcomes framework of statistical inference, he wrote: "something about ". This assumption became formalized as the formibable sounding `Single Unit Treatment Value Assumption` or SUTVA.  This assumption incorporates the assumption of no-interference; that is, the treatment or exposure of one unit does not affect the outcome of other units. For nearly 25 years (or closer to a century if you consider that Fisher was one of the first to write about this in his book XX), little headway was made in relaxing this assumption. Perhaps fueled by interest in causal inference and social network type data, recent advances have made it possible to relax the no-interference assumption and still have valid, unbiased estimators. We're now at place of some interference and work continues.
+
+Stratified interference.
+Vanderweele and Tchegen Tchegen (VTT) developed an inverse-probability weighting estimation method. This \pkg{rinterference} implements these methods.
+
+To install:
+```{r, eval= FALSE}
+install.packages('rinterference')
+```
+
+Organaization of this paper.
+
+* Overview: Causal inference with Interference
+  * Notation
+	* Mapping between math and code
+	* estimation methods: glmer, glm, oracle
+	* glm issue: just integrates dnorm to 1 (almost)
+* Computational Issues
+	* missing data
+* Examples
+	* Voters
+	* Cholera? - mapping example
+* Tips
+	* Speeding up code
+		* method = 'simple'
+* Conclusion
+
+# OLD BELOW
 
 This is a VERY brief description of how to use the `rinterference` package.
 
@@ -38,14 +77,15 @@ The `rinterference` package has two main steps. First is to calculate all the pi
 Here's a quick sample of `run_interference()` based on the data provided:
 ```{r, echo=TRUE}
 sample_run <- run_interference(
-  data = sample_data, # name of the data frame
+  allocations = c(.3, .45, .6),
+  data = interference_sample, # name of the data frame
   groups = 'group',   # quoted string with group variable
   outcome = 'y',      # quoted string with outcome variable
-  predictors = c('X1', 'X2'), # vector of strings with predcitor variables
-  # At this time at least one predictor must be defined
   treatment = 'A', # quote string of treatment variable
   propensityB = 'B', # quoted string for 'first stage' variable. OPTIONAL.
-  allocations = c(.3, .45, .6))
+  propensity_formula = B ~ X1 + X2 + (1|group),
+  randomization = 2/3,
+  method = 'simple')
 ```
 
 Now we can compute the effects:
@@ -64,15 +104,18 @@ indirect_effect(sample_run, .3, .6)
 Let's say we're running simulations and we know the true parameters. In the sample above, the parameters were estimated by `glmer`, but we can tell `run_interference` that we know the truth via the `known_params` argument. Be careful that the number of parameters line up with the number of parameters expected by the integrand function. In the case of `logit_integrand`, the default integrand function, it expects an intercept parameter, one for each covariate, and one for the random effect. 
 
 ```{r, echo = TRUE}
-sample_run_truth <- run_interference(
+sample_run <- run_interference(
   data = sample_data, # name of the data frame
   groups = 'group',   # quoted string with group variable
   outcome = 'y',      # quoted string with outcome variable
-  predictors = c('X1', 'X2'), # vector of strings with predcitor variables
-  # At this time at least one predictor must be defined
   treatment = 'A', # quote string of treatment variable
   propensityB = 'B', # quoted string for 'first stage' variable. OPTIONAL.
-  known_params = c(0.2727, -0.0387, .2719, 1.0859),
+  propensity_formula = B ~ X1 + X2 + (1|group)
+  randomization = 2/3,
+  estimation_method = 'oracle',
+  estimate_options = (fixed.effects = c(0.2727, -0.0387, .2719), 
+                      random.effects = 1.0859)
+  method = 'simple', # passed to grad()
   allocations = c(.3, .45, .6))
 ```
 

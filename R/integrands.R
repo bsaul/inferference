@@ -1,4 +1,4 @@
-#' Integrand of Pr(A|X)
+#' Integrand of the group-level propensity score
 #' 
 #' Computes the following function:
 #' \deqn{\prod_{j=1}^{n} (r h_{j}(b))^{A_j}  (1 - r h_{j}(b))^{1 - A_j} 
@@ -10,60 +10,77 @@
 #' \eqn{ranef} is the random effect variance. Used by \code{\link{wght_calc}} and
 #' \code{\link{score_calc}}.
 #' 
-#' @param b vector argument of values necessary for \code{\link{integrate}}
+#' @param b vector argument of values necessary for \code{\link{integrate}}.
 #' @param x Used by \code{\link{grad}} for taking the derivative with respect an element of
 #' params. Only used if \code{pos} is not NULL.
 #' @param pos The position of theta for which to take the derivative. Defaults to NULL.
-#' @param X n by length(params) - 1 matrix of covariates. Make sure the order of columns in X corresponds to params.
-#' @param params p + 1 vector of fixed effects plus the random effect variance. The variance estimate must be the last element.
+#' @param X n by length(fixed.effects) matrix of covariates.
+#' @param fixed.effects vector of fixed effect parameters.
+#' @param random.effects OPTIONAL vector of random effect parameters. If provided, 
+#' only the first element is used. If this element is <= 0, it is ignored.
 #' @param A vector of observed treatments (0,1)
-#' @param allocation The allocation strategy. Required if include.alpha == TRUE. 
+#' @param allocation The allocation strategy. Required if include.allocations == TRUE. 
 #' Defaults to NA.
-#' @param r Randomization probability. Defaults to 1.
-#' @param include.allocation Either TRUE for including allocation in the product or FALSE 
+#' @param randomization Randomization probability. Defaults to 1.
+#' @param integrate.allocation Either TRUE for including allocation in the product or FALSE 
 #' does not include allocation. See \code{\link{wght_calc}} for more information.
 #' 
 #' @return value of the integrand
 #' @export
 #' 
 
-logit_integrand <- function(b, 
-                            X, 
-                            A, 
-                            params, 
-                            x = NULL, 
-                            pos = NULL, 
-                            allocation = NULL, 
-                            r = 1, 
-                            include.allocation = FALSE){
-  
+logit_integrand <- function(b, X, A, 
+                             fixed.effects,
+                             random.effects = NULL,
+                             x = NULL, 
+                             pos = NULL, 
+                             allocation = NULL, 
+                             randomization = 1, 
+                             integrate.allocation = FALSE)
+{
+  p  <- length(fixed.effects)
+  re <- random.effects[1]
+    
   ## Warnings ##
-  if(length(params) - 1 != ncol(X)){
+  if(length(fixed.effects) != ncol(X)){
     stop('The number of fixed effect parameters is not equal to the number \n
          of columns in the covariate matrix')
   }
   
+  if(length(A) != nrow(X)){
+    stop('Length of treatment vector is not equal to number of observations')
+  }
+  
+  if(!is.matrix(X)){
+    X <- as.matrix(X)
+  }
+  ## For taking derivative w.r.t. a parameter ##
+  params <- c(fixed.effects, re)
   if(!is.null(pos)){
     params[pos] <- x
   }
   
-  # X needs to be a matrix
-  if(!is.matrix(X)){
-    X <- as.matrix(X)
+  ## Calculations ## 
+  if(is.null(re) || re <= 0){
+    pr.b <- randomization * (plogis(X %*% params[1:p]))
+  } else {
+    pr.b <- randomization * (plogis(drop(outer(X %*% params[1:p], b, '+'))))
   }
   
-  theta.fix <- params[1:ncol(X)]
-  theta.ran <- params[length(params)]
-  
-  pr.b <- r * (plogis(drop(outer(X %*% theta.fix, b, '+'))))  
-  
-  if(include.allocation == FALSE){
+  if(integrate.allocation == FALSE){
     hh <- dbinom(A, 1, pr.b)
   } else {
     hh <- (pr.b/allocation)^A * ((1-pr.b)/(1 - allocation))^(1-A)
   }
   
-  hha <- apply(hh, 2, prod)
+  if(is.null(re) || re <= 0){
+    # in this way dnorm integrates to one when integrating from -Inf to Inf
+    out <- prod(hh) * dnorm(b, mean=0, sd = 1) 
+  } else {
+    hha <- apply(hh, 2, prod)
+    out <- hha * dnorm(b, mean=0, sd = params[p + 1])
+  }
   
-  return(hha * dnorm(b, mean=0, theta.ran))
+  return(out)
 }
+

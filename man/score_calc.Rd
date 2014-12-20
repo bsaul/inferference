@@ -3,18 +3,21 @@
 \alias{score_calc}
 \title{Compute scores for a single group}
 \usage{
-score_calc(integrand = logit_integrand, hide.errors = TRUE, params, ...)
+score_calc(integrand = logit_integrand, hide.errors = TRUE, fixed.effects,
+  random.effects, ...)
 }
 \arguments{
 \item{integrand}{function to used for the integrand.
-Defaults to \code{\link{logit_integrand}}}
+Defaults to \code{\link{logit_integrand}}.}
 
 \item{hide.errors}{Hide errors printed from \code{\link{grad}}.
-Defaults to true}
+Defaults to true.}
 
-\item{params}{See \code{\link{logit_integrand}}.}
+\item{fixed.effects}{vector of fixed effect parameters.}
 
-\item{...}{additional arguments pass to the integrand function}
+\item{random.effects}{OPTIONAL vector random effect parameters.}
+
+\item{...}{additional arguments pass to the integrand function.}
 }
 \value{
 length(theta) vector of scores

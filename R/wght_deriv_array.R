@@ -2,16 +2,15 @@
 #' 
 #' Uses \code{\link{wght_deriv_calc}} to compute the weight derivatives for each 
 #' group per coverage level
-#' 
-#' @param integrand the function used in the weight calculation. Defaults to 
-#' \code{\link{logit_integrand}} 
+
+#' @param integrand the function to passed to the argument 'f' of \code{\link{integrate}},
+#' which is part of \code{\link{wght_calc}}. 
 #' @param allocations coverage levels in (0, 1), possibly (probably) vector valued
-#' @param data data frame
-#' @param groups quoted string for name of variable in data containing group membership
-#' @param predictors character vector of names of predictor variables in data
-#' @param treatment character vector of name of treatment variable in data
-#' @param params p + 1 vector of fixed effects plus the random effect variance. 
-#' The variance estimate must be last.
+#' @param X covariate matrix
+#' @param A vector of treatment assignments
+#' @param G vector of group assignments
+#' @param fixed.effects vector of fixed effect parameters
+#' @param random.effects OPTIONAL vector random effect parameters
 #' @param ... additional arguments passed to integrand
 #' @return a length(unique(group)) X length(params) X length(alphas) array of 
 #' group weight derivatives
@@ -19,45 +18,42 @@
 
 wght_deriv_array <- function(integrand = logit_integrand, 
                              allocations, 
-                             data, 
-                             groups, 
-                             predictors, 
-                             treatment, 
-                             params, 
-                             ...){
+                             X, A, G,
+                             fixed.effects,
+                             random.effects,
+                             ...)
+{
   ## Gather necessary bits ##
   integrand <- match.fun(integrand)
-  G  <- data[, groups]
-  X  <- cbind(1, data[, predictors])
-  A  <- data[, treatment]
-  p  <- ncol(X) # number of predictors
+  XX <- cbind(X, A)
+  p  <- length(fixed.effects) # number of predictors
+  pp <- p + length(random.effects)
   aa <- sort(allocations) # Make sure alphas are sorted
   gg <- sort(unique(G))
   k  <- length(allocations) 
   N  <- length(unique(G))
+  dots <- list(...)
 
   ## Warnings ##
-  if(length(params) != (p + 1)){
-    stop("The length of params is not equal to the number of predictors + 2 ")
-  }
-  
+
   ## Compute weight (derivative) for each group, parameter, and alpha level ##
   w.list <- lapply(aa, function(allocation){
-    w <- by(cbind(X, A), INDICES = G, simplify = TRUE, 
+    w <- by(XX, INDICES = G, simplify = TRUE, 
             FUN = function(x) {
-              x <- as.matrix(x) # PrAX expects a matrix
               wght_deriv_calc(integrand = integrand, 
                               allocation = allocation, 
                               A = x[, p+1], 
                               X = x[, 1:p], 
-                              params = params, ...)})
-    w2 <- matrix(unlist(w, use.names = FALSE), ncol = p+1, byrow = TRUE)
+                              fixed.effects = fixed.effects, 
+                              random.effects = random.effects,
+                              ...)})
+    w2 <- matrix(unlist(w, use.names = FALSE), ncol = pp, byrow = TRUE)
     return(w2)}) 
   
   ## Reshape list into array ##
   out <- array(unlist(w.list, use.names = FALSE), 
-               dim = c(N, p+1, k),
-               dimnames = list(gg, names(params), aa))
+               dim = c(N, pp, k),
+               dimnames = list(gg, names(c(fixed.effects, random.effects)), aa))
   
   return(out)
 }
