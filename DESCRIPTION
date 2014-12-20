@@ -10,3 +10,7 @@ Depends:
     numDeriv (>= 2012.9-1),
     lme4 (>= 1.1-6),
 License: MIT
+Suggests:
+    testthat,
+    knitr
+VignetteBuilder: knitr
