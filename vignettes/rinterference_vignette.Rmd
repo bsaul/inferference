@@ -62,6 +62,8 @@ sample_sim <- sim_interference(n = 3000, N = 250, nsims = 1,
                                parameters = theta.sim,
                                alphas = alphaz)
 sample_data <- sample_sim$sims[[1]]
+
+
 #save(sample_data, file = "data/sample_data.rda")
 ```
 

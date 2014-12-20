@@ -14,3 +14,4 @@ Suggests:
     testthat,
     knitr
 VignetteBuilder: knitr
+LazyData: true
