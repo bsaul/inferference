@@ -13,7 +13,6 @@ wght_calc(integrand = logit_integrand, allocation, x = NULL, pos = NULL,
 
 \item{x}{OPTIONAL argument necessary for \code{\link{grad}} when using \code{\link{wght_deriv_calc}}.}
 
-
 \item{pos}{OPTIONAL argument necessary for \code{\link{logit_integrand}} when using \code{\link{wght_deriv_calc}}.}
 
 \item{...}{other arguments passed to integrand.}
