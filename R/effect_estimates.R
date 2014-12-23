@@ -135,7 +135,7 @@ calc_effect <- function(obj,
     print(toprint)
   }
   
-  out <- data.frame(estimage = pe,
+  out <- data.frame(estimate = pe,
                     std.error = sqrt(ave), 
                     conf.lower = pe - me, 
                     conf.upper = pe + me)
