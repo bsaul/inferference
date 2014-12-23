@@ -135,10 +135,10 @@ calc_effect <- function(obj,
     print(toprint)
   }
   
-  out <- data.frame(point = pe,
-                    variance = ave, 
-                    ll = pe - me, 
-                    ul = pe + me)
+  out <- data.frame(estimage = pe,
+                    std.error = sqrt(ave), 
+                    conf.lower = pe - me, 
+                    conf.upper = pe + me)
   return(out)
 }
 
