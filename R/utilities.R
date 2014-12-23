@@ -24,6 +24,7 @@ get_args <- function(FUN, args_list = NULL, ...){
   return(args)
 }
 
+#-----------------------------------------------------------------------------#
 #' Calculate outcome means per group per treatment level
 #' 
 #' @param Y name (character vector) of observed outcomes in data
@@ -32,7 +33,7 @@ get_args <- function(FUN, args_list = NULL, ...){
 #' @param a value of treatment level, defaults to NA.
 #' @param data data.frame with variables
 #' @return data dataset to use
-#'
+#-----------------------------------------------------------------------------#
 
 group_means <- function(Y, A, G, a = NA, data){
   
@@ -62,7 +63,8 @@ group_means <- function(Y, A, G, a = NA, data){
 #' compute all outcome, direct, indirect, total, and overall effect estimates from
 #' an object created from \code{\link{run_inference}} 
 #' @export
-#' @example effect_grid(seq(0,1, by = .1), c(0,1))
+#' @examples 
+#' effect_grid(seq(0,1, by = .1), c(0,1))
 #' 
 #-----------------------------------------------------------------------------#
 
