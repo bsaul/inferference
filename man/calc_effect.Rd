@@ -3,7 +3,7 @@
 \alias{calc_effect}
 \title{Calculate IPW estimates}
 \usage{
-calc_effect(obj, alpha1, trt.lvl1, alpha2 = NA, trt.lvl2 = NA, effect,
+calc_effect(obj, alpha1, trt.lvl1, alpha2 = NA, trt.lvl2 = NA, effect_type,
   marginal, rescale.factor = 1, conf.level = 0.95, print = FALSE)
 }
 \arguments{
@@ -16,12 +16,12 @@ scheme in the constrast of interest. See details.}
 treatment in the constrast of interest. If marginal = TRUE, this is ignored.}
 
 \item{alpha2}{the second allocation scheme for the contrast of interest.
-Ignored if effect = 'outcome'.}
+Ignored if effect_type = 'outcome'.}
 
 \item{trt.lvl2}{the second treatment in the constrast of interest.
-If marginal = TRUE or effect = 'outcome', this is ignored.}
+If marginal = TRUE or effect_type = 'outcome', this is ignored.}
 
-\item{effect}{either 'contrast' or 'outcome'}
+\item{effect_type}{either 'contrast' or 'outcome'}
 
 \item{marginal}{TRUE or FALSE}
 
@@ -48,7 +48,7 @@ See \code{\link{direct_effect}}, \code{\link{indirect_effect}},
 
  This table summarizes the value that \code{calc_effect} returns.
  \tabular{llc}{
- Marginal \tab Effect    \tab Value returned \cr
+ Marginal \tab Effect_type    \tab Value returned \cr
  FALSE    \tab 'outcome' \tab \eqn{\hat{Y}(trt.lvl1, alpha1)}{Yhat(trt.lvl1, alpha1)} \cr
  TRUE     \tab 'outcome' \tab \eqn{\hat{Y}(alpha1)}{Yhat(alpha1)}  \cr
  FALSE    \tab 'contrast' \tab

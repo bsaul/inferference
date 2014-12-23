@@ -4,7 +4,7 @@
 \title{V Matrix}
 \usage{
 V_matrix(scores, point_estimates, allocation1, trt.lvl1, allocation2 = NA,
-  trt.lvl2 = NA, effect, marginal)
+  trt.lvl2 = NA, effect_type, marginal)
 }
 \arguments{
 \item{scores}{the output of \code{\link{score_matrix_calc}}}
@@ -19,7 +19,7 @@ V_matrix(scores, point_estimates, allocation1, trt.lvl1, allocation2 = NA,
 
 \item{trt.lvl2}{See details in \code{\link{calc_effect}}.}
 
-\item{effect}{See details in \code{\link{calc_effect}}.}
+\item{effect_type}{See details in \code{\link{calc_effect}}.}
 
 \item{marginal}{See details in \code{\link{calc_effect}}.}
 }

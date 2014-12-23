@@ -49,7 +49,8 @@ calc_effect <- function(obj,
                         marginal,
                         rescale.factor = 1,
                         conf.level = 0.95,
-                        print = FALSE){
+                        print = FALSE)
+{
   ## Warnings ##
   # Print error if either estimates with alpha1 have been computed 
   # or a constrast is being estimated when estimates for alpha2
@@ -141,6 +142,11 @@ calc_effect <- function(obj,
                     conf.upper = pe + me)
   return(out)
 }
+
+calc_effect <- Vectorize(calc_effect, 
+                         vectorize.args = c("alpha1", 'alpha2', 'trt.lvl1', 'trt.lvl2', 
+                                            'marginal', 'effect_type'))
+
 
 #-----------------------------------------------------------------------------#
 #' Calculate Direct Effect Estimates

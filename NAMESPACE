@@ -3,6 +3,7 @@
 export(V_matrix)
 export(calc_effect)
 export(direct_effect)
+export(effect_grid)
 export(get_args)
 export(indirect_effect)
 export(ipw_point_estimates)
