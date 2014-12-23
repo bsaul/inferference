@@ -10,7 +10,7 @@
 #' @param trt.lvl1 See details in \code{\link{calc_effect}}.
 #' @param allocation2 See details in \code{\link{calc_effect}}.
 #' @param trt.lvl2 See details in \code{\link{calc_effect}}.
-#' @param effect See details in \code{\link{calc_effect}}.
+#' @param effect_type See details in \code{\link{calc_effect}}.
 #' @param marginal See details in \code{\link{calc_effect}}.
 #' 
 #' @return V matrix
@@ -23,7 +23,7 @@ V_matrix <- function(scores,
                      trt.lvl1, 
                      allocation2 = NA, 
                      trt.lvl2    = NA, 
-                     effect, 
+                     effect_type, 
                      marginal){
   ## Necessary bits ##
   N  <- dim(scores)[1]
@@ -38,14 +38,14 @@ V_matrix <- function(scores,
   hold_oal <- point_estimates[[fff]]$overall 
   hold_grp <- point_estimates[[fff]]$groups
   
-  if(effect == 'contrast'){   
+  if(effect_type == 'contrast'){   
     if(marginal == TRUE){
       xx <- (hold_grp[ , a1] - hold_oal[a1]) - (hold_grp[, a2] - hold_oal[a2])
     } else {
       xx <- (hold_grp[ , a1, t1] - hold_oal[a1, t1]) - (hold_grp[, a2, t2] - hold_oal[a2, t2])
     }
   } 
-  else if(effect == 'outcome'){
+  else if(effect_type == 'outcome'){
     if(marginal == TRUE){
       xx <- hold_grp[ , a1] - hold_oal[a1]
     } else {

@@ -10,7 +10,7 @@
 #'  
 #'  This table summarizes the value that \code{calc_effect} returns.
 #'  \tabular{llc}{
-#'  Marginal \tab Effect    \tab Value returned \cr
+#'  Marginal \tab Effect_type    \tab Value returned \cr
 #'  FALSE    \tab 'outcome' \tab \eqn{\hat{Y}(trt.lvl1, alpha1)}{Yhat(trt.lvl1, alpha1)} \cr
 #'  TRUE     \tab 'outcome' \tab \eqn{\hat{Y}(alpha1)}{Yhat(alpha1)}  \cr
 #'  FALSE    \tab 'contrast' \tab 
@@ -25,10 +25,10 @@
 #' @param trt.lvl1 the treatment level for the outcome of interest or the first
 #' treatment in the constrast of interest. If marginal = TRUE, this is ignored.
 #' @param alpha2 the second allocation scheme for the contrast of interest.
-#' Ignored if effect = 'outcome'.
+#' Ignored if effect_type = 'outcome'.
 #' @param trt.lvl2  the second treatment in the constrast of interest. 
-#' If marginal = TRUE or effect = 'outcome', this is ignored.
-#' @param effect either 'contrast' or 'outcome'
+#' If marginal = TRUE or effect_type = 'outcome', this is ignored.
+#' @param effect_type either 'contrast' or 'outcome'
 #' @param marginal TRUE or FALSE
 #' @param rescale.factor factor by which to rescale values. Defaults to 1.
 #' @param conf.level Confidence level for confidence intervals. Defaults to 0.95.
@@ -45,7 +45,7 @@ calc_effect <- function(obj,
                         trt.lvl1, 
                         alpha2 = NA, 
                         trt.lvl2 = NA,
-                        effect,
+                        effect_type,
                         marginal,
                         rescale.factor = 1,
                         conf.level = 0.95,
@@ -55,7 +55,7 @@ calc_effect <- function(obj,
   # or a constrast is being estimated when estimates for alpha2
   # have not been computed
   if (!(alpha1 %in% obj$summary$allocations) | 
-     (effect == 'contrast' & !(alpha2 %in% obj$summary$allocations))){
+     (effect_type == 'contrast' & !(alpha2 %in% obj$summary$allocations))){
     stop(paste('At least one of the chosen coverage levels has not been estimated.\n',
                'Select from the following: \n', 
                paste(obj$summary$allocations, collapse = ' ')))
@@ -75,7 +75,7 @@ calc_effect <- function(obj,
   Uoal <- obj$Upart[[fff]]$overall 
   Ugrp <- obj$Upart[[fff]]$groups
   
-  if(effect == 'contrast'){
+  if(effect_type == 'contrast'){
     if(marginal == TRUE){
       pe          <- oal[a1] - oal[a2]
       pe_grp_diff <- (grp[ , a1] - oal[a1]) - (grp[, a2] - oal[a2])
@@ -107,7 +107,7 @@ calc_effect <- function(obj,
                   point_estimates = obj$point_estimates, 
                   allocation1 = a1, allocation2 = a2, 
                   trt.lvl1 = t1, trt.lvl2 = t2, 
-                  effect = effect, marginal = marginal)
+                  effect_type = effect_type, marginal = marginal)
     
     vdim <- dim(V)[1]
     
@@ -167,7 +167,7 @@ direct_effect <- function(obj,
                           conf.level = 0.95,
                           rescale.factor = 1){
   out <- calc_effect(obj, allocation, trt.lvl1, allocation, trt.lvl2,
-                     effect = 'contrast', marginal = FALSE,
+                     effect_type = 'contrast', marginal = FALSE,
                      print = print, conf.level = conf.level,
                      rescale.factor = rescale.factor)
   return(out)
@@ -200,7 +200,7 @@ indirect_effect <- function(obj,
                             conf.level = 0.95){
   
   out <- calc_effect(obj, allocation1, trt.lvl, allocation2, trt.lvl,
-                     effect = 'contrast', marginal = FALSE,
+                     effect_type = 'contrast', marginal = FALSE,
                      print = print, conf.level = conf.level,
                      rescale.factor = rescale.factor)
   return(out)
@@ -234,7 +234,7 @@ total_effect <- function(obj,
                          conf.level = 0.95){
   
   out <- calc_effect(obj, allocation1, trt.lvl1, allocation2, trt.lvl2,
-                     effect = 'contrast', marginal = FALSE,
+                     effect_type = 'contrast', marginal = FALSE,
                      print = print, conf.level = conf.level,
                      rescale.factor = rescale.factor)
   return(out)
@@ -264,7 +264,7 @@ overall_effect <- function(obj,
                            conf.level = 0.95){
   
   out <- calc_effect(obj, allocation1, trt.lvl1 = NA, allocation2, trt.lvl2 = NA,
-                     effect = 'contrast', marginal = TRUE,
+                     effect_type = 'contrast', marginal = TRUE,
                      print = print, conf.level = conf.level,
                      rescale.factor = rescale.factor)
   return(out)
