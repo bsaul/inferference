@@ -55,7 +55,7 @@ interference <- function(estimation_type = 'ipw',
   }
 
   grid <- effect_grid(allocations = out$summary$allocations, 
-                         treatments  = out$summary$treatments)
+                      treatments  = out$summary$treatments)
   
   out$estimates <- cbind(grid, t(calc_effect(out, 
                                               alpha1      = grid$alpha1,
@@ -67,5 +67,8 @@ interference <- function(estimation_type = 'ipw',
                                               rescale.factor = rescale.factor,
                                               conf.level = conf.level,
                                               print = FALSE)))
+  out$summary$conf.level <- conf.level 
+  
+  class(out) <- "causal_interference"
   return(out)
 }
