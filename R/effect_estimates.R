@@ -138,8 +138,8 @@ calc_effect <- function(obj,
   
   out <- data.frame(estimate = pe,
                     std.error = sqrt(ave), 
-                    conf.lower = pe - me, 
-                    conf.upper = pe + me)
+                    conf.low = pe - me, 
+                    conf.high = pe + me)
   return(out)
 }
 
