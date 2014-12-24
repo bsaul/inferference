@@ -42,9 +42,16 @@ ipw_interference <- function(integrand = logit_integrand,
 {
   ## Necessary bits ##
   dots <- list(...)
-  integrand  <- match.fun(integrand)
-  likelihood <- match.fun(likelihood)
-  oracle     <- model_method == 'oracle'
+  integrand    <- match.fun(integrand)
+  likelihood   <- match.fun(likelihood)
+  oracle       <- model_method == 'oracle'
+  random.count <- length(findbars(propensity_formula))
+  
+  ## Warnings ##
+  if(model_method == 'glm' & random.count > 0 ){
+    stop('propensity_formula appears to include a random effect when "glm" was chosen \n 
+         for parameter estimation. Set model_method to "glmer" to include a random effect')
+  }
   
   ## Reorder data frame by groups ##
   data <- data[order(data[ , groups]), ]
