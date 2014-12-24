@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------#
-#' Run Interference  
+#' IPW Interference estimation 
 #'
 #' Prepares the object necessary to compute IPW effect estimates with 
 #' \code{\link{calc_effect}}, \code{\link{direct_effect}}, \code{\link{indirect_effect}},
@@ -11,21 +11,11 @@
 #' \code{\link{score_calc}}. Defaults to \code{\link{logit_integrand}}.
 #' @param allocations the allocation (coverage) schemes for which to estimate effects. 
 #' Must be in (0, 1].
-#' @param data the analysis data.frame
-#' @param groups quoted name of group variable in \code{data}
-#' @param outcome quoted name of outcome variable in \code{data}
-#' @param treatment quoted name of treatment variable in \code{data}
-#' @param predictors character vector of predictor variables in \code{data}
-#' @param propensityB Optional. If the treatment variable is different for 
-#' \code{integrand} and \code{likelihood}, include the quote name of the variable
-#' to be passed to \code{likelihood}. Defaults to \code{treatment}. 
-#' @param family passed to \code{\link{glmer}}. See \code{\link{family}}.
-#' @param known_params if the parameter vector is known (e.g. for simulated data), 
-#' this argument can be used to pass the known parameters to \code{\link{wght_calc}} 
-#' and related functions. If this argument is given, fixed effect parameter estimation
-#' is skipped. Defaults to NULL.
-#' @param set.NA.to.0 if TRUE, sets any weights that returned an NA value to 0. 
-#' Defaults to TRUE.
+#' @param model_method One of three options: `glmer`, `glm`, or `oracle`
+#' @param model_options List of options passed to \code{model_method}
+#' @param set_NA_to_0 if TRUE, sets any weights that returned an NA value to 0. 
+#' Defaults to TRUE
+#' @inheritParams interference
 #' @param ... additional arguments passed to other functions such as 
 #' \code{\link{glmer}}, \code{\link{grad}}, and \code{integrand} or \code{likelihood}.
 #' @return Returns a list of overall and group-level IPW point estimates 
@@ -36,7 +26,7 @@
 #' @export
 #-----------------------------------------------------------------------------#
 
-run_interference <- function(integrand = logit_integrand,
+ipw_interference <- function(integrand = logit_integrand,
                              likelihood = logit_integrand,
                              allocations,
                              data,
@@ -45,16 +35,16 @@ run_interference <- function(integrand = logit_integrand,
                              treatment, 
                              propensityB = treatment,
                              propensity_formula,
-                             estimation_method = 'glmer',
-                             estimation_options = list(family = binomial(link = 'logit')),
-                             set.NA.to.0 = TRUE,
-                             ...){
+                             model_method = 'glmer',
+                             model_options = list(family = binomial(link = 'logit')),
+                             set_NA_to_0 = TRUE,
+                             ...)
+{
   ## Necessary bits ##
   dots <- list(...)
   integrand  <- match.fun(integrand)
   likelihood <- match.fun(likelihood)
-#  est_method <- match.fun(estimation_method)
-  oracle     <- estimation_method == 'oracle'
+  oracle     <- model_method == 'oracle'
   
   ## Reorder data frame by groups ##
   data <- data[order(data[ , groups]), ]
@@ -62,21 +52,21 @@ run_interference <- function(integrand = logit_integrand,
   #### Compute Parameter Estimates ####
   
   estimation_args <- append(list(formula = propensity_formula, data = data), 
-                            estimation_options)
+                           model_options)
     
-  if(estimation_method == "glmer"){
+  if(model_method == "glmer"){
     propensity_model <- do.call(glmer, args = estimation_args)
     fixed.effects <- getME(propensity_model, 'fixef')
     random.effect <- getME(propensity_model, 'theta')[1]
     XXp <- getME(propensity_model, "X")
-  } else if(estimation_method == "glm"){
+  } else if(model_method == "glm"){
     propensity_model <- do.call(glm, args = estimation_args)
     fixed.effects <- coef(propensity_model)
     random.effect <- NULL
     XXp <- model.matrix(propensity_model)
-  } else if(estimation_method == "oracle"){
-    fixed.effects <- estimation_options[[1]]
-    random.effect <- estimation_options[[2]]
+  } else if(model_method == "oracle"){
+    fixed.effects <- model_options[[1]]
+    random.effect <- model_options[[2]]
     XXp <- model.matrix(propensity_formula, data)
   }
   
@@ -104,7 +94,7 @@ run_interference <- function(integrand = logit_integrand,
   weightd <- do.call(wght_deriv_array, args = append(weight_args, grad_args))
   
   ## replace any missing weights with 0 ##
-  if(set.NA.to.0 == TRUE) {
+  if(set_NA_to_0 == TRUE) {
     weights[is.na(weights)] <- 0
     weightd[is.na(weightd)] <- 0
   }
@@ -139,7 +129,7 @@ run_interference <- function(integrand = logit_integrand,
   out$scores          <- do.call(score_matrix_calc,   args = score_args)
   
   ## replace any Bscores with 0 ##
-  if(set.NA.to.0 == TRUE) {
+  if(set_NA_to_0 == TRUE) {
     out$scores[is.na(out$scores)] <- 0
   }
   out$weights <- weights
@@ -156,7 +146,7 @@ run_interference <- function(integrand = logit_integrand,
   if(!oracle){
     out$models <- list(propensity_model = propensity_model)
   } else {
-    out$oracle_parameters <- estimation_options
+    out$oracle_parameters <- model_options
   }
   
   out$summary <- list(oracle      = oracle,
