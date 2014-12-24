@@ -91,8 +91,8 @@ effect_grid <- function(allocations, treatments = c(0,1))
                     alpha2 = allocations, trt2 = NA,
                     marginal = FALSE, 
                     effect_type = 'contrast', effect = 'indirect')
-  g3$trt2 <- g2$trt1
   g3 <- g3[g3$alpha1 != g3$alpha2, ]
+  g3$trt2 <- g3$trt1
   
   # Total Effects
   g4 <- expand.grid(alpha1 = allocations, trt1 = treatments, 
