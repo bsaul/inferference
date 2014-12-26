@@ -63,7 +63,10 @@ calc_effect <- function(obj,
   }
   
   ## Necessary bits ##
-  N <- obj$summary$ngroups
+  N  <- obj$summary$ngroups
+  p  <- obj$summary$npredictors
+  k  <- obj$summary$nallocations
+  l  <- obj$summary$ntreatments
   a1 <- as.character(alpha1)
   a2 <- as.character(alpha2)
   t1 <- as.character(trt.lvl1)
@@ -75,6 +78,22 @@ calc_effect <- function(obj,
   grp  <- obj$point_estimates[[fff]]$groups
   Uoal <- obj$Upart[[fff]]$overall 
   Ugrp <- obj$Upart[[fff]]$groups
+  
+  # Cludgy workaround for case of 1 fixed effect: add dimension to Ugrp array #
+  if(p == 1){
+    names <- dimnames(Ugrp)
+    if(marginal == TRUE){
+      Ugrp <-  array(c(Ugrp[1:N, ], 1, Ugrp[, 1:k]),
+                     dim=c(N, 1, k),
+                     dimnames = list(names[[1]], 'Intercept', names[[2]]))
+    } else {
+      Ugrp <-  array(c(Ugrp[1:N, , ], 1, Ugrp[, 1:k , 1:l]),
+                     dim=c(N, 1, k, l),
+                     dimnames = list(names[[1]], 'Intercept', names[[2]], names[[3]]))
+    }
+
+    
+  }
   
   if(effect_type == 'contrast'){
     if(marginal == TRUE){
@@ -101,7 +120,11 @@ calc_effect <- function(obj,
   #### VARIANCE ESTIMATION ####
   if(obj$summary$oracle == FALSE){
     # partial U matrix
-    U21 <- (t(as.matrix(apply(-U_pe_grp, 2, sum, na.rm = T))))/N
+    if(p == 1){
+      U21 <- sum(-U_pe_grp)/N
+    } else {
+      U21 <- (t(as.matrix(apply(-U_pe_grp, 2, sum, na.rm = T))))/N
+    }
 
     # V matrix
     V <- V_matrix(scores = obj$scores, 
