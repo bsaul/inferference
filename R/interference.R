@@ -69,6 +69,6 @@ interference <- function(estimation_type = 'ipw',
                                               print = FALSE)))
   out$summary$conf.level <- conf.level 
   
-  class(out) <- "causal_interference"
+  class(out) <- "interference"
   return(out)
 }
