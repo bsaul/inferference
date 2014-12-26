@@ -30,17 +30,23 @@
 #' 
 
 logit_integrand <- function(b, X, A, 
-                             fixed.effects,
-                             random.effects = NULL,
-                             x = NULL, 
-                             pos = NULL, 
-                             allocation = NULL, 
-                             randomization = 1, 
-                             integrate.allocation = FALSE)
+                            fixed.effects,
+                            random.effects = NULL,
+                            x = NULL, 
+                            pos = NULL, 
+                            allocation = NULL, 
+                            randomization = 1, 
+                            integrate.allocation = FALSE)
 {
   p  <- length(fixed.effects)
   re <- random.effects[1]
-    
+  
+  ## In the case of an intercept-only model, X needs to be converted to matrix
+  # for the warning to work
+  if(!is.matrix(X)){
+    X <- as.matrix(X)
+  }
+  
   ## Warnings ##
   if(length(fixed.effects) != ncol(X)){
     stop('The number of fixed effect parameters is not equal to the number \n
@@ -51,9 +57,7 @@ logit_integrand <- function(b, X, A,
     stop('Length of treatment vector is not equal to number of observations')
   }
   
-  if(!is.matrix(X)){
-    X <- as.matrix(X)
-  }
+
   ## For taking derivative w.r.t. a parameter ##
   params <- c(fixed.effects, re)
   if(!is.null(pos)){

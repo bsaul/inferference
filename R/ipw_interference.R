@@ -156,11 +156,12 @@ ipw_interference <- function(integrand = logit_integrand,
     out$oracle_parameters <- model_options
   }
   
-  out$summary <- list(oracle      = oracle,
+  out$summary <- list(oracle       = oracle,
                       ngroups      = N, 
                       nallocations = k,
-                      allocations  = allocations,
+                      npredictors  = length(fixed.effects),
                       ntreatments  = l,
+                      allocations  = allocations,
                       treatments   = trt_lvls,
                       predictors   = dimnames(XXp)[[2]],
                       weights_na_count  = weights_na,
