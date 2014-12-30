@@ -5,6 +5,9 @@
 \usage{
 summary.interference(object)
 }
+\arguments{
+\item{object}{object of class 'interference'}
+}
 \description{
 Summary of a causal_interference object
 }
