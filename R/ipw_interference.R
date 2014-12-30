@@ -26,8 +26,8 @@
 #' @export
 #-----------------------------------------------------------------------------#
 
-ipw_interference <- function(integrand = logit_integrand,
-                             likelihood = logit_integrand,
+ipw_interference <- function(integrand = "logit_integrand",
+                             likelihood = "logit_integrand",
                              allocations,
                              data,
                              groups,
@@ -35,15 +35,15 @@ ipw_interference <- function(integrand = logit_integrand,
                              treatment, 
                              propensityB = treatment,
                              propensity_formula,
-                             model_method = 'glmer',
+                             model_method = "glmer",
                              model_options = list(family = binomial(link = 'logit')),
                              set_NA_to_0 = TRUE,
                              ...)
 {
   ## Necessary bits ##
   dots <- list(...)
-  integrand    <- match.fun(integrand)
-  likelihood   <- match.fun(likelihood)
+  integrandFUN    <- match.fun(integrand)
+  likelihoodFUN   <- match.fun(likelihood)
   oracle       <- model_method == 'oracle'
   random.count <- length(findbars(propensity_formula))
   
@@ -51,6 +51,18 @@ ipw_interference <- function(integrand = logit_integrand,
   if(model_method == 'glm' & random.count > 0 ){
     stop('propensity_formula appears to include a random effect when "glm" was chosen \n 
          for parameter estimation. Set model_method to "glmer" to include a random effect')
+  }
+  
+  if(integrand == "logit_integrand" & random.count > 1){
+    stop('Logit integrand is designed to handle only 1 random effect.')
+  }
+  
+  if(min(allocations) < 0 | max(allocations) > 1){
+    stop('Allocations must be between 0 and 1 (inclusive)')
+  }
+  
+  if(length(allocations) < 2){
+    warning('At least 2 allocations must be specified in order to estimate indirect effects')
   }
   
   ## Reorder data frame by groups ##
@@ -83,14 +95,14 @@ ipw_interference <- function(integrand = logit_integrand,
   BBp <- data[, propensityB]
 
   #### Arguments Necessary for Causal Estimation Functions ####
-  integrand_args <- get_args(FUN = integrand, args_list = dots)
+  integrand_args <- get_args(FUN = integrandFUN, args_list = dots)
   point_est_args <- get_args(FUN = ipw_point_estimates, args_list = dots)
-  loglihood_args <- get_args(FUN = likelihood, args_list = dots)
+  loglihood_args <- get_args(FUN = likelihoodFUN, args_list = dots)
   grad_args      <- get_args(FUN = grad, args_list = dots)
   integrate_args <- get_args(FUN = integrate, args_list = dots)
   
   weight_args <- append(append(integrand_args, integrate_args),
-                        list(integrand = integrand, 
+                        list(integrand = integrandFUN, 
                              allocations = allocations, 
                              X = XXp, A = AAp, G = GGp,
                              fixed.effects = fixed.effects,
@@ -114,7 +126,7 @@ ipw_interference <- function(integrand = logit_integrand,
   point_args <- append(estimate_args, list(weights = weights))
   U_args     <- append(estimate_args, list(weights = weightd))
   sargs      <- append(append(loglihood_args, grad_args), integrate_args)
-  score_args <- append(sargs, list(integrand = likelihood,
+  score_args <- append(sargs, list(integrand = likelihoodFUN,
                                    X = XXp, G = GGp, A = BBp,
                                    fixed.effects = fixed.effects,
                                    random.effect = random.effect))
@@ -123,7 +135,7 @@ ipw_interference <- function(integrand = logit_integrand,
   score_args$randomization <- 1
   # If integrate.allocation is used in the integrand (as in logit_integrand)
   # set this argument to FALSE
-  if('integrate.allocation' %in% names(formals(integrand))){
+  if('integrate.allocation' %in% names(formals(integrandFUN))){
     score_args$integrate.allocation <- FALSE
   }
 

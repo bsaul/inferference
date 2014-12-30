@@ -3,10 +3,11 @@
 \alias{ipw_interference}
 \title{IPW Interference estimation}
 \usage{
-ipw_interference(integrand = logit_integrand, likelihood = logit_integrand,
-  allocations, data, groups, outcome, treatment, propensityB = treatment,
-  propensity_formula, model_method = "glmer", model_options = list(family =
-  binomial(link = "logit")), set_NA_to_0 = TRUE, ...)
+ipw_interference(integrand = "logit_integrand",
+  likelihood = "logit_integrand", allocations, data, groups, outcome,
+  treatment, propensityB = treatment, propensity_formula,
+  model_method = "glmer", model_options = list(family = binomial(link =
+  "logit")), set_NA_to_0 = TRUE, ...)
 }
 \arguments{
 \item{integrand}{function used as the integrand in computing the IPW weights.
