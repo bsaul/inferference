@@ -40,7 +40,7 @@ wght_deriv_calc <- function(integrand = logit_integrand,
   ## Compute Derivatives ##
   dervs <- sapply(1:length(params), function(i){
     args$x <- params[i]; args$pos <- i
-    f <- try(do.call('numDeriv::grad', args = args), silent = hide.errors)
+    f <- try(do.call(numDeriv::grad, args = args), silent = hide.errors)
     return(ifelse(is(f, 'try-error'), NA, f))
   })
   return(dervs)

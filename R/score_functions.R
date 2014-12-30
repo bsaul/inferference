@@ -81,7 +81,7 @@ score_calc <- function(integrand = logit_integrand,
                         x = params[i], 
                         pos = i))
     
-    attempt <- try(do.call('numDeriv::grad', args = args), silent = hide.errors)
+    attempt <- try(do.call(numDeriv::grad, args = args), silent = hide.errors)
     return(ifelse(is(attempt, 'try-error'), NA, attempt))
   })
   

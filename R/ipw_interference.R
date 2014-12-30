@@ -74,10 +74,10 @@ ipw_interference <- function(integrand = "logit_integrand",
                            model_options)
     
   if(model_method == "glmer"){
-    propensity_model <- do.call("lme4::glmer", args = estimation_args)
+    propensity_model <- do.call(lme4::glmer, args = estimation_args)
     fixed.effects <- lme4::getME(propensity_model, 'fixef')
     random.effect <- lme4::getME(propensity_model, 'theta')[1]
-    XXp <- getME(propensity_model, "X")
+    XXp <- lme4::getME(propensity_model, "X")
   } else if(model_method == "glm"){
     propensity_model <- do.call("glm", args = estimation_args)
     fixed.effects <- coef(propensity_model)
