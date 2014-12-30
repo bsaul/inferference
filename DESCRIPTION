@@ -7,9 +7,11 @@ Author: Bradley Saul
 Maintainer: Bradley Saul <saulb@live.unc.edu>
 Description: Causal inference with interference
 Depends:
+    R (>= 3.1)
+Imports:
     numDeriv (>= 2012.9-1),
     lme4 (>= 1.1-6)
-License: MIT
+License: GPL (>= 2)
 Suggests:
     testthat,
     knitr
