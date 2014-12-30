@@ -70,7 +70,7 @@ score_calc <- function(integrand = logit_integrand,
   ## Function arguments ##
   int.args <- append(get_args(integrand, dots),
                      get_args(integrate, dots))
-  fargs    <- append(int.args, get_args(grad, dots))
+  fargs    <- append(int.args, get_args(numDeriv::grad, dots))
   
   ## Compute the derivative of the log likelihood for each parameter ##
   scores <- sapply(1:length(params), function(i){
@@ -81,7 +81,7 @@ score_calc <- function(integrand = logit_integrand,
                         x = params[i], 
                         pos = i))
     
-    attempt <- try(do.call(grad, args = args), silent = hide.errors)
+    attempt <- try(do.call('numDeriv::grad', args = args), silent = hide.errors)
     return(ifelse(is(attempt, 'try-error'), NA, attempt))
   })
   

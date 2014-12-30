@@ -45,7 +45,7 @@ ipw_interference <- function(integrand = "logit_integrand",
   integrandFUN    <- match.fun(integrand)
   likelihoodFUN   <- match.fun(likelihood)
   oracle       <- model_method == 'oracle'
-  random.count <- length(findbars(propensity_formula))
+  random.count <- length(lme4::findbars(propensity_formula))
   
   ## Warnings ##
   if(model_method == 'glm' & random.count > 0 ){
@@ -74,12 +74,12 @@ ipw_interference <- function(integrand = "logit_integrand",
                            model_options)
     
   if(model_method == "glmer"){
-    propensity_model <- do.call(glmer, args = estimation_args)
-    fixed.effects <- getME(propensity_model, 'fixef')
-    random.effect <- getME(propensity_model, 'theta')[1]
+    propensity_model <- do.call("lme4::glmer", args = estimation_args)
+    fixed.effects <- lme4::getME(propensity_model, 'fixef')
+    random.effect <- lme4::getME(propensity_model, 'theta')[1]
     XXp <- getME(propensity_model, "X")
   } else if(model_method == "glm"){
-    propensity_model <- do.call(glm, args = estimation_args)
+    propensity_model <- do.call("glm", args = estimation_args)
     fixed.effects <- coef(propensity_model)
     random.effect <- NULL
     XXp <- model.matrix(propensity_model)
@@ -98,7 +98,7 @@ ipw_interference <- function(integrand = "logit_integrand",
   integrand_args <- get_args(FUN = integrandFUN, args_list = dots)
   point_est_args <- get_args(FUN = ipw_point_estimates, args_list = dots)
   loglihood_args <- get_args(FUN = likelihoodFUN, args_list = dots)
-  grad_args      <- get_args(FUN = grad, args_list = dots)
+  grad_args      <- get_args(FUN = numDeriv::grad, args_list = dots)
   integrate_args <- get_args(FUN = integrate, args_list = dots)
   
   weight_args <- append(append(integrand_args, integrate_args),

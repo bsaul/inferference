@@ -35,7 +35,7 @@ score_matrix_calc <- function(integrand = logit_integrand,
   ## Compute score for each group and parameter ##
   int.args <- append(get_args(integrand, dots),
                      get_args(integrate, dots))
-  fargs <- append(int.args, get_args(grad, dots))
+  fargs <- append(int.args, get_args(numDeriv::grad, dots))
   
   print("Calculating matrix of scores...")
   s.list <- by(XX, INDICES = G, simplify = TRUE, 

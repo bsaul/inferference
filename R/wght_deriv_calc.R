@@ -28,7 +28,7 @@ wght_deriv_calc <- function(integrand = logit_integrand,
   int.args <- append(get_args(integrand, dots),
                      get_args(integrate, dots))
   
-  args <- append(append(int.args, get_args(grad, dots)),
+  args <- append(append(int.args, get_args(numDeriv::grad, dots)),
                  list(func           = wght_calc, 
                       integrand      = integrand, 
                       allocation     = allocation,
@@ -40,7 +40,7 @@ wght_deriv_calc <- function(integrand = logit_integrand,
   ## Compute Derivatives ##
   dervs <- sapply(1:length(params), function(i){
     args$x <- params[i]; args$pos <- i
-    f <- try(do.call('grad', args = args), silent = hide.errors)
+    f <- try(do.call('numDeriv::grad', args = args), silent = hide.errors)
     return(ifelse(is(f, 'try-error'), NA, f))
   })
   return(dervs)

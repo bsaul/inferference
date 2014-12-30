@@ -16,7 +16,7 @@
 
 get_args <- function(FUN, args_list = NULL, ...){
   dots <- append(args_list, list(...))
-  arg_names <- names(formals(FUN))
+  arg_names <- names(formals(match.fun(FUN)))
   
   args <- dots[arg_names]
   args[sapply(args, is.null)] <- NULL
