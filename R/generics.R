@@ -10,7 +10,7 @@ summary.interference <- function(object)
   
   cols <- c('alpha1', 'trt1', 'alpha2', 'trt2', 'estimate', 'std.error', 'conf.low', 'conf.high')
   est  <- object$estimates
-  form <- as.character(deparse(object$models$propensity_model$formula))
+#Not defined for glmer class:  form <- as.character(deparse(object$models$propensity_model$formula))
   allo <- object$summary$allocations
   conf <- object$summary$conf.level
   
@@ -63,7 +63,7 @@ summary.interference <- function(object)
       "--------------------------------------------------------------------------\n",      
       "Number of groups: ", object$summary$ngroups, '\n',
       "Allocations used: ", allo, '\n',
-      "Propensity model: ", form, '\n',
+ #     "Propensity model: ", form, '\n',
       "--------------------------------------------------------------------------\n",
       "                         Causal Effect Summary                            \n",
       "                        Confidence level: ", conf, "                      \n",
