@@ -13,7 +13,7 @@ effect_grid(allocations, treatments = c(0, 1))
 \value{
 data.frame with arguments necessary for \code{\link{calc_effect}} to
 compute all outcome, direct, indirect, total, and overall effect estimates from
-an object created from \code{\link{run_inference}}
+an object created from \code{\link{ipw_interference}}
 }
 \description{
 Create a dataset of arguments for effect estimates

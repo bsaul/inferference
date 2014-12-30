@@ -18,8 +18,10 @@ A vaccine may protect the treated person as well as others in their social netwo
 
 This is a VERY brief description of how to use the `rinterference` package.
 
-```{r, echo = TRUE}
+```{r, echo = FALSE}
 library(rinterference)
+#require(lme4)
+#srequire(numDeriv)
 ```
 
 I have included a simple dataset generated from `rinterferenceSim` package: 3000 units, 250 groups, 2 covariates, 21 allocations (0 to 1 by 0.05), using the parameters in the code below. See Perez 2014 for details on how the simulations were structured.

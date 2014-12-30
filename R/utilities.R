@@ -61,7 +61,7 @@ group_means <- function(Y, A, G, a = NA, data){
 #' @param treatments vector of treatments. defaults to \code{c(0 ,1)}
 #' @return data.frame with arguments necessary for \code{\link{calc_effect}} to 
 #' compute all outcome, direct, indirect, total, and overall effect estimates from
-#' an object created from \code{\link{run_inference}} 
+#' an object created from \code{\link{ipw_interference}} 
 #' @export
 #' @examples 
 #' effect_grid(seq(0,1, by = .1), c(0,1))

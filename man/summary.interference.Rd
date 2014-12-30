@@ -8,7 +8,7 @@ summary.interference(object, ...)
 \arguments{
 \item{object}{object of class 'interference'}
 
-\item{ignored}{}
+\item{...}{ignored}
 }
 \description{
 Prints a summary of an interference object

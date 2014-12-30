@@ -2,7 +2,7 @@
 #' Prints a summary of an interference object
 #'
 #' @param object object of class 'interference'
-#' @param ignored
+#' @param ... ignored
 #' @export
 #-----------------------------------------------------------------------------#
 

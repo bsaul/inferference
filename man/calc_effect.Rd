@@ -39,7 +39,7 @@ A \code{data.frame} with 1 record and 4 variables: point (the point
 }
 \description{
 Computes either outcome or effect estimates from the object output by
- \code{\link{run_interference}}.
+ \code{\link{ipw_interference}}.
 }
 \details{
 See \code{\link{direct_effect}}, \code{\link{indirect_effect}},

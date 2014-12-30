@@ -2,7 +2,7 @@
 #' Calculate IPW estimates
 #'
 #'  Computes either outcome or effect estimates from the object output by 
-#'  \code{\link{run_interference}}.  
+#'  \code{\link{ipw_interference}}.  
 #'  
 #'  @details See \code{\link{direct_effect}}, \code{\link{indirect_effect}},
 #'  \code{\link{total_effect}}, and \code{\link{overall_effect}} for convenient
