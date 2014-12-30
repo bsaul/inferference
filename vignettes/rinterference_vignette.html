@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="date" content="2014-12-23" />
+<meta name="date" content="2014-12-30" />
 
 <title>RInterference Vignette</title>
 
@@ -54,7 +54,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h1 class="title">RInterference Vignette</h1>
 <h4 class="author"><em>Bradley Saul</em></h4>
 <address class="author_afil">
-University of North Carolina<br><h4 class="date"><em>2014-12-23</em></h4>
+University of North Carolina<br><h4 class="date"><em>2014-12-30</em></h4>
 </div>
 
 
@@ -62,6 +62,10 @@ University of North Carolina<br><h4 class="date"><em>2014-12-23</em></h4>
 <h1>OLD BELOW</h1>
 <p>This is a VERY brief description of how to use the <code>rinterference</code> package.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rinterference)</code></pre>
+<pre><code>## Loading required package: numDeriv
+## Loading required package: lme4
+## Loading required package: Matrix
+## Loading required package: Rcpp</code></pre>
 <p>I have included a simple dataset generated from <code>rinterferenceSim</code> package: 3000 units, 250 groups, 2 covariates, 21 allocations (0 to 1 by 0.05), using the parameters in the code below. See Perez 2014 for details on how the simulations were structured.</p>
 <pre class="sourceCode r"><code class="sourceCode r">alphaz =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by=</span>.<span class="dv">05</span>) <span class="co"># needed to compute truth</span>
 theta.base &lt;-<span class="st"> </span><span class="kw">c</span>(.<span class="dv">5</span>, -<span class="fl">0.788</span>, -<span class="fl">2.953</span>, -<span class="fl">0.098</span>, -<span class="fl">0.145</span>, <span class="fl">0.351</span>)
@@ -84,7 +88,7 @@ sample_data &lt;-<span class="st"> </span>sample_sim$sims[[<span class="dv">1</s
 <p>y is the outcome. X1 and X2 are covariates. A is the randomized treatment indicator. B is an indicator of participation in the trial. Group is obvious.</p>
 <p>The <code>rinterference</code> package has two main steps. First is to calculate all the pieces of the IPW estimators. <code>run_interference()</code> does this. Using these pieces, you want to compute the effects and associated variances. <code>calc_effect()</code> does this. <code>direct_effect()</code>, <code>indirect_effect()</code>, <code>total_effect()</code> and <code>overall_effect()</code> are convenient wrappers for <code>calc_effect</code> to get.</p>
 <p>Here’s a quick sample of <code>run_interference()</code> based on the data provided:</p>
-<pre class="sourceCode r"><code class="sourceCode r">sample_run &lt;-<span class="st"> </span><span class="kw">run_interference</span>(
+<pre class="sourceCode r"><code class="sourceCode r">sample_run &lt;-<span class="st"> </span><span class="kw">interference</span>(
   <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">45</span>, .<span class="dv">6</span>),
   <span class="dt">data =</span> interference_sample, <span class="co"># name of the data frame</span>
   <span class="dt">groups =</span> <span class="st">'group'</span>,   <span class="co"># quoted string with group variable</span>
@@ -94,20 +98,51 @@ sample_data &lt;-<span class="st"> </span>sample_sim$sims[[<span class="dv">1</s
   <span class="dt">propensity_formula =</span> B ~<span class="st"> </span>X1 +<span class="st"> </span>X2 +<span class="st"> </span>(<span class="dv">1</span>|group),
   <span class="dt">randomization =</span> <span class="dv">2</span>/<span class="dv">3</span>,
   <span class="dt">method =</span> <span class="st">'simple'</span>)</code></pre>
-<pre><code>## [1] &quot;Run_interference complete&quot;</code></pre>
+<pre><code>## [1] &quot;Calculating matrix of IP weights...&quot;
+## [1] &quot;Calculating array of IP weight derivatives...&quot;
+## [1] &quot;Calculating matrix of scores...&quot;
+## [1] &quot;Run_interference complete&quot;</code></pre>
 <p>Now we can compute the effects:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Compute DE(.3)</span>
-<span class="kw">direct_effect</span>(sample_run, .<span class="dv">3</span>)</code></pre>
-<pre><code>##    point variance    ll    ul
-## 1 0.1605 0.000612 0.112 0.209</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Compute IE(.3, .6)</span>
-<span class="kw">indirect_effect</span>(sample_run, .<span class="dv">3</span>, .<span class="dv">6</span>)</code></pre>
-<pre><code>##    point variance     ll     ul
-## 1 0.1591 0.000685 0.1078 0.2104</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Compute IE(.3, .9)</span>
-<span class="co">#Oops we didn't include that allocation scheme in run_interence</span></code></pre>
+<span class="kw">summary</span>(sample_run)</code></pre>
+<pre><code>##  --------------------------------------------------------------------------
+##                                Model Summary                    
+##  --------------------------------------------------------------------------
+##  Number of groups:  250 
+##  Allocations used:  0.3 0.45 0.6 
+##  --------------------------------------------------------------------------
+##                           Causal Effect Summary                            
+##                          Confidence level:  0.95                       
+##  --------------------------------------------------------------------------
+## 
+##  Direct Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##    0.30    0   0.30    1   0.1605   0.02474    0.112     0.209
+##    0.60    0   0.60    1   0.1086   0.01856   0.0722     0.145
+##    0.45    0   0.45    1   0.1339   0.01778  0.09904    0.1687
+## 
+##  Indirect Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##    0.30    0   0.60    0   0.1591   0.02617   0.1078    0.2104
+##    0.30    0   0.45    0  0.08656   0.01732  0.05262    0.1205
+##    0.45    0   0.60    0   0.0725   0.01408   0.0449    0.1001
+## 
+##  Total Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##    0.30    0   0.60    1   0.2676   0.02435   0.2199    0.3154
+##    0.30    0   0.45    1   0.2205   0.02469   0.1721    0.2688
+##    0.45    0   0.60    1   0.1811    0.0184    0.145    0.2172
+## 
+##  Overall Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##    0.30   NA   0.60   NA   0.1761   0.01925   0.1383    0.2138
+##    0.30   NA   0.45   NA  0.09867   0.01421  0.07082    0.1265
+##    0.45   NA   0.60   NA   0.0774   0.00898   0.0598     0.095
+## 
+##  Variance and confidence intervals were computed using... 
+##  --------------------------------------------------------------------------</code></pre>
 <p>Let’s say we’re running simulations and we know the true parameters. In the sample above, the parameters were estimated by <code>glmer</code>, but we can tell <code>run_interference</code> that we know the truth via the <code>known_params</code> argument. Be careful that the number of parameters line up with the number of parameters expected by the integrand function. In the case of <code>logit_integrand</code>, the default integrand function, it expects an intercept parameter, one for each covariate, and one for the random effect.</p>
-<pre class="sourceCode r"><code class="sourceCode r">sample_run_truth &lt;-<span class="st"> </span><span class="kw">run_interference</span>(
+<pre class="sourceCode r"><code class="sourceCode r">sample_run_truth &lt;-<span class="st"> </span><span class="kw">interference</span>(
   <span class="dt">data =</span> sample_data, <span class="co"># name of the data frame</span>
   <span class="dt">groups =</span> <span class="st">'group'</span>,   <span class="co"># quoted string with group variable</span>
   <span class="dt">outcome =</span> <span class="st">'y'</span>,      <span class="co"># quoted string with outcome variable</span>
@@ -121,11 +156,7 @@ sample_data &lt;-<span class="st"> </span>sample_sim$sims[[<span class="dv">1</s
   <span class="dt">method =</span> <span class="st">'simple'</span>, <span class="co"># passed to grad()</span>
   <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">45</span>, .<span class="dv">6</span>))</code></pre>
 <p>Now we can compute the effects:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Compute DE(.3)</span>
-<span class="kw">direct_effect</span>(sample_run_truth, .<span class="dv">3</span>)
-
-<span class="co">#Compute IE(.3, .6)</span>
-<span class="kw">indirect_effect</span>(sample_run_truth, .<span class="dv">3</span>, .<span class="dv">6</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(sample_run_truth)</code></pre>
 <p>You can define your own integrand as a function and pass it as an argument to <code>run_interference</code> if desired. It would be helpful to look at the code for <code>logit_integrand</code> to get started.</p>
 </div>
 

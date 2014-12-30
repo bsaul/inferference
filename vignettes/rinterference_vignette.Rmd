@@ -33,13 +33,13 @@ sample_sim <- sim_interference(n = 3000, N = 250, nsims = 1,
                                base.parameters = theta.base, 
                                parameters = theta.sim,
                                alphas = alphaz)
-sample_data <- sample_sim$sims[[1]]
+interference_sample <- sample_sim$sims[[1]]
 #save(sample_data, file = "data/sample_data.rda")
 ```
 
 Here's what the data looks like:
 ```{r}
-head(sample_data)
+head(interference_sample)
 ```
 
 y is the outcome. X1 and X2 are covariates. A is the randomized treatment indicator. B is an indicator of participation in the trial. Group is obvious.
@@ -48,7 +48,7 @@ The `rinterference` package has two main steps. First is to calculate all the pi
 
 Here's a quick sample of `run_interference()` based on the data provided:
 ```{r, echo=TRUE}
-sample_run <- run_interference(
+sample_run <- interference(
   allocations = c(.3, .45, .6),
   data = interference_sample, # name of the data frame
   groups = 'group',   # quoted string with group variable
@@ -64,19 +64,13 @@ Now we can compute the effects:
 
 ```{r, echo = TRUE}
 #Compute DE(.3)
-direct_effect(sample_run, .3)
-
-#Compute IE(.3, .6)
-indirect_effect(sample_run, .3, .6)
-
-#Compute IE(.3, .9)
-#Oops we didn't include that allocation scheme in run_interence
+summary(sample_run)
 ```
 
 Let's say we're running simulations and we know the true parameters. In the sample above, the parameters were estimated by `glmer`, but we can tell `run_interference` that we know the truth via the `known_params` argument. Be careful that the number of parameters line up with the number of parameters expected by the integrand function. In the case of `logit_integrand`, the default integrand function, it expects an intercept parameter, one for each covariate, and one for the random effect. 
 
 ```{r, echo = TRUE, eval=FALSE}
-sample_run_truth <- run_interference(
+sample_run_truth <- interference(
   data = sample_data, # name of the data frame
   groups = 'group',   # quoted string with group variable
   outcome = 'y',      # quoted string with outcome variable
@@ -94,11 +88,7 @@ sample_run_truth <- run_interference(
 Now we can compute the effects:
 
 ```{r, echo = TRUE, eval=FALSE}
-#Compute DE(.3)
-direct_effect(sample_run_truth, .3)
-
-#Compute IE(.3, .6)
-indirect_effect(sample_run_truth, .3, .6)
+summary(sample_run_truth)
 ```
 
 You can define your own integrand as a function and pass it as an argument to `run_interference` if desired. It would be helpful to look at the code for `logit_integrand` to get started. 
