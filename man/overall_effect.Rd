@@ -7,17 +7,18 @@ overall_effect(obj, allocation1, allocation2, print = FALSE,
   rescale.factor = 1, conf.level = 0.95)
 }
 \arguments{
-\item{obj}{the name of the object created by \code{\link{run_interference}}}
-
 \item{allocation1}{the allocation scheme for which to estimate overall effects}
 
 \item{allocation2}{the allocation scheme for which to estimate overall effects}
 
 \item{rescale.factor}{factor by which to rescale values. Defaults to 1.}
 
-\item{print}{see \code{\link{calc_effect}}}
+\item{obj}{the name of the object created by \code{\link{ipw_interference}}}
 
-\item{conf.level}{see \code{\link{calc_effect}}}
+\item{print}{TRUE/FALSE. If TRUE, the point estimates and confidence interval
+are printed to the console.}
+
+\item{conf.level}{Confidence level for confidence intervals. Defaults to 0.95.}
 }
 \value{
 See \code{\link{calc_effect}}.

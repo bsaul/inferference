@@ -7,19 +7,20 @@ direct_effect(obj, allocation, trt.lvl1 = 0, trt.lvl2 = 1, print = FALSE,
   conf.level = 0.95, rescale.factor = 1)
 }
 \arguments{
-\item{obj}{the name of the object created by \code{\link{run_interference}}}
-
 \item{allocation}{the allocation scheme for which to estimate direct effects}
 
 \item{trt.lvl1}{Defaults to 0.}
 
 \item{trt.lvl2}{Defaults to 1.}
 
+\item{obj}{the name of the object created by \code{\link{ipw_interference}}}
+
+\item{print}{TRUE/FALSE. If TRUE, the point estimates and confidence interval
+are printed to the console.}
+
+\item{conf.level}{Confidence level for confidence intervals. Defaults to 0.95.}
+
 \item{rescale.factor}{factor by which to rescale values. Defaults to 1.}
-
-\item{print}{see \code{\link{calc_effect}}}
-
-\item{conf.level}{see \code{\link{calc_effect}}}
 }
 \value{
 See \code{\link{calc_effect}}.
