@@ -19,7 +19,7 @@
 #'  \eqn{\hat{Y}(alpha1) - \hat{Y}(alpha2)}{Yhat(alpha1) - Yhat(alpha2)} \cr
 #' }
 #'  
-#' @param obj the name of the object created by \code{\link{run_interference}}
+#' @param obj the name of the object created by \code{\link{ipw_interference}}
 #' @param alpha1 the allocation scheme for the outcome of interest or the first
 #' scheme in the constrast of interest. See details.
 #' @param trt.lvl1 the treatment level for the outcome of interest or the first
@@ -177,13 +177,10 @@ calc_effect <- Vectorize(calc_effect,
 #' @description Computes the population average direct causal effect:
 #' \eqn{\hat{Y}(0, alpha) - \hat{Y}(1, alpha)}{Yhat(0, alpha) - Yhat(1, alpha)}.
 #'  
-#' @param obj the name of the object created by \code{\link{run_interference}}
 #' @param allocation the allocation scheme for which to estimate direct effects
 #' @param trt.lvl1 Defaults to 0.
 #' @param trt.lvl2 Defaults to 1.
-#' @param rescale.factor factor by which to rescale values. Defaults to 1.
-#' @param print see \code{\link{calc_effect}}
-#' @param conf.level see \code{\link{calc_effect}}
+#' @inheritParams calc_effect
 #' @return See \code{\link{calc_effect}}.
 #' @export
 #-----------------------------------------------------------------------------#
@@ -209,13 +206,10 @@ direct_effect <- function(obj,
 #' \eqn{\hat{Y}(0, alpha1) - \hat{Y}(0, alpha2)}{Yhat(0, alpha1) - Yhat(0, alpha2)}. 
 #' This is the effect due to the coverage (allocation) levels.
 #'  
-#' @param obj the name of the object created by \code{\link{run_interference}}
 #' @param allocation1 the allocation scheme for which to estimate indirect effects
 #' @param allocation2 the allocation scheme for which to estimate indirect effects
 #' @param trt.lvl Defaults to 0.
-#' @param rescale.factor factor by which to rescale values. Defaults to 1.
-#' @param print see \code{\link{calc_effect}}
-#' @param conf.level see \code{\link{calc_effect}}
+#' @inheritParams calc_effect
 #' @return See \code{\link{calc_effect}}.
 #' @export
 #-----------------------------------------------------------------------------#
@@ -241,14 +235,11 @@ indirect_effect <- function(obj,
 #' @description Compute the population average total causal effect:
 #' \eqn{\hat{Y}(0, alpha1) - \hat{Y}(1, alpha2)}{Yhat(0, alpha1) - Yhat(1, alpha2)}
 #'  
-#' @param obj the name of the object created by \code{\link{run_interference}}
 #' @param allocation1 the allocation scheme for which to estimate total effects
 #' @param allocation2 the allocation scheme for which to estimate total effects
 #' @param trt.lvl1 Defaults to 0.
 #' @param trt.lvl2 Defaults to 1.
-#' @param rescale.factor factor by which to rescale values. Defaults to 1.
-#' @param print see \code{\link{calc_effect}}
-#' @param conf.level see \code{\link{calc_effect}}
+#' @inheritParams calc_effect
 #' @return See \code{\link{calc_effect}}.
 #' @export
 #-----------------------------------------------------------------------------#
@@ -275,12 +266,10 @@ total_effect <- function(obj,
 #' @description Computes the population average overall causal effect:
 #' \eqn{\hat{Y}(alpha1) - \hat{Y}(lpha2)}{Yhat(alpha1) - Yhat(alpha2)}
 #' 
-#' @param obj the name of the object created by \code{\link{run_interference}}
 #' @param allocation1 the allocation scheme for which to estimate overall effects
 #' @param allocation2 the allocation scheme for which to estimate overall effects
 #' @param rescale.factor factor by which to rescale values. Defaults to 1.
-#' @param print see \code{\link{calc_effect}}
-#' @param conf.level see \code{\link{calc_effect}}
+#' @inheritParams calc_effect
 #' @return See \code{\link{calc_effect}}.
 #' @export
 #-----------------------------------------------------------------------------#
