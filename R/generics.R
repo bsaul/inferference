@@ -5,7 +5,7 @@
 #' @export
 #-----------------------------------------------------------------------------#
 
-summary.interference <- function(object)
+summary.interference <- function(object, ...)
 {
   
   cols <- c('alpha1', 'trt1', 'alpha2', 'trt2', 'estimate', 'std.error', 'conf.low', 'conf.high')
