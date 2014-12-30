@@ -37,6 +37,7 @@ score_matrix_calc <- function(integrand = logit_integrand,
                      get_args(integrate, dots))
   fargs <- append(int.args, get_args(grad, dots))
   
+  print("Calculating matrix of scores...")
   s.list <- by(XX, INDICES = G, simplify = TRUE, 
                FUN = function(xx) {
                args <- append(fargs, 

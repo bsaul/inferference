@@ -32,6 +32,8 @@ wght_matrix <- function(integrand = logit_integrand,
   gg <- sort(unique(G))
   
   ## Compute weight for each group and allocation level ##
+  print('Calculating matrix of IP weights...')
+  
   w.list <- lapply(aa, function(allocation){
     w <- by(cbind(X, A), INDICES = G, simplify = FALSE, 
             FUN = function(x) {

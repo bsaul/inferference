@@ -37,6 +37,8 @@ wght_deriv_array <- function(integrand = logit_integrand,
   ## Warnings ##
 
   ## Compute weight (derivative) for each group, parameter, and alpha level ##
+  print('Calculating array of IP weight derivatives...')
+  
   w.list <- lapply(aa, function(allocation){
     w <- by(XX, INDICES = G, simplify = TRUE, 
             FUN = function(x) {
