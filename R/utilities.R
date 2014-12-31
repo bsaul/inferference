@@ -8,7 +8,7 @@
 #' @param args_list a list of arguments. Defaults to NULL.
 #' @param ... any arguments. Those necessary for FUN must be named as appropriate for FUN
 #' @return list of arguments for FUN
-#' @export
+# @export
 #' @examples
 #' myargs <- get_args(lm, formula = Sepal.Length ~ Sepal.Width, data = iris )
 #' summary(do.call('lm', myargs))
@@ -62,7 +62,7 @@ group_means <- function(Y, A, G, a = NA, data){
 #' @return data.frame with arguments necessary for \code{\link{calc_effect}} to 
 #' compute all outcome, direct, indirect, total, and overall effect estimates from
 #' an object created from \code{\link{ipw_interference}} 
-#' @export
+# @export
 #' @examples 
 #' effect_grid(seq(0,1, by = .1), c(0,1))
 #' 
