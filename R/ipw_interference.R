@@ -145,7 +145,7 @@ ipw_interference <- function(integrand = "logit_integrand",
   #### Calculate output ####
   out$point_estimates <- do.call(ipw_point_estimates, args = point_args)
   out$Upart           <- do.call(ipw_point_estimates, args = U_args)
-  out$scores          <- do.call(score_matrix_calc,   args = score_args)
+  out$scores          <- do.call(score_matrix,   args = score_args)
   
   ## replace any Bscores with 0 ##
   if(set_NA_to_0 == TRUE) {

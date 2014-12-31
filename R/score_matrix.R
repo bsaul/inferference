@@ -14,11 +14,11 @@
 #' @export
 #-----------------------------------------------------------------------------#
 
-score_matrix_calc <- function(integrand = logit_integrand,
-                              X, A, G, 
-                              fixed.effects,
-                              random.effects,
-                              ...)
+score_matrix <- function(integrand = logit_integrand,
+                         X, A, G, 
+                         fixed.effects,
+                         random.effects,
+                         ...)
 {
   ## Warnings ##
   if(length(fixed.effects) != ncol(X)){
