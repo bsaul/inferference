@@ -57,16 +57,16 @@ interference <- function(estimation_type = 'ipw',
   grid <- effect_grid(allocations = out$summary$allocations, 
                       treatments  = out$summary$treatments)
   
-  out$estimates <- cbind(grid, t(calc_effect(out, 
-                                              alpha1      = grid$alpha1,
-                                              trt.lvl1    = grid$trt1,
-                                              alpha2      = grid$alpha2,
-                                              trt.lvl2    = grid$trt2,
-                                              marginal    = grid$marginal,
-                                              effect_type = grid$effect_type,
-                                              rescale.factor = rescale.factor,
-                                              conf.level = conf.level,
-                                              print = FALSE)))
+  out$estimates <- cbind(grid, t(ipw_effect_calc(out, 
+                                                 alpha1      = grid$alpha1,
+                                                 trt.lvl1    = grid$trt1,
+                                                 alpha2      = grid$alpha2,
+                                                 trt.lvl2    = grid$trt2,
+                                                 marginal    = grid$marginal,
+                                                 effect_type = grid$effect_type,
+                                                 rescale.factor = rescale.factor,
+                                                 conf.level = conf.level,
+                                                 print = FALSE)))
   out$summary$conf.level <- conf.level 
   
   class(out) <- "interference"
