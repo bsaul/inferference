@@ -40,16 +40,16 @@
 #' @export
 #-----------------------------------------------------------------------------#
 
-calc_effect <- function(obj, 
-                        alpha1, 
-                        trt.lvl1, 
-                        alpha2 = NA, 
-                        trt.lvl2 = NA,
-                        effect_type,
-                        marginal,
-                        rescale.factor = 1,
-                        conf.level = 0.95,
-                        print = FALSE)
+ipw_effect_calc <- function(obj, 
+                            alpha1, 
+                            trt.lvl1, 
+                            alpha2 = NA, 
+                            trt.lvl2 = NA,
+                            effect_type,
+                            marginal,
+                            rescale.factor = 1,
+                            conf.level = 0.95,
+                            print = FALSE)
 {
   ## Warnings ##
   # Print error if either estimates with alpha1 have been computed 
@@ -166,124 +166,6 @@ calc_effect <- function(obj,
   return(out)
 }
 
-calc_effect <- Vectorize(calc_effect, 
-                         vectorize.args = c("alpha1", 'alpha2', 'trt.lvl1', 'trt.lvl2', 
-                                            'marginal', 'effect_type'))
-
-
-#-----------------------------------------------------------------------------#
-#' Calculate Direct Effect Estimates
-#'  
-#' @description Computes the population average direct causal effect:
-#' \eqn{\hat{Y}(0, alpha) - \hat{Y}(1, alpha)}{Yhat(0, alpha) - Yhat(1, alpha)}.
-#'  
-#' @param allocation the allocation scheme for which to estimate direct effects
-#' @param trt.lvl1 Defaults to 0.
-#' @param trt.lvl2 Defaults to 1.
-#' @inheritParams calc_effect
-#' @return See \code{\link{calc_effect}}.
-#' @export
-#-----------------------------------------------------------------------------#
-
-direct_effect <- function(obj, 
-                          allocation, 
-                          trt.lvl1 = 0, 
-                          trt.lvl2 = 1,
-                          print = FALSE, 
-                          conf.level = 0.95,
-                          rescale.factor = 1){
-  out <- calc_effect(obj, allocation, trt.lvl1, allocation, trt.lvl2,
-                     effect_type = 'contrast', marginal = FALSE,
-                     print = print, conf.level = conf.level,
-                     rescale.factor = rescale.factor)
-  return(out)
-}
-
-#-----------------------------------------------------------------------------#
-#' Calculate Indirect Effect Estimates
-#'  
-#' @description Computes the population average indirect causal effect:
-#' \eqn{\hat{Y}(0, alpha1) - \hat{Y}(0, alpha2)}{Yhat(0, alpha1) - Yhat(0, alpha2)}. 
-#' This is the effect due to the coverage (allocation) levels.
-#'  
-#' @param allocation1 the allocation scheme for which to estimate indirect effects
-#' @param allocation2 the allocation scheme for which to estimate indirect effects
-#' @param trt.lvl Defaults to 0.
-#' @inheritParams calc_effect
-#' @return See \code{\link{calc_effect}}.
-#' @export
-#-----------------------------------------------------------------------------#
-
-indirect_effect <- function(obj, 
-                            allocation1, 
-                            allocation2, 
-                            trt.lvl = 0, 
-                            print = FALSE, 
-                            rescale.factor = 1,
-                            conf.level = 0.95){
-  
-  out <- calc_effect(obj, allocation1, trt.lvl, allocation2, trt.lvl,
-                     effect_type = 'contrast', marginal = FALSE,
-                     print = print, conf.level = conf.level,
-                     rescale.factor = rescale.factor)
-  return(out)
-}
-
-#-----------------------------------------------------------------------------#
-#' Calculate Total Effect Estimates
-#'
-#' @description Compute the population average total causal effect:
-#' \eqn{\hat{Y}(0, alpha1) - \hat{Y}(1, alpha2)}{Yhat(0, alpha1) - Yhat(1, alpha2)}
-#'  
-#' @param allocation1 the allocation scheme for which to estimate total effects
-#' @param allocation2 the allocation scheme for which to estimate total effects
-#' @param trt.lvl1 Defaults to 0.
-#' @param trt.lvl2 Defaults to 1.
-#' @inheritParams calc_effect
-#' @return See \code{\link{calc_effect}}.
-#' @export
-#-----------------------------------------------------------------------------#
-
-total_effect <- function(obj, 
-                         allocation1, 
-                         allocation2, 
-                         trt.lvl1 = 0, 
-                         trt.lvl2 = 1, 
-                         print = FALSE, 
-                         rescale.factor = 1,
-                         conf.level = 0.95){
-  
-  out <- calc_effect(obj, allocation1, trt.lvl1, allocation2, trt.lvl2,
-                     effect_type = 'contrast', marginal = FALSE,
-                     print = print, conf.level = conf.level,
-                     rescale.factor = rescale.factor)
-  return(out)
-}
-
-#-----------------------------------------------------------------------------#
-#' Calculate Overall Effect Estimates
-#' 
-#' @description Computes the population average overall causal effect:
-#' \eqn{\hat{Y}(alpha1) - \hat{Y}(lpha2)}{Yhat(alpha1) - Yhat(alpha2)}
-#' 
-#' @param allocation1 the allocation scheme for which to estimate overall effects
-#' @param allocation2 the allocation scheme for which to estimate overall effects
-#' @param rescale.factor factor by which to rescale values. Defaults to 1.
-#' @inheritParams calc_effect
-#' @return See \code{\link{calc_effect}}.
-#' @export
-#-----------------------------------------------------------------------------#
-
-overall_effect <- function(obj, 
-                           allocation1, 
-                           allocation2, 
-                           print = FALSE, 
-                           rescale.factor = 1,
-                           conf.level = 0.95){
-  
-  out <- calc_effect(obj, allocation1, trt.lvl1 = NA, allocation2, trt.lvl2 = NA,
-                     effect_type = 'contrast', marginal = TRUE,
-                     print = print, conf.level = conf.level,
-                     rescale.factor = rescale.factor)
-  return(out)
-}
+ipw_effect_calc <- Vectorize(ipw_effect_calc, 
+                             vectorize.args = c("alpha1", 'alpha2', 'trt.lvl1', 'trt.lvl2', 
+                                                'marginal', 'effect_type'))
