@@ -110,5 +110,123 @@ effect_grid <- function(allocations, treatments = c(0,1))
   g5 <- g5[g5$alpha1 != g5$alpha2, ]
   
   out <- rbind(g1, g2, g3, g4, g5)
+  rownames(out) <- NULL # Rownames aren't useful
+  return(out)
+}
+
+#-----------------------------------------------------------------------------#
+#' Retreive Direct Effect estimates
+#'  
+#' @description Retrieves the population average direct causal effect for a 
+#' specified allocation:
+#' \eqn{\hat{Y}(0, alpha) - \hat{Y}(1, alpha)}{Yhat(0, alpha) - Yhat(1, alpha)}.
+#'  
+#' @param object an object of class \code{interference}
+#' @param allocation the allocation scheme for which to estimate direct effects
+#' @param trt.lvl1 Defaults to 0.
+#' @param trt.lvl2 Defaults to 1.
+#' @param value character vector of values to return. Defaults to 
+#' \code{c('estimate', 'std.error', 'conf.low', 'conf.high')}
+#' @return a data.frame with a single row with requested values
+#' @export
+#-----------------------------------------------------------------------------#
+
+direct_effect <- function(object, 
+                          allocation, 
+                          trt.lvl1 = 0, 
+                          trt.lvl2 = 1,
+                          value = c('estimate', 'std.error', 'conf.low', 'conf.high'))
+{
+  ce  <- object$estimates[object$estimates$effect == 'direct', ]
+  out <- ce[ce$alpha1 == allocation & ce$trt1 == trt.lvl1 & 
+              ce$alpha2 == allocation & ce$trt2 == trt.lvl2, value]
+  rownames(out) <- NULL
+  return(out)
+}
+
+#-----------------------------------------------------------------------------#
+#' Retreive Inirect Effect estimates
+#'  
+#' @description Retrieves the population average indirect causal effect for
+#' specified allocations:
+#' \eqn{\hat{Y}(0, alpha1) - \hat{Y}(0, alpha2)}{Yhat(0, alpha1) - Yhat(0, alpha2)}. 
+#' This is the effect due to the coverage (allocation) levels.
+#'  
+#' @param allocation1 the allocation scheme for which to estimate indirect effects
+#' @param allocation2 the allocation scheme for which to estimate indirect effects
+#' @param trt.lvl Defaults to 0.
+#' @inheritParams direct_effect
+#' @return a data.frame with a single row with requested values
+#' @export
+#-----------------------------------------------------------------------------#
+
+ie <- indirect_effect <- function(object, 
+                                  allocation1, 
+                                  allocation2,
+                                  trt.lvl = 0, 
+                                  value = c('estimate', 'std.error', 
+                                            'conf.low', 'conf.high'))
+{
+  ce  <- object$estimates[object$estimates$effect == 'indirect', ]
+  out <- ce[ce$alpha1 == allocation1 & ce$trt1 == trt.lvl & 
+              ce$alpha2 == allocation2 & ce$trt2 == trt.lvl, value]
+  rownames(out) <- NULL
+  return(out)
+}
+
+#-----------------------------------------------------------------------------#
+#' Retrieve Total Effect estimates
+#'
+#' @description Retrieves the population average total causal effect for
+#' specified allocations:
+#' \eqn{\hat{Y}(0, alpha1) - \hat{Y}(1, alpha2)}{Yhat(0, alpha1) - Yhat(1, alpha2)}
+#'  
+#' @param allocation1 the allocation scheme for which to estimate total effects
+#' @param allocation2 the allocation scheme for which to estimate total effects
+#' @param trt.lvl1 Defaults to 0.
+#' @param trt.lvl2 Defaults to 1.
+#' @inheritParams direct_effect
+#' @return a data.frame with a single row with requested values
+#' @export
+#-----------------------------------------------------------------------------#
+
+te <- total_effect <- function(object, 
+                               allocation1, 
+                               allocation2,
+                               trt.lvl1 = 0, 
+                               trt.lvl2 = 1, 
+                               value = c('estimate', 'std.error', 
+                                         'conf.low', 'conf.high'))
+{
+  ce  <- object$estimates[object$estimates$effect == 'total', ]
+  out <- ce[ce$alpha1 == allocation1 & ce$trt1 == trt.lvl1 & 
+              ce$alpha2 == allocation2 & ce$trt2 == trt.lvl2, value]
+  rownames(out) <- NULL
+  return(out)
+}
+
+
+#-----------------------------------------------------------------------------#
+#' Retrieve Overall Effect Estimates
+#' 
+#' @description Retrieves the population average overall causal effect:
+#' \eqn{\hat{Y}(alpha1) - \hat{Y}(lpha2)}{Yhat(alpha1) - Yhat(alpha2)}
+#' 
+#' @param allocation1 the allocation scheme for which to estimate overall effects
+#' @param allocation2 the allocation scheme for which to estimate overall effects
+#' @inheritParams direct_effect
+#' @return a data.frame with a single row with requested values
+#' @export
+#-----------------------------------------------------------------------------#
+
+oe <- overall_effect <- function(object, 
+                               allocation1, 
+                               allocation2,
+                               value = c('estimate', 'std.error', 
+                                         'conf.low', 'conf.high'))
+{
+  ce  <- object$estimates[object$estimates$effect == 'overall', ]
+  out <- ce[ce$alpha1 == allocation1 & ce$alpha2 == allocation2, value]
+  rownames(out) <- NULL
   return(out)
 }
