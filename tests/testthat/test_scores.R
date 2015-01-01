@@ -32,7 +32,7 @@ test_that("score calculations equal", {
                                                       0.0286844121526597))
   
   # Checking score matrix calculations
-  expect_equal(score_matrix_calc(integrand = logit_integrand,
+  expect_equal(score_matrix(integrand = logit_integrand,
                                  allocations = aaa,
                                  X = XXX, A = AAA, G = GGG,
                                  fixed.effects = fff,
