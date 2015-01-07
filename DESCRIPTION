@@ -10,7 +10,8 @@ Depends:
     R (>= 3.1)
 Imports:
     numDeriv (>= 2012.9-1),
-    lme4 (>= 1.1-6)
+    lme4 (>= 1.1-6),
+    Formula (>= 1.1-2)
 License: GPL (>= 2)
 Suggests:
     testthat,
