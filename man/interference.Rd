@@ -4,37 +4,45 @@
 \alias{interference}
 \title{Estimate Causal Effects in presence of interference}
 \usage{
-interference(estimation_type = "ipw", allocations, data, groups, outcome,
-  treatment, propensityB = treatment, propensity_formula, conf.level = 0.95,
-  rescale.factor = 1, ...)
+interference(formula, propensity_integrand,
+  loglihood_integrand = propensity_integrand, allocations, data,
+  model_method = "glmer", model_options = list(family = binomial(link =
+  "logit")), causal_estimation_method = "ipw",
+  causal_estimation_options = list(set_NA_to_0 = TRUE, variance_estimation =
+  "robust"), conf.level = 0.95, rescale.factor = 1, ...)
 }
 \arguments{
-\item{estimation_type}{currently only supports `ipw`.}
+\item{formula}{}
+
+\item{propensity_integrand}{function used as the integrand in computing the IPW weights.
+Defaults to \code{\link{logit_integrand}}.}
+
+\item{loglihood_integrand}{function used as the integrand in computing the scores in
+\code{\link{score_calc}}. Defaults to \code{\link{logit_integrand}}.}
 
 \item{allocations}{the allocation (coverage) schemes for which to estimate effects.
-Must be in (0, 1].}
+Must be in [0, 1].}
 
 \item{data}{the analysis data.frame}
 
-\item{groups}{quoted name of group variable in \code{data}}
+\item{model_method}{One of three options: `glmer`, `glm`, or `oracle`}
 
-\item{outcome}{quoted name of outcome variable in \code{data}}
+\item{model_options}{List of options passed to \code{model_method}}
 
-\item{treatment}{quoted name of treatment variable in \code{data}}
+\item{causal_estimation_method}{currently only supports `ipw`.}
 
-\item{propensityB}{Optional. If the treatment variable is different for
-\code{integrand} and \code{likelihood}, include the quote name of the variable
-to be passed to \code{likelihood}. Defaults to \code{treatment}.}
-
-\item{propensity_formula}{formula passed to model_method for estimation of propensity score
-parameters.}
+\item{causal_estimation_options}{list of options passed to the corresponding
+estimation function. `ipw` is \code{\link{ipw_interference}}}
 
 \item{conf.level}{Confidence level for confidence intervals. Defaults to 0.95.}
 
 \item{rescale.factor}{factor by which to rescale values. Defaults to 1.}
 
 \item{...}{additional arguments passed to other functions such as
-\code{\link{glmer}}, \code{\link{grad}}, and \code{integrand} or \code{likelihood}.}
+\code{\link{glmer}}, \code{\link{grad}}, \code{\link{integrate}}, and \code{integrand} or \code{likelihood}.}
+
+\item{set_NA_to_0}{if TRUE, sets any weights that returned an NA value to 0.
+Defaults to TRUE}
 }
 \value{
 Returns a list of overall and group-level IPW point estimates
