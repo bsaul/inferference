@@ -5,14 +5,13 @@ test_that("retrieval functions work", {
   allos  <- c(.35, .4)
   
   test <- interference(data = testdt,
-                           allocations = allos,
-                           outcome = 'y',
-                           treatment = 'A',
-                           propensityB = 'B',
-                           group = 'group',
-                           propensity_formula = B ~ X1 + (1|group),
-                           method = 'simple')
-  
+                       propensity_integrand = 'logit_integrand',
+                       formula = y | A | B ~ X1 + (1|group) | group,
+                       allocations = allos,
+                       model_method = 'glmer',
+                       causal_estimation_options = list(variance_estimation = 'robust'),
+                       method = 'simple')
+
   # Direct effects
   expect_equivalent(as.numeric(as.matrix(direct_effect(test, .4))), 
                     c(0.24673529536089, 0.122468329766916, 
