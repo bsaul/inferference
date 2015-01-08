@@ -4,16 +4,14 @@
 \alias{ipw_point_estimates}
 \title{Calculate IPW point estimates}
 \usage{
-ipw_point_estimates(outcome, groups, treatment, data, weights)
+ipw_point_estimates(Y, G, A, weights)
 }
 \arguments{
-\item{outcome}{quoted name of outcome variable in \code{data}}
+\item{Y}{vector of outcomes}
 
-\item{groups}{quoted name of group variable in \code{data}}
+\item{G}{vector of group assignments}
 
-\item{treatment}{quoted name of treatment variable in \code{data}}
-
-\item{data}{data.frame with above variables}
+\item{A}{vector of treatment assignments}
 
 \item{weights}{weight matrix/array to use from either \code{\link{wght_matrix}}
 or \code{\link{wght_deriv_array}}}
