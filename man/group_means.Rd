@@ -2,25 +2,24 @@
 % Please edit documentation in R/utilities.R
 \name{group_means}
 \alias{group_means}
-\title{Calculate outcome means per group per treatment level}
+\title{Calculate outcome mean per group per treatment level}
 \usage{
-group_means(Y, A, G, a = NA, data)
+group_means(Y, A, G, a = NA)
 }
 \arguments{
-\item{Y}{name (character vector) of observed outcomes in data}
+\item{Y}{vector of outcomes}
 
-\item{A}{name of treatment variable}
+\item{A}{vector of treatment assignments}
 
-\item{G}{name of grouping variable in data}
+\item{G}{vector of group assignments}
 
-\item{a}{value of treatment level, defaults to NA.}
-
-\item{data}{data.frame with variables}
+\item{a}{value of treatment level, defaults to NA. NA is used for marginal
+estimates.}
 }
 \value{
-data dataset to use
+matrix of group means
 }
 \description{
-Calculate outcome means per group per treatment level
+Calculate outcome mean per group per treatment level
 }
 

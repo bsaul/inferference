@@ -25,27 +25,28 @@ get_args <- function(FUN, args_list = NULL, ...){
 }
 
 #-----------------------------------------------------------------------------#
-#' Calculate outcome means per group per treatment level
+#' Calculate outcome mean per group per treatment level
 #' 
-#' @param Y name (character vector) of observed outcomes in data
-#' @param A name of treatment variable
-#' @param G name of grouping variable in data
-#' @param a value of treatment level, defaults to NA.
-#' @param data data.frame with variables
-#' @return data dataset to use
+#' @param Y vector of outcomes
+#' @param G vector of group assignments
+#' @param A vector of treatment assignments
+#' @param a value of treatment level, defaults to NA. NA is used for marginal
+#' estimates.
+#' @return matrix of group means
 #-----------------------------------------------------------------------------#
 
-group_means <- function(Y, A, G, a = NA, data){
+group_means <- function(Y, A, G, a = NA){
   
-  N <- length(unique(data[ , G]))
+  N <- length(unique(G))
+  YA <- cbind(Y, A)
   
-  vals <- by(data, data[ , G], function(x){
-    n <- length(x[ , Y])
+  vals <- by(YA, INDICES = G, function(x){
+    n <- length(x[ , 1])
     
     if(is.na(a)){
-      sum(x[ , Y])/n
+      sum(x[ , 1])/n
     } else {
-      sum(x[ , Y] * (x[ , A] == a) * 1)/n
+      sum(x[ , 1] * (x[ , 2] == a) * 1)/n
     }
   })
   
@@ -204,7 +205,6 @@ te <- total_effect <- function(object,
   rownames(out) <- NULL
   return(out)
 }
-
 
 #-----------------------------------------------------------------------------#
 #' Retrieve Overall Effect Estimates
