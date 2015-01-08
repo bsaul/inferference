@@ -2,183 +2,109 @@
 #' IPW Interference estimation 
 #'
 #' Prepares the object necessary to compute IPW effect estimates with 
-#' \code{\link{calc_effect}}, \code{\link{direct_effect}}, \code{\link{indirect_effect}},
-#' \code{\link{total_effect}}, or \code{\link{overall_effect}}.
+#' \code{\link{calc_effect}}.
 #' 
-#' @param integrand function used as the integrand in computing the IPW weights. 
-#' Defaults to \code{\link{logit_integrand}}.
-#' @param likelihood function used as the integrand in computing the scores in 
-#' \code{\link{score_calc}}. Defaults to \code{\link{logit_integrand}}.
-#' @param allocations the allocation (coverage) schemes for which to estimate effects. 
-#' Must be in (0, 1].
-#' @param model_method One of three options: `glmer`, `glm`, or `oracle`
-#' @param model_options List of options passed to \code{model_method}
-#' @param set_NA_to_0 if TRUE, sets any weights that returned an NA value to 0. 
-#' Defaults to TRUE
 #' @inheritParams interference
+#' @param Y outcome vector
+#' @param X covariate matrix
+#' @param A treatmeent vector
+#' @param B 'participation' vector. Defaults to A in the case there is no
+#' participation variable.
+#' @param G group assignment vector
+#' @param fixed.effects vector of fixed effects
+#' @param random.effects vector of random effects 
+#' @param variance_estimation currently supports 'robust' or 'simple'
 #' @param ... additional arguments passed to other functions such as 
 #' \code{\link{glmer}}, \code{\link{grad}}, and \code{integrand} or \code{likelihood}.
 #' @return Returns a list of overall and group-level IPW point estimates 
 #' (the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW 
 #' point estimates (using the weight derivatives), scores (the output of 
-#' \code{\link{score_matrix_calc}}), the computed weight matrix, the computed 
-#' weight derivative array, and a summary.
+#' \code{\link{score_matrix_calc}}), the computed weight matrix, and the computed 
+#' weight derivative array.
 #' @export
 #-----------------------------------------------------------------------------#
 
-ipw_interference <- function(integrand = "logit_integrand",
-                             likelihood = "logit_integrand",
+ipw_interference <- function(propensity_integrand,
+                             loglihood_integrand = propensity_integrand,
                              allocations,
-                             data,
-                             groups,
-                             outcome,
-                             treatment, 
-                             propensityB = treatment,
+                             Y, X, A, B = A, G, 
+                             fixed.effects, 
+                             random.effects,
                              propensity_formula,
-                             model_method = "glmer",
-                             model_options = list(family = binomial(link = 'logit')),
+                             variance_estimation,
                              set_NA_to_0 = TRUE,
                              ...)
 {
-  ## Necessary bits ##
   dots <- list(...)
-  integrandFUN    <- match.fun(integrand)
-  likelihoodFUN   <- match.fun(likelihood)
-  oracle       <- model_method == 'oracle'
-  random.count <- length(lme4::findbars(propensity_formula))
   
   ## Warnings ##
-  if(model_method == 'glm' & random.count > 0 ){
-    stop('propensity_formula appears to include a random effect when "glm" was chosen \n 
-         for parameter estimation. Set model_method to "glmer" to include a random effect')
-  }
   
-  if(integrand == "logit_integrand" & random.count > 1){
-    stop('Logit integrand is designed to handle only 1 random effect.')
-  }
-  
-  if(min(allocations) < 0 | max(allocations) > 1){
-    stop('Allocations must be between 0 and 1 (inclusive)')
-  }
-  
-  if(length(allocations) < 2){
-    warning('At least 2 allocations must be specified in order to estimate indirect effects')
-  }
-  
-  ## Reorder data frame by groups ##
-  data <- data[order(data[ , groups]), ]
-  
-  #### Compute Parameter Estimates ####
-  
-  estimation_args <- append(list(formula = propensity_formula, data = data), 
-                           model_options)
-    
-  if(model_method == "glmer"){
-    propensity_model <- do.call(lme4::glmer, args = estimation_args)
-    fixed.effects <- lme4::getME(propensity_model, 'fixef')
-    random.effect <- lme4::getME(propensity_model, 'theta')[1]
-    XXp <- lme4::getME(propensity_model, "X")
-  } else if(model_method == "glm"){
-    propensity_model <- do.call("glm", args = estimation_args)
-    fixed.effects <- coef(propensity_model)
-    random.effect <- NULL
-    XXp <- model.matrix(propensity_model)
-  } else if(model_method == "oracle"){
-    fixed.effects <- model_options[[1]]
-    random.effect <- model_options[[2]]
-    XXp <- model.matrix(propensity_formula, data)
-  }
-  
-  ## Propensity Model Pieces ##
-  AAp <- data[, treatment]
-  GGp <- data[, groups]
-  BBp <- data[, propensityB]
-
   #### Arguments Necessary for Causal Estimation Functions ####
-  integrand_args <- get_args(FUN = integrandFUN, args_list = dots)
+  integrand_args <- get_args(FUN = propensity_integrand, args_list = dots)
   point_est_args <- get_args(FUN = ipw_point_estimates, args_list = dots)
-  loglihood_args <- get_args(FUN = likelihoodFUN, args_list = dots)
+  loglihood_args <- get_args(FUN = loglihood_integrand, args_list = dots)
   grad_args      <- get_args(FUN = numDeriv::grad, args_list = dots)
   integrate_args <- get_args(FUN = integrate, args_list = dots)
   
   weight_args <- append(append(integrand_args, integrate_args),
-                        list(integrand = integrandFUN, 
+                        list(integrand = propensity_integrand, 
                              allocations = allocations, 
-                             X = XXp, A = AAp, G = GGp,
+                             X = X, A = A, G = G,
                              fixed.effects = fixed.effects,
-                             random.effect = random.effect))
-  
+                             random.effects = random.effects))
+  #### Prepare output ####
+  out <- list()  
+
   ## Compute Weights ##
   weights <- do.call(wght_matrix, args = weight_args)
-  weightd <- do.call(wght_deriv_array, args = append(weight_args, grad_args))
+  if(variance_estimation == 'robust'){
+    weightd <- do.call(wght_deriv_array, args = append(weight_args, grad_args))  
+  } 
   
   ## replace any missing weights with 0 ##
   if(set_NA_to_0 == TRUE) {
     weights[is.na(weights)] <- 0
-    weightd[is.na(weightd)] <- 0
+    if(variance_estimation == 'robust'){ 
+      weightd[is.na(weightd)] <- 0 
+      out$weightd <- weightd
+    }
   }
   
   #### COMPUTE ESTIMATES AND OUTPUT ####
-  estimate_args <- append(point_est_args, list(outcome   = outcome, 
-                                               groups    = groups, 
-                                               treatment = treatment, 
-                                               data      = data))
+  estimate_args <- append(point_est_args, list(Y = Y, G = G, A = A))
   point_args <- append(estimate_args, list(weights = weights))
-  U_args     <- append(estimate_args, list(weights = weightd))
-  sargs      <- append(append(loglihood_args, grad_args), integrate_args)
-  score_args <- append(sargs, list(integrand = likelihoodFUN,
-                                   X = XXp, G = GGp, A = BBp,
-                                   fixed.effects = fixed.effects,
-                                   random.effect = random.effect))
-  
-  # set randomization scheme to 1 for scores for logit_integrand
-  score_args$randomization <- 1
-  # If integrate.allocation is used in the integrand (as in logit_integrand)
-  # set this argument to FALSE
-  if('integrate.allocation' %in% names(formals(integrandFUN))){
-    score_args$integrate.allocation <- FALSE
-  }
 
-  #### Prepare output ####
-  out <- list()  
+
 
   #### Calculate output ####
   out$point_estimates <- do.call(ipw_point_estimates, args = point_args)
-  out$Upart           <- do.call(ipw_point_estimates, args = U_args)
-  out$scores          <- do.call(score_matrix,   args = score_args)
   
-  ## replace any Bscores with 0 ##
-  if(set_NA_to_0 == TRUE) {
-    out$scores[is.na(out$scores)] <- 0
-  }
-  out$weights <- weights
-  out$weightd <- weightd
-  
-  #### Summary ####
-  trt_lvls <- sort(unique(data[, treatment]))
-  N <- length(unique(data[ , groups]))
-  k <- length(allocations)
-  l <- length(trt_lvls)
-  weights_na <- apply(weights, 2, function(x) sum(is.na(x)))
-  scores_na <- apply(out$scores, 2, function(x) sum(is.na(x)))
+  if(variance_estimation == 'robust'){
+    U_args     <- append(estimate_args, list(weights = weightd))
+    sargs      <- append(append(loglihood_args, grad_args), integrate_args)
+    score_args <- append(sargs, list(integrand = loglihood_integrand,
+                                     X = X, G = G, A = B,
+                                     fixed.effects = fixed.effects,
+                                     random.effects = random.effects))
+    
+    # set randomization scheme to 1 for scores for logit_integrand
+    score_args$randomization <- 1
+    
+    # If integrate.allocation is used in the integrand (as in logit_integrand)
+    # set this argument to FALSE
+    if('integrate.allocation' %in% names(formals(loglihood_integrand))){
+      score_args$integrate.allocation <- FALSE
+    }
+    out$Upart           <- do.call(ipw_point_estimates, args = U_args)
+    out$scores          <- do.call(score_matrix, args = score_args)
+    ## replace any scores with 0 ##
+    if(set_NA_to_0 == TRUE) {
+      out$scores[is.na(out$scores)] <- 0
+    }
+  } 
 
-  if(!oracle){
-    out$models <- list(propensity_model = propensity_model)
-  } else {
-    out$oracle_parameters <- model_options
-  }
+  out$weights <- weights
+  out$variance_estimation <- variance_estimation #for use in ipw_effect_calc()
   
-  out$summary <- list(oracle       = oracle,
-                      ngroups      = N, 
-                      nallocations = k,
-                      npredictors  = length(fixed.effects),
-                      ntreatments  = l,
-                      allocations  = allocations,
-                      treatments   = trt_lvls,
-                      predictors   = dimnames(XXp)[[2]],
-                      weights_na_count  = weights_na,
-                      scores_na_count   = scores_na)  
-  
-  print('Run_interference complete')
   return(out)
 }

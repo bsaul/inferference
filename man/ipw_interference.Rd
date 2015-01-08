@@ -4,40 +4,37 @@
 \alias{ipw_interference}
 \title{IPW Interference estimation}
 \usage{
-ipw_interference(integrand = "logit_integrand",
-  likelihood = "logit_integrand", allocations, data, groups, outcome,
-  treatment, propensityB = treatment, propensity_formula,
-  model_method = "glmer", model_options = list(family = binomial(link =
-  "logit")), set_NA_to_0 = TRUE, ...)
+ipw_interference(propensity_integrand,
+  loglihood_integrand = propensity_integrand, allocations, Y, X, A, B = A,
+  G, fixed.effects, random.effects, propensity_formula, variance_estimation,
+  set_NA_to_0 = TRUE, ...)
 }
 \arguments{
-\item{integrand}{function used as the integrand in computing the IPW weights.
+\item{propensity_integrand}{function used as the integrand in computing the IPW weights.
 Defaults to \code{\link{logit_integrand}}.}
 
-\item{likelihood}{function used as the integrand in computing the scores in
+\item{loglihood_integrand}{function used as the integrand in computing the scores in
 \code{\link{score_calc}}. Defaults to \code{\link{logit_integrand}}.}
 
 \item{allocations}{the allocation (coverage) schemes for which to estimate effects.
-Must be in (0, 1].}
+Must be in [0, 1].}
 
-\item{data}{the analysis data.frame}
+\item{Y}{outcome vector}
 
-\item{groups}{quoted name of group variable in \code{data}}
+\item{X}{covariate matrix}
 
-\item{outcome}{quoted name of outcome variable in \code{data}}
+\item{A}{treatmeent vector}
 
-\item{treatment}{quoted name of treatment variable in \code{data}}
+\item{B}{'participation' vector. Defaults to A in the case there is no
+participation variable.}
 
-\item{propensityB}{Optional. If the treatment variable is different for
-\code{integrand} and \code{likelihood}, include the quote name of the variable
-to be passed to \code{likelihood}. Defaults to \code{treatment}.}
+\item{G}{group assignment vector}
 
-\item{propensity_formula}{formula passed to model_method for estimation of propensity score
-parameters.}
+\item{fixed.effects}{vector of fixed effects}
 
-\item{model_method}{One of three options: `glmer`, `glm`, or `oracle`}
+\item{random.effects}{vector of random effects}
 
-\item{model_options}{List of options passed to \code{model_method}}
+\item{variance_estimation}{currently supports 'robust' or 'simple'}
 
 \item{set_NA_to_0}{if TRUE, sets any weights that returned an NA value to 0.
 Defaults to TRUE}
@@ -49,12 +46,11 @@ Defaults to TRUE}
 Returns a list of overall and group-level IPW point estimates
 (the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW
 point estimates (using the weight derivatives), scores (the output of
-\code{\link{score_matrix_calc}}), the computed weight matrix, the computed
-weight derivative array, and a summary.
+\code{\link{score_matrix_calc}}), the computed weight matrix, and the computed
+weight derivative array.
 }
 \description{
 Prepares the object necessary to compute IPW effect estimates with
-\code{\link{calc_effect}}, \code{\link{direct_effect}}, \code{\link{indirect_effect}},
-\code{\link{total_effect}}, or \code{\link{overall_effect}}.
+\code{\link{calc_effect}}.
 }
 
