@@ -48,7 +48,7 @@ logit_integrand <- function(b, X, A,
   }
   
   ## Warnings ##
-  if(length(fixed.effects) != ncol(X)){
+  if(p != ncol(X)){
     stop('The number of fixed effect parameters is not equal to the number \n
          of columns in the covariate matrix')
   }
@@ -70,13 +70,11 @@ logit_integrand <- function(b, X, A,
   } else {
     pr.b <- randomization * (plogis(drop(outer(X %*% params[1:p], b, '+'))))
   }
-  
   if(integrate.allocation == FALSE){
     hh <- dbinom(A, 1, pr.b)
   } else {
     hh <- (pr.b/allocation)^A * ((1-pr.b)/(1 - allocation))^(1-A)
   }
-  
   if(is.null(re) || re <= 0){
     # in this way dnorm integrates to one when integrating from -Inf to Inf
     out <- prod(hh) * dnorm(b, mean=0, sd = 1) 

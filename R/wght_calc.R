@@ -67,9 +67,10 @@ wght_calc <- function(integrand = logit_integrand,
   ## Compute the integral ##
   # if any of the products within the integrand return Inf, then return NA
   # else return the result of integration
+  
   f <- try(do.call("integrate", args = args), silent = TRUE)
   PrA <- ifelse(is(f, 'try-error'), NA, f$value)
- 
+
   ## Compute the weight ##
   if(allocation.denom == TRUE){
     weight <- 1/PrA
