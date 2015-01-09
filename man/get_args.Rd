@@ -20,8 +20,4 @@ list of arguments for FUN
 Extracts the names of the arguments from a function, and creates a list
 of those arguments where they exist in ... .
 }
-\examples{
-myargs <- get_args(lm, formula = Sepal.Length ~ Sepal.Width, data = iris )
-summary(do.call('lm', myargs))
-}
 

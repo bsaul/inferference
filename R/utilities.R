@@ -9,9 +9,9 @@
 #' @param ... any arguments. Those necessary for FUN must be named as appropriate for FUN
 #' @return list of arguments for FUN
 # @export
-#' @examples
-#' myargs <- get_args(lm, formula = Sepal.Length ~ Sepal.Width, data = iris )
-#' summary(do.call('lm', myargs))
+# @examples
+# myargs <- get_args(lm, formula = Sepal.Length ~ Sepal.Width, data = iris )
+# summary(do.call('lm', myargs))
 #-----------------------------------------------------------------------------#
 
 get_args <- function(FUN, args_list = NULL, ...){
@@ -60,7 +60,7 @@ group_means <- function(Y, A, G, a = NA){
 #'
 #' @param allocations vector of allocations 
 #' @param treatments vector of treatments. defaults to \code{c(0 ,1)}
-#' @return data.frame with arguments necessary for \code{\link{calc_effect}} to 
+#' @return data.frame with arguments necessary for \code{\link{ipw_effect_calc}} to 
 #' compute all outcome, direct, indirect, total, and overall effect estimates from
 #' an object created from \code{\link{ipw_interference}} 
 # @export

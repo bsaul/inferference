@@ -12,7 +12,7 @@ effect_grid(allocations, treatments = c(0, 1))
 \item{treatments}{vector of treatments. defaults to \code{c(0 ,1)}}
 }
 \value{
-data.frame with arguments necessary for \code{\link{calc_effect}} to
+data.frame with arguments necessary for \code{\link{ipw_effect_calc}} to
 compute all outcome, direct, indirect, total, and overall effect estimates from
 an object created from \code{\link{ipw_interference}}
 }
