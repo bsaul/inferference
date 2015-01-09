@@ -4,23 +4,20 @@
 \alias{direct_effect}
 \title{Retreive Direct Effect estimates}
 \usage{
-direct_effect(object, allocation, trt.lvl1 = 0, trt.lvl2 = 1,
-  value = c("estimate", "std.error", "conf.low", "conf.high"))
+direct_effect(object, allocation = NULL, trt.lvl1 = 0)
 }
 \arguments{
 \item{object}{an object of class \code{interference}}
 
-\item{allocation}{the allocation scheme for which to estimate direct effects}
+\item{allocation}{the allocation scheme for which to estimate direct effects.
+If NULL, then returns all direct effects.}
 
 \item{trt.lvl1}{Defaults to 0.}
 
 \item{trt.lvl2}{Defaults to 1.}
-
-\item{value}{character vector of values to return. Defaults to
-\code{c('estimate', 'std.error', 'conf.low', 'conf.high')}}
 }
 \value{
-a data.frame with a single row with requested values
+a data.frame with requested values
 }
 \description{
 Retrieves the population average direct causal effect for a
