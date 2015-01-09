@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------------#
 #' Estimate Causal Effects in presence of interference  
 #'
-#' @param formula
+#' @param formula the formula used to define the causal model. See vignette for example.
 #' @param propensity_integrand function used as the integrand in computing the IPW weights. 
 #' Defaults to \code{\link{logit_integrand}}.
 #' @param loglihood_integrand function used as the integrand in computing the scores in 
@@ -23,7 +23,7 @@
 #' @return Returns a list of overall and group-level IPW point estimates 
 #' (the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW 
 #' point estimates (using the weight derivatives), scores (the output of 
-#' \code{\link{score_matrix_calc}}), the computed weight matrix, the computed 
+#' \code{\link{score_matrix}}), the computed weight matrix, the computed 
 #' weight derivative array, and a summary.
 #' @export
 #-----------------------------------------------------------------------------#

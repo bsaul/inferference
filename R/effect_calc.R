@@ -6,9 +6,9 @@
 #'  
 #'  @details See \code{\link{direct_effect}}, \code{\link{indirect_effect}},
 #'  \code{\link{total_effect}}, and \code{\link{overall_effect}} for convenient
-#'  wrappers of \code{calc_effect} to compute common causal effects.
+#'  wrappers of \code{ipw_effect_calc} to compute common causal effects.
 #'  
-#'  This table summarizes the value that \code{calc_effect} returns.
+#'  This table summarizes the value that \code{ipw_effect_calc} returns.
 #'  \tabular{llc}{
 #'  Marginal \tab Effect_type    \tab Value returned \cr
 #'  FALSE    \tab 'outcome' \tab \eqn{\hat{Y}(trt.lvl1, alpha1)}{Yhat(trt.lvl1, alpha1)} \cr

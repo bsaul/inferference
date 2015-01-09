@@ -64,8 +64,8 @@ group_means <- function(Y, A, G, a = NA){
 #' compute all outcome, direct, indirect, total, and overall effect estimates from
 #' an object created from \code{\link{ipw_interference}} 
 # @export
-#' @examples 
-#' effect_grid(seq(0,1, by = .1), c(0,1))
+# @examples 
+# effect_grid(seq(0,1, by = .1), c(0,1))
 #' 
 #-----------------------------------------------------------------------------#
 
@@ -126,7 +126,6 @@ effect_grid <- function(allocations, treatments = c(0,1))
 #' @param allocation the allocation scheme for which to estimate direct effects.
 #' If NULL, then returns all direct effects.
 #' @param trt.lvl1 Defaults to 0.
-#' @param trt.lvl2 Defaults to 1.
 #' @return a data.frame with requested values
 #' @export
 #-----------------------------------------------------------------------------#
@@ -135,12 +134,12 @@ direct_effect <- function(object,
                           allocation = NULL, 
                           trt.lvl1 = 0)
 {
-  ce  <- subset(object$estimates, effect == 'direct')
+  ce  <- object$estimates[object$estimates$effect == 'direct', ]
   if(is.null(allocation)){
-    out <- subset(ce, trt1 == trt.lvl1 &  trt2 == !trt.lvl1*1)
+    out <- ce[ce$trt1 == trt.lvl1 & ce$trt2 == !trt.lvl1*1, ]
   } else{
-    out <- subset(ce, alpha1 == allocation & trt1 == trt.lvl1 &
-                      alpha2 == allocation & trt2 == !trt.lvl1*1)
+    out <- ce[ce$alpha1 == allocation & ce$trt1 == trt.lvl1 &
+              ce$alpha2 == allocation & ce$trt2 == !trt.lvl1*1, ]
   }
   rownames(out) <- NULL
   return(out)
@@ -169,13 +168,14 @@ indirect_effect <- function(object,
                                   allocation2 = NULL,
                                   trt.lvl = 0)
 {
-  ce  <- subset(object$estimates, effect == 'indirect' & 
-                                  trt1 == trt.lvl  & trt2 == trt.lvl)
+  ce  <- object$estimates[object$estimates$effect ==  'indirect' & 
+                          object$estimates$trt1 == trt.lvl & 
+                          object$estimates$trt2 == trt.lvl, ]
 
   if(is.null(allocation2)){
-    out <- subset(ce, alpha1 == allocation1)
+    out <- ce[ce$alpha1 == allocation1, ]
   } else {
-    out <- subset(ce, alpha1 == allocation1 & alpha2 == allocation2 )
+    out <- ce[ce$alpha1 == allocation1 & ce$alpha2 == allocation2, ]
   }
   
   rownames(out) <- NULL
@@ -213,13 +213,14 @@ total_effect <- function(object,
                                allocation2 = NULL,
                                trt.lvl1 = 0)
 {
-  ce  <- subset(object$estimates, effect == 'total' & 
-                  trt1 == trt.lvl1  & trt2 == !trt.lvl1*1)
+  ce  <- object$estimates[object$estimates$effect == 'total' & 
+                          object$estimates$trt1 == trt.lvl1 & 
+                          object$estimates$trt2 == !trt.lvl1*1, ]
   
   if(is.null(allocation2)){
-    out <- subset(ce, alpha1 == allocation1)
+    out <- ce[ce$alpha1 == allocation1, ]
   } else {
-    out <- subset(ce, alpha1 == allocation1 & alpha2 == allocation2 )
+    out <- ce[ce$alpha1 == allocation1 & ce$alpha2 == allocation2, ] 
   }
 
   rownames(out) <- NULL
@@ -248,15 +249,15 @@ te <- total_effect
 #-----------------------------------------------------------------------------#
 
 overall_effect <- function(object, 
-                               allocation1, 
-                               allocation2 = NULL)
+                           allocation1, 
+                           allocation2 = NULL)
 {
-  ce  <- subset(object$estimates, effect == 'overall')
+  ce  <- object$estimates[object$estimates$effect == 'overall', ]
   
   if(is.null(allocation2)){
-    out <- subset(ce, alpha1 == allocation1)
+    out <- ce[ce$alpha1 == allocation1, ]
   } else {
-    out <- subset(ce, alpha1 == allocation1 & alpha2 == allocation2 )
+    out <- ce[ce$alpha1 == allocation1 & ce$alpha2 == allocation2, ]
   }
 
   rownames(out) <- NULL

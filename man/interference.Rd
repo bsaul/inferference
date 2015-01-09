@@ -12,7 +12,7 @@ interference(formula, propensity_integrand = "logit_integrand",
   "robust"), conf.level = 0.95, rescale.factor = 1, ...)
 }
 \arguments{
-\item{formula}{}
+\item{formula}{the formula used to define the causal model. See vignette for example.}
 
 \item{propensity_integrand}{function used as the integrand in computing the IPW weights.
 Defaults to \code{\link{logit_integrand}}.}
@@ -48,7 +48,7 @@ Defaults to TRUE}
 Returns a list of overall and group-level IPW point estimates
 (the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW
 point estimates (using the weight derivatives), scores (the output of
-\code{\link{score_matrix_calc}}), the computed weight matrix, the computed
+\code{\link{score_matrix}}), the computed weight matrix, the computed
 weight derivative array, and a summary.
 }
 \description{

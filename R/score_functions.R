@@ -1,6 +1,6 @@
 #' Log Likelihood 
 #' 
-#' Used by \code{\link{score_matrix_calc}} to compute the log likelihood.
+#' Used by \code{\link{score_matrix}} to compute the log likelihood.
 #' 
 #' @param x used by \code{\link{grad}} to take the derivative of the 
 #' \code{\link{integrate}}(\code{integrand}) with respect to each value of the 
@@ -43,7 +43,7 @@ log_likelihood <- function(x,
 
 #' Compute scores for a single group
 #' 
-#' Used by \code{\link{score_matrix_calc}} to log likelihood derivatives for
+#' Used by \code{\link{score_matrix}} to log likelihood derivatives for
 #' a single group.
 #' 
 #' @param integrand function to used for the integrand. 

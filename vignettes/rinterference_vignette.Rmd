@@ -127,7 +127,7 @@ Helper functions for finding effects:
 ```{r, echo=TRUE}
 direct_effect(sample1, .3) #DE(.3)/ unfortunately de() is a function in utils.
 ie(sample1, .3, .6) #IE(.3, .6) 
-indirect_effect(sample1, .3) # same
+indirect_effect(sample1, .3, .6) # same
 te(sample1, .3, .6) #TE(.3, .6)
 oe(sample1, .3, .6) #OE(.3, .6)
 

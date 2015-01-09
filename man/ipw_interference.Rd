@@ -6,8 +6,8 @@
 \usage{
 ipw_interference(propensity_integrand,
   loglihood_integrand = propensity_integrand, allocations, Y, X, A, B = A,
-  G, fixed.effects, random.effects, propensity_formula, variance_estimation,
-  set_NA_to_0 = TRUE, ...)
+  G, fixed.effects, random.effects, variance_estimation, set_NA_to_0 = TRUE,
+  ...)
 }
 \arguments{
 \item{propensity_integrand}{function used as the integrand in computing the IPW weights.
@@ -46,11 +46,11 @@ Defaults to TRUE}
 Returns a list of overall and group-level IPW point estimates
 (the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW
 point estimates (using the weight derivatives), scores (the output of
-\code{\link{score_matrix_calc}}), the computed weight matrix, and the computed
+\code{\link{score_matrix}}), the computed weight matrix, and the computed
 weight derivative array.
 }
 \description{
 Prepares the object necessary to compute IPW effect estimates with
-\code{\link{calc_effect}}.
+\code{\link{ipw_effect_calc}}.
 }
 

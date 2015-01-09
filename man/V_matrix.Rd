@@ -8,27 +8,27 @@ V_matrix(scores, point_estimates, allocation1, trt.lvl1, allocation2 = NA,
   trt.lvl2 = NA, effect_type, marginal)
 }
 \arguments{
-\item{scores}{the output of \code{\link{score_matrix_calc}}}
+\item{scores}{the output of \code{\link{score_matrix}}}
 
 \item{point_estimates}{output of \code{\link{ipw_point_estimates}}}
 
-\item{allocation1}{See details in \code{\link{calc_effect}}.}
+\item{allocation1}{See details in \code{\link{ipw_effect_calc}}.}
 
-\item{trt.lvl1}{See details in \code{\link{calc_effect}}.}
+\item{trt.lvl1}{See details in \code{\link{ipw_effect_calc}}.}
 
-\item{allocation2}{See details in \code{\link{calc_effect}}.}
+\item{allocation2}{See details in \code{\link{ipw_effect_calc}}.}
 
-\item{trt.lvl2}{See details in \code{\link{calc_effect}}.}
+\item{trt.lvl2}{See details in \code{\link{ipw_effect_calc}}.}
 
-\item{effect_type}{See details in \code{\link{calc_effect}}.}
+\item{effect_type}{See details in \code{\link{ipw_effect_calc}}.}
 
-\item{marginal}{See details in \code{\link{calc_effect}}.}
+\item{marginal}{See details in \code{\link{ipw_effect_calc}}.}
 }
 \value{
 V matrix
 }
 \description{
 Computes the V matrix necessary for variance estimates. Used in
-\code{\link{calc_effect}}. See web appendix of Perez et al. 2014 for more details.
+\code{\link{ipw_effect_calc}}. See web appendix of Perez et al. 2014 for more details.
 }
 

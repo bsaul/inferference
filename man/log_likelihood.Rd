@@ -21,6 +21,6 @@ log_likelihood(x, pos, integrand = logit_integrand, ...)
 value of log likelihood
 }
 \description{
-Used by \code{\link{score_matrix_calc}} to compute the log likelihood.
+Used by \code{\link{score_matrix}} to compute the log likelihood.
 }
 

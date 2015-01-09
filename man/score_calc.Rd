@@ -24,7 +24,7 @@ Defaults to true.}
 length(theta) vector of scores
 }
 \description{
-Used by \code{\link{score_matrix_calc}} to log likelihood derivatives for
+Used by \code{\link{score_matrix}} to log likelihood derivatives for
 a single group.
 }
 

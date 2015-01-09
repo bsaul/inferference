@@ -19,7 +19,4 @@ an object created from \code{\link{ipw_interference}}
 \description{
 Create a dataset of arguments for effect estimates
 }
-\examples{
-effect_grid(seq(0,1, by = .1), c(0,1))
-}
 

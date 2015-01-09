@@ -13,8 +13,6 @@ direct_effect(object, allocation = NULL, trt.lvl1 = 0)
 If NULL, then returns all direct effects.}
 
 \item{trt.lvl1}{Defaults to 0.}
-
-\item{trt.lvl2}{Defaults to 1.}
 }
 \value{
 a data.frame with requested values
