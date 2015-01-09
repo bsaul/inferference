@@ -29,7 +29,7 @@
 #-----------------------------------------------------------------------------#
 
 interference <- function(formula,
-                         propensity_integrand,
+                         propensity_integrand = 'logit_integrand',
                          loglihood_integrand = propensity_integrand,
                          allocations,
                          data,

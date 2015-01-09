@@ -4,7 +4,7 @@
 \alias{interference}
 \title{Estimate Causal Effects in presence of interference}
 \usage{
-interference(formula, propensity_integrand,
+interference(formula, propensity_integrand = "logit_integrand",
   loglihood_integrand = propensity_integrand, allocations, data,
   model_method = "glmer", model_options = list(family = binomial(link =
   "logit")), causal_estimation_method = "ipw",
