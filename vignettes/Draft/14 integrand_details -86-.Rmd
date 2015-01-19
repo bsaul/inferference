@@ -1,0 +1,3 @@
+Write a help example.
+
+This functions needs the following arguments. The first argument is the value the the integrate function will integrate with respect. `x` and `pos`.  `fixed.effects` and `random.effects`. `allocation`

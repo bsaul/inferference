@@ -306,13 +306,11 @@ interference_sample &lt;-<span class="st"> </span>sample_sim$sims[[<span class="
 ## 1    0.3    0    0.6    0    FALSE    contrast indirect   0.1591   0.02617
 ##   conf.low conf.high
 ## 1   0.1078    0.2104</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">indirect_effect</span>(sample1, .<span class="dv">3</span>) <span class="co"># same</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">indirect_effect</span>(sample1, .<span class="dv">3</span>, .<span class="dv">6</span>) <span class="co"># same</span></code></pre>
 <pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type   effect estimate std.error
-## 1    0.3    0   0.45    0    FALSE    contrast indirect  0.08656   0.01732
-## 2    0.3    0   0.60    0    FALSE    contrast indirect   0.1591   0.02617
+## 1    0.3    0    0.6    0    FALSE    contrast indirect   0.1591   0.02617
 ##   conf.low conf.high
-## 1  0.05262    0.1205
-## 2   0.1078    0.2104</code></pre>
+## 1   0.1078    0.2104</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">te</span>(sample1, .<span class="dv">3</span>, .<span class="dv">6</span>) <span class="co">#TE(.3, .6)</span></code></pre>
 <pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type effect estimate std.error
 ## 1    0.3    0    0.6    1    FALSE    contrast  total   0.2676   0.02435

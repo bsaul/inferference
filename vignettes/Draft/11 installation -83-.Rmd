@@ -1,0 +1,6 @@
+To install:
+```{r, eval= FALSE}
+install.packages('rinterference')
+```
+
+Or github?

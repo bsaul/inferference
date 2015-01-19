@@ -1,0 +1,32 @@
+# Notation 
+$\mathbf{Z}_i = (Z_{i1}, Z_{i2})$ is treatment assignment for group $i$. $\mathbf{X}_i = (\mathbf{X}_{i1}, \mathbf{X}_{i2})$ is the vector of individuals' covariate matrices for group $i$. Possible covariates in this dataset include age, gender, previous voting history, and party affiliation. $\mathbf{B}_i = (B_{i1}, B_{i2})$ is indicator that the $j$th subjects open the door in group $i$. We only consider possibility that exactly one person opens the door. Hence $\mathbf{B}_i \in \{(1, 0), (0, 1)\}$ and $P(B_{i1} = 1| X_{ij}) + P(B_{i2} = 1| X_{ij}) = 1$. We're throwing out the data where no one opens the door. $G_i \in \{0, 1\}$ is the indicator that group $i$ is randomized to treatment or control. By design, $P(G_i = 1) = 0.5$.
+
+# Group-level propensity
+
+If we suppose each individual has equal probability of opening the door, then the group-level propensity is simply:
+\begin{align*}
+P(\mathbf{Z}_i) &= P(\mathbf{Z}_i | G_i = 1)P(G_i = 1) + P(\mathbf{Z}_i | G_i = 0)P(G_i = 0)  \\
+&= 0.5[P(\mathbf{Z}_i | G_i = 1) + P(\mathbf{Z}_i | G_i = 0)]\\
+&= \begin{cases}
+.5 & \text{if $Z_1 = 0, Z_2 = 0, G_i = 0$} \\
+.25 & \text{if $Z_1 = 0, Z_2 = 1$ or $Z_1 = 1, Z_2 = 0$ and $G_i = 1$} \\
+0  & \text{else}
+\end{cases}
+\end{align*}
+
+
+Let $h_{ij} = P(B_{ij} = 1| \mathbf{X}_{ij}; \theta) = logit^{-1}(\mathbf{X}_{ij}\theta)$, the probability that the $j$th subject opens the door. By the note above, $h_{i1} + h_{i2} = 1$. If we want to account for covariates that may affect the probability of opening the door, then the group-level propensity can be expressed:
+\begin{align*}
+P(\mathbf{Z}_i | \mathbf{X}_i ; \theta) &= P(\mathbf{Z}_i | G_i = 1, \mathbf{X}_i ; \theta)P(G_i = 1) + P(\mathbf{Z}_i | G_i = 0, \mathbf{X}_i ; \theta)P(G_i = 0) \\
+&= 0.5[ P(\mathbf{Z}_i | G_i = 1, \mathbf{X}_i ; \theta) +   P(\mathbf{Z}_i | G_i = 0, \mathbf{X}_i ; \theta)] \\
+&= \begin{cases}
+.5 & \text{if $Z_1 = 0, Z_2 = 0$ and $G_i = 0$} \\
+.5[h_{i1}^{Z_{i1}}(1 - h_{i1})^{1 - Z_{i1}}] & \text{if $Z_1 = 0, Z_2 = 1$ or $Z_1 = 1, Z_2 = 0$ and $G_i = 1$}  \\
+0  & \text{else}
+\end{cases} \\
+\end{align*}
+
+# Some thoughts
+
+* To estimate $\theta$, I think we want to use the entire dataset, not just the subset of treated households.
+* What is the best way to get $\hat{\theta}$? Logistic regression? Conditional logistic regression? Could we express $h_{ij}(b_i) = logit^{-1}(\mathbf{X}_{ij}\theta + b_i)$ where $b_i \sim N(0, \theta_s$) and use a random effects model, and use $.5 [ \int h_{i1}^{Z_{i1}}(1 - h_{i1})^{1 - Z_{i1}} f_b(b_i, \theta_s) db_i]$ for the propensity of the treated groups? 
