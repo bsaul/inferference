@@ -94,6 +94,10 @@ interference <- function(formula,
     warning('At least 2 allocations must be specified in order to estimate indirect effects')
   }
   
+  if(N == 1){
+    stop('The group variable must have at least 2 groups (more is better).')
+  }
+  
   #### Compute Parameter Estimates ####
 
   estimation_args <- append(list(formula = propensity_formula, data = data), 
