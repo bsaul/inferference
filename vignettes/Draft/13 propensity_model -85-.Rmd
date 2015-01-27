@@ -1,4 +1,0 @@
-In version XX.XX, `rinterference` provides two methods for estimating propensity model parameters,
-`glmer` and `glm`, as well as a method for providing known parameters or parameters estimated from other packages, `oracle`. In most settings, a random effect for the group will provide a better-fitting model, so the propensity model should be set up for `glmer`; e.g. `stage_one ~ x1 + x2 + (1|group)`. If the group sizes are small, the estimate of the random effect variance may be small or zero; in which case, `glm` should be used. 
-
-When using `logit_integrand`, only one random effect - the group effect - will be used in the causal effect estimates. Users must define their own integrand function for more complicated propensity models.

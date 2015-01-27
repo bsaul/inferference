@@ -1,9 +1,0 @@
-### Summary of Assumptions
-
-You still have to assume:
-* positivity (see section on computational issues)
-* for observational data: no unmeasured confounders (model is correctly specified)
-* what else?
-* no interference between groups (partial interference)
-
-Treatment assignment - type b

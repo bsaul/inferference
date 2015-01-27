@@ -1,8 +1,0 @@
-To start, first install the package from CRAN using standard syntax,
-```{r, eval= FALSE}
-install.packages('rinterference')
-```
-or alternatively, you may use the latest version on gitub using the `devtools` package
-```{r, eval = FALSE}
-devtools::install_github("")
-```

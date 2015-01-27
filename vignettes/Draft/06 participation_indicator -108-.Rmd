@@ -1,4 +1,0 @@
-
-#### Participation -- ???
-
- The estimators in the next section work under the assumption that $Y_{ij}(\mathbf{a}_i, \mathbf{b}_i) = Y_{ij}(\mathbf{a}_i, \mathbf{b}_i') = Y_{ij}(\mathbf{a}_i$ for all $\mathbf{b}_i, \mathbf{b}_i'$, $Y_{ij}.

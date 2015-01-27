@@ -1,7 +1,0 @@
-## Treatment Assignment
-Suppose that within a group, individuals are assigned treatment according to the known Bernoulli-type probability mass function (TTV's 'type B' parametrisation p.57). 
-\[
-P(\mathbf{A}_i; \alpha) = \pi_{i}(\mathbf{A}_i; \alpha) = \prod_{j = 1}^{n_i} \alpha^{a_{ij}}(1 - \alpha)^{1 - a_{ij}} \text{ and } P(\mathbf{A}_{i, -j} | A_{ij}; \alpha) = \pi_{i}(\mathbf{A}_{i, -j}, A_{ij}; \alpha) = \prod_{k = 1, k \neq j}^{n_i} \alpha^{a_{ij}}(1 - \alpha)^{1 - a_{ij}}
-\]
-
-The parameter $\alpha$ is in some sense counterfactual. In the estimators described below, we are able to estimate what the causal effects would be under a set of $alpha$ values chosen by the researcher. Generally, one would chose allocation levels that make sense to the data. In their analysis of Cholera vaccines, Perez-Heydrich et al. examined allocations between $0.3$ and $0.6$ since 75\% of the groups had vaccine coverages in that range.
