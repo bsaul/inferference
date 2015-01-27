@@ -20,6 +20,8 @@
 #' }
 #'  
 #' @param obj the name of the object created by \code{\link{ipw_interference}}
+#' @param variance_estimation the variance estimation method.  See 
+#' \code{\link{interference}} for details
 #' @param alpha1 the allocation scheme for the outcome of interest or the first
 #' scheme in the constrast of interest. See details.
 #' @param trt.lvl1 the treatment level for the outcome of interest or the first
@@ -41,6 +43,7 @@
 #-----------------------------------------------------------------------------#
 
 ipw_effect_calc <- function(obj, 
+                            variance_estimation,
                             alpha1, 
                             trt.lvl1, 
                             alpha2 = NA, 
@@ -61,7 +64,7 @@ ipw_effect_calc <- function(obj,
   if (!(alpha1 %in% allocations) | (effect_type == 'contrast' & !(alpha2 %in% allocations))){
     stop(paste('At least one of the chosen coverage levels has not been estimated.\n',
                'Select from the following: \n', 
-               paste(obj$summary$allocations, collapse = ' ')))
+               paste(allocations, collapse = ' ')))
   }
   
   ## Necessary bits ##
@@ -79,7 +82,7 @@ ipw_effect_calc <- function(obj,
   oal  <- obj$point_estimates[[fff]]$overall
   grp  <- obj$point_estimates[[fff]]$groups
   
-  if(obj$variance_estimation == 'robust'){
+  if(variance_estimation == 'robust'){
     Uoal <- obj$Upart[[fff]]$overall 
     Ugrp <- obj$Upart[[fff]]$groups
     
@@ -102,13 +105,13 @@ ipw_effect_calc <- function(obj,
     if(marginal == TRUE){
       pe          <- oal[a1] - oal[a2]
       pe_grp_diff <- (grp[ , a1] - oal[a1]) - (grp[, a2] - oal[a2])
-      if(obj$variance_estimation == 'robust'){
+      if(variance_estimation == 'robust'){
         U_pe_grp    <- Ugrp[ , , a1] - Ugrp[ , , a2]
       }
     } else {
       pe          <- oal[a1, t1] - oal[a2, t2]
       pe_grp_diff <- (grp[ , a1, t1] - oal[a1, t1]) - (grp[ , a2, t2] - oal[a2, t2])
-      if(obj$variance_estimation == 'robust'){
+      if(variance_estimation == 'robust'){
         U_pe_grp    <- Ugrp[ , , a1, t1] - Ugrp[ , , a2, t2]
       }
     }
@@ -116,20 +119,20 @@ ipw_effect_calc <- function(obj,
     if(marginal == TRUE){
       pe          <- oal[a1] 
       pe_grp_diff <- (grp[ , a1] - oal[a1])
-      if(obj$variance_estimation == 'robust'){
+      if(variance_estimation == 'robust'){
         U_pe_grp    <- Ugrp[ , , a1]
       }
     } else {
       pe          <- oal[a1, t1] 
       pe_grp_diff <- (grp[ , a1, t1] - oal[a1, t1])
-      if(obj$variance_estimation == 'robust'){
+      if(variance_estimation == 'robust'){
         U_pe_grp    <- Ugrp[ , , a1, t1]
       }
     }
   }
   
   #### VARIANCE ESTIMATION ####
-  if(obj$variance_estimation == 'robust'){
+  if(variance_estimation == 'robust'){
     # partial U matrix
     if(p == 1){
       U21 <- sum(-U_pe_grp)/N
@@ -152,7 +155,7 @@ ipw_effect_calc <- function(obj,
     
     ## Sandwich Variance Estimate ##
     ave <- ((U21 - 2*V21) %*% solve(V11) %*% t(U21) + V22)/N * rescale.factor^2
-  } else if(obj$variance_estimation == 'simple'){
+  } else if(variance_estimation == 'simple'){
     ave <- (1/(N^2)) * (sum((pe_grp_diff)^2, na.rm = T)) * rescale.factor^2
   }
   

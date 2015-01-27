@@ -143,19 +143,22 @@ interference <- function(formula,
     
     print('Computing effect estimates...')
     
-    out$estimates <- cbind(grid, t(ipw_effect_calc(ipw, 
-                                                   alpha1      = grid$alpha1,
-                                                   trt.lvl1    = grid$trt1,
-                                                   alpha2      = grid$alpha2,
-                                                   trt.lvl2    = grid$trt2,
-                                                   marginal    = grid$marginal,
-                                                   effect_type = grid$effect_type,
-                                                   rescale.factor = rescale.factor,
-                                                   conf.level = conf.level,
-                                                   print = FALSE)))
+    estimate_args <- list(obj = ipw,
+                          variance_estimation = causal_estimation_options$variance_estimation,
+                          alpha1      = grid$alpha1,
+                          trt.lvl1    = grid$trt1,
+                          alpha2      = grid$alpha2,
+                          trt.lvl2    = grid$trt2,
+                          marginal    = grid$marginal,
+                          effect_type = grid$effect_type,
+                          rescale.factor = rescale.factor,
+                          conf.level = conf.level,
+                          print = FALSE)
+    
+    est <- do.call(ipw_effect_calc, args = estimate_args)
+    out$estimates <- cbind(grid, t(est))
   }
 
-  
   #### Summary ####
   
   # count missing weights by allocation
@@ -167,7 +170,7 @@ interference <- function(formula,
     out$models <- list(propensity_model = model_options) 
   }
   
-  out$summary <- list(causal_model = deparse(formula),
+  out$summary <- list(formula      = deparse(formula),
                       oracle       = oracle,
                       conf.level   = conf.level,
                       ngroups      = N, 
@@ -176,7 +179,8 @@ interference <- function(formula,
                       ntreatments  = l,
                       allocations  = allocations,
                       treatments   = trt_lvls,
-                      weights_na_count  = weights_na)
+                      weights_na_count  = weights_na,
+                      variance_estimation = causal_estimation_options$variance_estimation)
   
   class(out) <- "interference"
   

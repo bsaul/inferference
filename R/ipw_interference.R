@@ -103,7 +103,7 @@ ipw_interference <- function(propensity_integrand,
   } 
 
   out$weights <- weights
-  out$variance_estimation <- variance_estimation #for use in ipw_effect_calc()
+ # out$variance_estimation <- variance_estimation #for use in ipw_effect_calc()
   
   return(out)
 }

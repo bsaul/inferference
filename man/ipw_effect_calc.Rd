@@ -4,12 +4,15 @@
 \alias{ipw_effect_calc}
 \title{Calculate IPW estimates}
 \usage{
-ipw_effect_calc(obj, alpha1, trt.lvl1, alpha2 = NA, trt.lvl2 = NA,
-  effect_type, marginal, rescale.factor = 1, conf.level = 0.95,
-  print = FALSE)
+ipw_effect_calc(obj, variance_estimation, alpha1, trt.lvl1, alpha2 = NA,
+  trt.lvl2 = NA, effect_type, marginal, rescale.factor = 1,
+  conf.level = 0.95, print = FALSE)
 }
 \arguments{
 \item{obj}{the name of the object created by \code{\link{ipw_interference}}}
+
+\item{variance_estimation}{the variance estimation method.  See
+\code{\link{interference}} for details}
 
 \item{alpha1}{the allocation scheme for the outcome of interest or the first
 scheme in the constrast of interest. See details.}
