@@ -12,8 +12,12 @@ summary.interference <- function(object, ...)
   cols <- c('alpha1', 'trt1', 'alpha2', 'trt2', 'estimate', 'std.error', 'conf.low', 'conf.high')
   est  <- object$estimates
 #Not defined for glmer class:  form <- as.character(deparse(object$models$propensity_model$formula))
+  form <- object$summary$formula
   allo <- object$summary$allocations
   conf <- object$summary$conf.level
+  varm <- object$summary$variance_estimation
+  k <- object$summary$nallocations
+  N <- object$summary$ngroups
   
   mina <- min(allo)
   maxa <- max(allo)
@@ -61,13 +65,15 @@ summary.interference <- function(object, ...)
   ## Output ##
   cat(" --------------------------------------------------------------------------\n", 
       "                              Model Summary                    \n",
-      "--------------------------------------------------------------------------\n",      
-      "Number of groups: ", object$summary$ngroups, '\n',
-      "Allocations used: ", allo, '\n',
+      "--------------------------------------------------------------------------\n",
+      "Formula:", form, '\n',
+      "Number of groups: ", N, '\n',
+      k, "allocations were used from", mina, '(min) to', maxa, '(max) \n',
  #     "Propensity model: ", form, '\n',
       "--------------------------------------------------------------------------\n",
       "                         Causal Effect Summary                            \n",
-      "                        Confidence level: ", conf, "                      \n",
+      "                        Confidence level:", conf, "                      \n",
+      "                        Variance method:", varm, "       \n",
       "--------------------------------------------------------------------------\n\n",
       "Direct Effects\n")
   print(de, row.names = FALSE)
@@ -78,6 +84,5 @@ summary.interference <- function(object, ...)
   cat('\n', 'Overall Effects \n')
   print(oe, row.names = FALSE)
   cat('\n',
-      "Variance and confidence intervals were computed using... \n",
       "--------------------------------------------------------------------------\n")
 }
