@@ -13,7 +13,7 @@
 
 log_likelihood <- function(x, 
                            pos, 
-                           integrand = logit_integrand, 
+                           integrand,
                            ...)
 {
   ## Necessary pieces ##
@@ -56,7 +56,7 @@ log_likelihood <- function(x,
 #' @return length(theta) vector of scores
 #' @export
 
-score_calc <- function(integrand = logit_integrand,
+score_calc <- function(integrand,
                        hide.errors = TRUE,
                        fixed.effects,
                        random.effects,
@@ -75,7 +75,8 @@ score_calc <- function(integrand = logit_integrand,
   ## Compute the derivative of the log likelihood for each parameter ##
   scores <- sapply(1:length(params), function(i){
     args <- append(fargs,
-                   list(func = log_likelihood, 
+                   list(func = log_likelihood,
+                        integrand = integrand, 
                         fixed.effects = fixed.effects,
                         random.effects = random.effects,
                         x = params[i], 

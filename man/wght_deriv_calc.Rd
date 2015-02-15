@@ -4,8 +4,8 @@
 \alias{wght_deriv_calc}
 \title{Compute the derivative(s) of a weight}
 \usage{
-wght_deriv_calc(integrand = logit_integrand, fixed.effects,
-  random.effects = NULL, allocation, hide.errors = TRUE, ...)
+wght_deriv_calc(integrand, fixed.effects, random.effects = NULL, allocation,
+  hide.errors = TRUE, ...)
 }
 \arguments{
 \item{integrand}{the function to passed to the argument 'f' of \code{\link{integrate}},

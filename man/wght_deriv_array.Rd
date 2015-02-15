@@ -4,8 +4,8 @@
 \alias{wght_deriv_array}
 \title{Create an array of group weight derivatives}
 \usage{
-wght_deriv_array(integrand = logit_integrand, allocations, X, A, G,
-  fixed.effects, random.effects, ...)
+wght_deriv_array(integrand, allocations, X, A, G, fixed.effects, random.effects,
+  ...)
 }
 \arguments{
 \item{integrand}{the function to passed to the argument 'f' of \code{\link{integrate}},

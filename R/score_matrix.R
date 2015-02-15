@@ -14,7 +14,7 @@
 #' @export
 #-----------------------------------------------------------------------------#
 
-score_matrix <- function(integrand = logit_integrand,
+score_matrix <- function(integrand,
                          X, A, G, 
                          fixed.effects,
                          random.effects,

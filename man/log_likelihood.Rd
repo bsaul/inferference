@@ -4,7 +4,7 @@
 \alias{log_likelihood}
 \title{Log Likelihood}
 \usage{
-log_likelihood(x, pos, integrand = logit_integrand, ...)
+log_likelihood(x, pos, integrand, ...)
 }
 \arguments{
 \item{x}{used by \code{\link{grad}} to take the derivative of the

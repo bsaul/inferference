@@ -13,7 +13,7 @@
 #' @return vector of derivatives with respect to element of params
 #' @export
 
-wght_deriv_calc <- function(integrand = logit_integrand,
+wght_deriv_calc <- function(integrand,
                             fixed.effects,
                             random.effects = NULL,
                             allocation,

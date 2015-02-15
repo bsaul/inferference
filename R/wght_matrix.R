@@ -18,7 +18,7 @@
 #' @return a length(unique(group)) X length(alphas) matrix of group weights 
 #' @export
 
-wght_matrix <- function(integrand = logit_integrand, 
+wght_matrix <- function(integrand, 
                         allocations, 
                         X, A, G,
                         fixed.effects,

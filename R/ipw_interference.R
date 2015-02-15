@@ -73,8 +73,6 @@ ipw_interference <- function(propensity_integrand,
   estimate_args <- append(point_est_args, list(Y = Y, G = G, A = A))
   point_args <- append(estimate_args, list(weights = weights))
 
-
-
   #### Calculate output ####
   out$point_estimates <- do.call(ipw_point_estimates, args = point_args)
   
@@ -82,7 +80,8 @@ ipw_interference <- function(propensity_integrand,
     U_args     <- append(estimate_args, list(weights = weightd))
     sargs      <- append(append(loglihood_args, grad_args), integrate_args)
     score_args <- append(sargs, list(integrand = loglihood_integrand,
-                                     X = X, G = G, A = B,
+                                     X = X, G = G, 
+                                     A = B, # Use B for treatment in scores
                                      fixed.effects = fixed.effects,
                                      random.effects = random.effects))
     

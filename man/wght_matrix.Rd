@@ -4,7 +4,7 @@
 \alias{wght_matrix}
 \title{Create a matrix of group IP weights}
 \usage{
-wght_matrix(integrand = logit_integrand, allocations, X, A, G, fixed.effects,
+wght_matrix(integrand, allocations, X, A, G, fixed.effects,
   random.effects = NULL, ...)
 }
 \arguments{

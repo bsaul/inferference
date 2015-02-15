@@ -20,7 +20,7 @@
 #' @return scalar result of the integral
 #' @export
 
-wght_calc <- function(integrand = logit_integrand, 
+wght_calc <- function(integrand, 
                       allocation,
                       x = NULL, 
                       pos = NULL, 

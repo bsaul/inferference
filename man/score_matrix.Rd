@@ -4,8 +4,7 @@
 \alias{score_matrix}
 \title{Calculate matrix of log Likelihood derivatives}
 \usage{
-score_matrix(integrand = logit_integrand, X, A, G, fixed.effects,
-  random.effects, ...)
+score_matrix(integrand, X, A, G, fixed.effects, random.effects, ...)
 }
 \arguments{
 \item{integrand}{function passed to \code{\link{log_likelihood}}. Defaults to

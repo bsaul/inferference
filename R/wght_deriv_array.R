@@ -16,7 +16,7 @@
 #' group weight derivatives
 #' @export
 
-wght_deriv_array <- function(integrand = logit_integrand, 
+wght_deriv_array <- function(integrand, 
                              allocations, 
                              X, A, G,
                              fixed.effects,
