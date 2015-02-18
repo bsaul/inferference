@@ -92,7 +92,6 @@ effect_grid <- function(allocations, treatments = c(0,1))
                     alpha2 = allocations, trt2 = NA,
                     marginal = FALSE, 
                     effect_type = 'contrast', effect = 'indirect')
-  g3 <- g3[g3$alpha1 != g3$alpha2, ]
   g3$trt2 <- g3$trt1
   
   # Total Effects
@@ -100,7 +99,6 @@ effect_grid <- function(allocations, treatments = c(0,1))
                     alpha2 = allocations, trt2 = treatments,
                     marginal = FALSE, 
                     effect_type = 'contrast', effect = 'total')
-  g4 <- g4[g4$alpha1 != g4$alpha2, ]
   g4 <- g4[g4$trt1 != g4$trt2, ]
   
   # Overall Effects
@@ -108,11 +106,10 @@ effect_grid <- function(allocations, treatments = c(0,1))
                     alpha2 = allocations, trt2 = NA,
                     marginal = TRUE, 
                     effect_type = 'contrast', effect = 'overall')
-  g5 <- g5[g5$alpha1 != g5$alpha2, ]
   
   out <- rbind(g1, g2, g3, g4, g5)
   rownames(out) <- NULL # Rownames aren't useful
-  return(out)
+  return(out) 
 }
 
 #-----------------------------------------------------------------------------#
