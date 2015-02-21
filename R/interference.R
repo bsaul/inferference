@@ -156,7 +156,12 @@ interference <- function(formula,
                           print = FALSE)
     
     est <- do.call(ipw_effect_calc, args = estimate_args)
-    out$estimates <- cbind(grid, t(est))
+    
+    # 2/21/15: ipw_effect_calc returns a data.frame of lists, but these should 
+    # be numeric columns. Here's a quick fix.
+    est <- apply(t(est), 2, as.numeric)
+    
+    out$estimates <- cbind(grid, est)
   }
 
   #### Summary ####
