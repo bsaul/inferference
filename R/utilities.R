@@ -74,16 +74,23 @@ effect_grid <- function(allocations, treatments = c(0,1))
   marginal    <- c('TRUE', 'FALSE')
   
   # Outcomes
-  g1 <- expand.grid(alpha1 = allocations, trt1 = treatments, 
+  g1.1 <- expand.grid(alpha1 = allocations, trt1 = treatments, 
                     alpha2 = NA, trt2 = NA,
-                    marginal = marginal, 
-                    effect_type = 'outcome', effect = 'outcome')
+                    marginal = FALSE, 
+                    effect_type = 'outcome', effect = 'outcome',
+                    stringsAsFactors = FALSE)
+  g1.2 <- expand.grid(alpha1 = allocations, trt1 = NA, 
+                      alpha2 = NA, trt2 = NA,
+                      marginal = TRUE, 
+                      effect_type = 'outcome', effect = 'outcome',
+                      stringsAsFactors = FALSE)
   
   # Direct Effects
   g2 <- expand.grid(alpha1 = allocations, trt1 = treatments, 
                     alpha2 = NA, trt2 = treatments,
                     marginal = FALSE, 
-                    effect_type = 'contrast', effect = 'direct')
+                    effect_type = 'contrast', effect = 'direct',
+                    stringsAsFactors = FALSE)
   g2$alpha2 <- g2$alpha1
   g2 <- g2[g2$trt1 != g2$trt2, ]
   
@@ -91,23 +98,26 @@ effect_grid <- function(allocations, treatments = c(0,1))
   g3 <- expand.grid(alpha1 = allocations, trt1 = treatments, 
                     alpha2 = allocations, trt2 = NA,
                     marginal = FALSE, 
-                    effect_type = 'contrast', effect = 'indirect')
+                    effect_type = 'contrast', effect = 'indirect',
+                    stringsAsFactors = FALSE)
   g3$trt2 <- g3$trt1
   
   # Total Effects
   g4 <- expand.grid(alpha1 = allocations, trt1 = treatments, 
                     alpha2 = allocations, trt2 = treatments,
                     marginal = FALSE, 
-                    effect_type = 'contrast', effect = 'total')
+                    effect_type = 'contrast', effect = 'total',
+                    stringsAsFactors = FALSE)
   g4 <- g4[g4$trt1 != g4$trt2, ]
   
   # Overall Effects
   g5 <- expand.grid(alpha1 = allocations, trt1 = NA, 
                     alpha2 = allocations, trt2 = NA,
                     marginal = TRUE, 
-                    effect_type = 'contrast', effect = 'overall')
+                    effect_type = 'contrast', effect = 'overall',
+                    stringsAsFactors = FALSE)
   
-  out <- rbind(g1, g2, g3, g4, g5)
+  out <- rbind(g1.1, g1.2, g2, g3, g4, g5)
   rownames(out) <- NULL # Rownames aren't useful
   return(out) 
 }
