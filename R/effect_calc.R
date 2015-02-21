@@ -174,12 +174,13 @@ ipw_effect_calc <- function(obj,
   }
   
   out <- data.frame(estimate = pe,
-                    std.error = sqrt(ave), 
-                    conf.low = pe - me, 
-                    conf.high = pe + me)
+                     std.error = sqrt(ave), 
+                     conf.low = pe - me, 
+                     conf.high = pe + me)
   return(out)
 }
 
 ipw_effect_calc <- Vectorize(ipw_effect_calc, 
                              vectorize.args = c("alpha1", 'alpha2', 'trt.lvl1', 'trt.lvl2', 
-                                                'marginal', 'effect_type'))
+                                                'marginal', 'effect_type'),
+                             SIMPLIFY = TRUE)
