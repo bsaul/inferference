@@ -1,4 +1,4 @@
 library(testthat)
-library(rinterference)
+library(inferference)
 
-test_check("rinterference")
+test_check("inferference")

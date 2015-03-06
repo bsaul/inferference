@@ -1,7 +1,7 @@
 context("Interference functions")
 
 test_that("Interfence() works in various situations", {
-  testdt <- subset(interference_sample, group %in% 1:10)
+  testdt <- subset(vaccinesim, group %in% 1:10)
   allos  <- c(.35, .4)
   
   # Using GLMER with random effect: should not give error

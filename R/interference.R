@@ -51,7 +51,6 @@ interference <- function(formula,
   len_lhs         <- length(cformula)[1]
   len_rhs         <- length(cformula)[2]
 
-  
   ## For the sake of consistency downstream, reorder data frame by groups ##
   group_var <- attr(terms(cformula, lhs = 0, rhs = len_rhs), 'term.labels')
   data <- data[order(data[ , group_var]), ]

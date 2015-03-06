@@ -1,7 +1,7 @@
 context("Effect retrieval functions")
 
 test_that("retrieval functions work", {
-  testdt <- subset(interference_sample, group %in% 1:10)
+  testdt <- subset(vaccinesim, group %in% 1:10)
   allos  <- c(.35, .4)
   
   test <- interference(data = testdt,
