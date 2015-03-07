@@ -1,17 +1,17 @@
 #-----------------------------------------------------------------------------#
-#' Calculate matrix of log Likelihood derivatives  
-#'
-#' @param integrand function passed to \code{\link{log_likelihood}}. Defaults to
-#' \code{\link{logit_integrand}}
-#' @param X covariate matrix
-#' @param A vector of treatment assignments
-#' @param G vector of group assignments
-#' @param fixed.effects vector of fixed effect parameters
-#' @param random.effects OPTIONAL vector random effect parameters
-#' @param ... additional arguments passed to \code{integrand} or \code{\link{grad}}. 
-#' For example, one can change the \code{method} argument in \code{grad}.
-#' @return N X length(params) matrix of scores
-#' @export
+# Calculate matrix of log Likelihood derivatives  
+#
+# @param integrand function passed to \code{\link{log_likelihood}}. Defaults to
+# \code{\link{logit_integrand}}
+# @param X covariate matrix
+# @param A vector of treatment assignments
+# @param G vector of group assignments
+# @param fixed.effects vector of fixed effect parameters
+# @param random.effects OPTIONAL vector random effect parameters
+# @param ... additional arguments passed to \code{integrand} or \code{\link{grad}}. 
+# For example, one can change the \code{method} argument in \code{grad}.
+# @return N X length(params) matrix of scores
+# @export
 #-----------------------------------------------------------------------------#
 
 score_matrix <- function(integrand,

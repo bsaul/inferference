@@ -1,6 +1,7 @@
 #-----------------------------------------------------------------------------#
 #' Prints a summary of an interference object
 #'
+#' @rdname summary
 #' @param object object of class 'interference'
 #' @param ... ignored
 #' @export

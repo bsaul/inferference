@@ -1,20 +1,23 @@
-#' Create an array of group weight derivatives 
-#' 
-#' Uses \code{\link{wght_deriv_calc}} to compute the weight derivatives for each 
-#' group per coverage level
-
-#' @param integrand the function to passed to the argument 'f' of \code{\link{integrate}},
-#' which is part of \code{\link{wght_calc}}. 
-#' @param allocations coverage levels in (0, 1), possibly (probably) vector valued
-#' @param X covariate matrix
-#' @param A vector of treatment assignments
-#' @param G vector of group assignments
-#' @param fixed.effects vector of fixed effect parameters
-#' @param random.effects OPTIONAL vector random effect parameters
-#' @param ... additional arguments passed to integrand
-#' @return a length(unique(group)) X length(params) X length(alphas) array of 
-#' group weight derivatives
-#' @export
+#-----------------------------------------------------------------------------#
+# Create an array of group weight derivatives 
+# 
+# Uses \code{\link{wght_deriv_calc}} to compute the weight derivatives for each 
+# group per coverage level
+#
+# @param integrand the function to passed to the argument 'f' of \code{\link{integrate}},
+# which is part of \code{\link{wght_calc}}. 
+# @param allocations coverage levels in (0, 1), possibly (probably) vector valued
+# @param X covariate matrix
+# @param A vector of treatment assignments
+# @param G vector of group assignments
+# @param fixed.effects vector of fixed effect parameters
+# @param random.effects OPTIONAL vector random effect parameters
+# @param ... additional arguments passed to integrand
+# @return a length(unique(group)) X length(params) X length(alphas) array of 
+# group weight derivatives
+# @export
+# 
+#-----------------------------------------------------------------------------#
 
 wght_deriv_array <- function(integrand, 
                              allocations, 

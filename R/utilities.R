@@ -1,13 +1,13 @@
 #-----------------------------------------------------------------------------#
-#' Get arguments from a function
-#' 
-#' Extracts the names of the arguments from a function, and creates a list 
-#' of those arguments where they exist in ... . 
-#' 
-#' @param FUN function for which to find arguments
-#' @param args_list a list of arguments. Defaults to NULL.
-#' @param ... any arguments. Those necessary for FUN must be named as appropriate for FUN
-#' @return list of arguments for FUN
+# Get arguments from a function
+# 
+# Extracts the names of the arguments from a function, and creates a list 
+# of those arguments where they exist in ... . 
+# 
+# @param FUN function for which to find arguments
+# @param args_list a list of arguments. Defaults to NULL.
+# @param ... any arguments. Those necessary for FUN must be named as appropriate for FUN
+# @return list of arguments for FUN
 # @export
 # @examples
 # myargs <- get_args(lm, formula = Sepal.Length ~ Sepal.Width, data = iris )
@@ -25,14 +25,14 @@ get_args <- function(FUN, args_list = NULL, ...){
 }
 
 #-----------------------------------------------------------------------------#
-#' Calculate outcome mean per group per treatment level
-#' 
-#' @param Y vector of outcomes
-#' @param G vector of group assignments
-#' @param A vector of treatment assignments
-#' @param a value of treatment level, defaults to NA. NA is used for marginal
-#' estimates.
-#' @return matrix of group means
+# Calculate outcome mean per group per treatment level
+# 
+# @param Y vector of outcomes
+# @param G vector of group assignments
+# @param A vector of treatment assignments
+# @param a value of treatment level, defaults to NA. NA is used for marginal
+# estimates.
+# @return matrix of group means
 #-----------------------------------------------------------------------------#
 
 group_means <- function(Y, A, G, a = NA){
@@ -56,17 +56,17 @@ group_means <- function(Y, A, G, a = NA){
 }
 
 #-----------------------------------------------------------------------------#
-#' Create a dataset of arguments for effect estimates
-#'
-#' @param allocations vector of allocations 
-#' @param treatments vector of treatments. defaults to \code{c(0 ,1)}
-#' @return data.frame with arguments necessary for \code{\link{ipw_effect_calc}} to 
-#' compute all outcome, direct, indirect, total, and overall effect estimates from
-#' an object created from \code{\link{ipw_interference}} 
+# Create a dataset of arguments for effect estimates
+#
+# @param allocations vector of allocations 
+# @param treatments vector of treatments. defaults to \code{c(0 ,1)}
+# @return data.frame with arguments necessary for \code{\link{ipw_effect_calc}} to 
+# compute all outcome, direct, indirect, total, and overall effect estimates from
+# an object created from \code{\link{ipw_interference}} 
 # @export
 # @examples 
 # effect_grid(seq(0,1, by = .1), c(0,1))
-#' 
+# 
 #-----------------------------------------------------------------------------#
 
 effect_grid <- function(allocations, treatments = c(0,1))

@@ -1,27 +1,27 @@
 #-----------------------------------------------------------------------------#
-#' IPW Interference estimation 
-#'
-#' Prepares the object necessary to compute IPW effect estimates with 
-#' \code{\link{ipw_effect_calc}}.
-#' 
-#' @inheritParams interference
-#' @param Y outcome vector
-#' @param X covariate matrix
-#' @param A treatmeent vector
-#' @param B 'participation' vector. Defaults to A in the case there is no
-#' participation variable.
-#' @param G group assignment vector
-#' @param fixed.effects vector of fixed effects
-#' @param random.effects vector of random effects 
-#' @param variance_estimation currently supports 'robust' or 'simple'
-#' @param ... additional arguments passed to other functions such as 
-#' \code{\link{glmer}}, \code{\link{grad}}, and \code{integrand} or \code{likelihood}.
-#' @return Returns a list of overall and group-level IPW point estimates 
-#' (the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW 
-#' point estimates (using the weight derivatives), scores (the output of 
-#' \code{\link{score_matrix}}), the computed weight matrix, and the computed 
-#' weight derivative array.
-#' @export
+# IPW Interference estimation 
+#
+# Prepares the object necessary to compute IPW effect estimates with 
+# \code{\link{ipw_effect_calc}}.
+# 
+# @inheritParams interference
+# @param Y outcome vector
+# @param X covariate matrix
+# @param A treatmeent vector
+# @param B 'participation' vector. Defaults to A in the case there is no
+# participation variable.
+# @param G group assignment vector
+# @param fixed.effects vector of fixed effects
+# @param random.effects vector of random effects 
+# @param variance_estimation currently supports 'robust' or 'simple'
+# @param ... additional arguments passed to other functions such as 
+# \code{\link{glmer}}, \code{\link{grad}}, and \code{integrand} or \code{likelihood}.
+# @return Returns a list of overall and group-level IPW point estimates 
+# (the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW 
+# point estimates (using the weight derivatives), scores (the output of 
+# \code{\link{score_matrix}}), the computed weight matrix, and the computed 
+# weight derivative array.
+# @export
 #-----------------------------------------------------------------------------#
 
 ipw_interference <- function(propensity_integrand,

@@ -1,14 +1,14 @@
 #-----------------------------------------------------------------------------#
-#' Calculate IPW point estimates
-#'  
-#' @param Y vector of outcomes
-#' @param G vector of group assignments
-#' @param A vector of treatment assignments
-#' @param weights weight matrix/array to use from either \code{\link{wght_matrix}}
-#' or \code{\link{wght_deriv_array}}
-#' @return list containing point estimates for marginal outcomes and estimates
-#' per treatment level
-#' @export
+# Calculate IPW point estimates
+#  
+# @param Y vector of outcomes
+# @param G vector of group assignments
+# @param A vector of treatment assignments
+# @param weights weight matrix/array to use from either \code{\link{wght_matrix}}
+# or \code{\link{wght_deriv_array}}
+# @return list containing point estimates for marginal outcomes and estimates
+# per treatment level
+# @export
 #-----------------------------------------------------------------------------#
 
 ipw_point_estimates <- function(Y, G, A, weights){

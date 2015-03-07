@@ -1,24 +1,27 @@
-#' Compute IPW weight
-#' 
-#' Calculates the IPW for a single group. Used by \code{\link{wght_matrix}} to 
-#' create a matrix of weights for each group and allocation scheme.
-#' 
-#' If \code{integrate.allocation} is an argument in the integrand function and 
-#' \code{integrate.allocation == TRUE}, then the weight is calcuated as:
-#' 
-#' \deqn{\frac{1}{Pr(A|X)}}{1 / integrate(integrand)}
-#' 
-#' Otherwise, the weight is computed by:
-#' \deqn{\frac{\prod_{j=1}^n \alpha^A_j (1 - \alpha)^(1- 
-#' A_j)}{Pr(A|X)}}{prod(allocation^A(1 - allocation)^A) / integrate(integrand)}
-#' 
-#' @param integrand function to pass to the argument 'f' of \code{\link{integrate}}.
-#' @param allocation the allocation ratio for which to compute the weight
-#' @param x OPTIONAL argument necessary for \code{\link{grad}} when using \code{\link{wght_deriv_calc}}.
-#' @param pos OPTIONAL argument necessary for \code{\link{logit_integrand}} when using \code{\link{wght_deriv_calc}}. 
-#' @param ... other arguments passed to integrand. 
-#' @return scalar result of the integral
-#' @export
+#-----------------------------------------------------------------------------#
+# Compute IPW weight
+# 
+# Calculates the IPW for a single group. Used by \code{\link{wght_matrix}} to 
+# create a matrix of weights for each group and allocation scheme.
+# 
+# If \code{integrate.allocation} is an argument in the integrand function and 
+# \code{integrate.allocation == TRUE}, then the weight is calcuated as:
+# 
+# \deqn{\frac{1}{Pr(A|X)}}{1 / integrate(integrand)}
+# 
+# Otherwise, the weight is computed by:
+# \deqn{\frac{\prod_{j=1}^n \alpha^A_j (1 - \alpha)^(1- 
+# A_j)}{Pr(A|X)}}{prod(allocation^A(1 - allocation)^A) / integrate(integrand)}
+# 
+# @param integrand function to pass to the argument 'f' of \code{\link{integrate}}.
+# @param allocation the allocation ratio for which to compute the weight
+# @param x OPTIONAL argument necessary for \code{\link{grad}} when using \code{\link{wght_deriv_calc}}.
+# @param pos OPTIONAL argument necessary for \code{\link{logit_integrand}} when using \code{\link{wght_deriv_calc}}. 
+# @param ... other arguments passed to integrand. 
+# @return scalar result of the integral
+# @export
+# 
+#-----------------------------------------------------------------------------#
 
 wght_calc <- function(integrand, 
                       allocation,

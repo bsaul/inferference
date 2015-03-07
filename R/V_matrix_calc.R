@@ -1,21 +1,20 @@
 #-----------------------------------------------------------------------------#
-#' V Matrix
-#' 
-#' Computes the V matrix necessary for variance estimates. Used in 
-#' \code{\link{ipw_effect_calc}}. See web appendix of Perez et al. 2014 for more details.
-#' 
-#' @param scores the output of \code{\link{score_matrix}}
-#' @param point_estimates output of \code{\link{ipw_point_estimates}}
-#' @param allocation1 See details in \code{\link{ipw_effect_calc}}.
-#' @param trt.lvl1 See details in \code{\link{ipw_effect_calc}}.
-#' @param allocation2 See details in \code{\link{ipw_effect_calc}}.
-#' @param trt.lvl2 See details in \code{\link{ipw_effect_calc}}.
-#' @param effect_type See details in \code{\link{ipw_effect_calc}}.
-#' @param marginal See details in \code{\link{ipw_effect_calc}}.
-#' 
-#' @return V matrix
+# V Matrix
+# 
+# Computes the V matrix necessary for variance estimates. Used in 
+# \code{\link{ipw_effect_calc}}. See web appendix of Perez et al. 2014 for more details.
+# 
+# @param scores the output of \code{\link{score_matrix}}
+# @param point_estimates output of \code{\link{ipw_point_estimates}}
+# @param allocation1 See details in \code{\link{ipw_effect_calc}}.
+# @param trt.lvl1 See details in \code{\link{ipw_effect_calc}}.
+# @param allocation2 See details in \code{\link{ipw_effect_calc}}.
+# @param trt.lvl2 See details in \code{\link{ipw_effect_calc}}.
+# @param effect_type See details in \code{\link{ipw_effect_calc}}.
+# @param marginal See details in \code{\link{ipw_effect_calc}}.
+# @return V matrix
 # @export
-#' 
+# 
 #-----------------------------------------------------------------------------#
 V_matrix <- function(scores, 
                      point_estimates, 
