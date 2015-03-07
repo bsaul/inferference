@@ -14,7 +14,7 @@
  }}
 \description{
 A sample dataset based on the simulations of a cholera vaccine trial
-in \href{http://dx.doi.org/10.1111/biom.12184}{Heydrich-Perez et al 2014}
+in \href{http://dx.doi.org/10.1111/biom.12184}{Heydrich-Perez et al. (2014)}
 except with 3000 individuals in 250 groups rather than 10000 in 500.
 }
 
