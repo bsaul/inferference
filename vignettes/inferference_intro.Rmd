@@ -6,8 +6,8 @@ author:
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  \VignetteIndexEntry{inferference_intro}
-  \VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{inferference_intro}
+  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
