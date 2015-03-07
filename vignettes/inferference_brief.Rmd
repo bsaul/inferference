@@ -1,23 +1,23 @@
 ---
-title: "A Cursory Intro to `rinterference` "
+title: "A Brief Intro to `inferference`"
 author: 
 - name : "Bradley Saul"
   affiliation: "University of North Carolina"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  \VignetteIndexEntry{cursory_rinterference}
+  \VignetteIndexEntry{inferference_intro}
   \VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-# Use of `rinterference` 
+# Use of `inferference` 
 
-This is a VERY brief and unfinished description of how to use the `rinterference` package.
+This is a brief description of how to use the `inferference` package.
 
 ```{r, echo = TRUE}
 # load the package
-library(rinterference)
+library(inferference)
 ```
 
 I have included a simple dataset generated from `rinterferenceSim` package: 3000 units, 250 groups, 2 covariates, 21 allocations (0 to 1 by 0.05), using the parameters in the code below. See Perez 2014 for details on how the simulations were structured.
@@ -37,14 +37,14 @@ interference_sample <- sample_sim$sims[[1]]
 
 Here's what the data looks like:
 ```{r}
-head(interference_sample)
+head(vaccinesim)
 ```
 
 y is the outcome. X1 and X2 are covariates. A is the randomized treatment indicator. B is an indicator of participation in the trial. Group is obvious.
 
 # `interference` function
 
-The primary function in \pkg{rinterference} is `interference`. Currently, it only supports IPW estimation. `interference` has several options:
+The primary function in `inferference` is `interference`. Currently, it only supports IPW estimation. `interference` has several options:
 
 * `propensity_integrand`: a character string that names the function that defines the group-level propensity: $P(\mathbf{A}_i | \mathbf{X}_i)$. The default function is `logit_integrand`. This function handles models with and without random effects. Without random effects, `logit_integrand` computes:
 \[
@@ -83,7 +83,7 @@ The first example follows Perez-Heydrich 2014 and includes a random effect and p
 sample1 <- interference(
   allocations = c(.3, .45,  .6), # a minimum of 2 is required
   formula = y | A | B ~ X1 + X2 + (1|group) | group, 
-  data = interference_sample, # name of the data frame
+  data = vaccinesim, # name of the data frame
   randomization = 2/3,
   method = 'simple' # speeds up grad()
   )
@@ -153,7 +153,7 @@ See `?direct_effect`, `?ie`, `?te`, or `?oe` for options.
 sample2 <- interference(
   allocations = c(.3, .6), # a minimum of 2 is required
   formula = y | A | B ~ X1 + X2 | group,
-  data = interference_sample, # name of the data frame
+  data = vaccinesim, # name of the data frame
   model_method = 'glm',
   model_options = list(family = binomial),
   randomization = 2/3,
@@ -167,7 +167,7 @@ summary(sample2)
 sample3 <- interference(
   allocations = c(.3, .6), # a minimum of 2 is required
   formula = y | A | B ~ X1 + X2 | group,
-  data = interference_sample, # name of the data frame
+  data = vaccinesim, # name of the data frame
   model_method = 'oracle',
   model_options = list(fixed.effects = c(0.2727, -0.0387, .2719),
                        random.effects = NULL),
@@ -185,7 +185,7 @@ Suppose we don't have the participation variable and estimate the treatment prob
 sample4 <- interference(
   allocations = c(.3, .6), # a minimum of 2 is required
   formula = y | A ~ X1 + X2 | group,
-  data = interference_sample, # name of the data frame
+  data = vaccinesim, # name of the data frame
   model_method = 'glm',
   causal_estimation_options = list(variance_estimation = 'robust'),
   method = 'simple' # speeds up grad()
@@ -208,7 +208,7 @@ sample5 <- interference(
   propensity_integrand = 'myFUN',
   allocations = c(.3, .6), # a minimum of 2 is required
   formula = y | A ~ X1 + X2 | group,
-  data = interference_sample, # name of the data frame
+  data = vaccinesim, # name of the data frame
   model_method = 'glm',
   causal_estimation_options = list(variance_estimation = 'simple'),
   # won't work for 'robust' unless addition arguments are defined
@@ -225,7 +225,7 @@ Here's a simple plot of direct effects. Run the `interference` function with a l
 sample6 <- interference(
   allocations = seq(.3, .6, by = .01), 
   formula = y | A ~ X1 + X2 | group,
-  data = interference_sample, # name of the data frame
+  data = vaccinesim, # name of the data frame
   model_method = 'glm',
   causal_estimation_options = list(variance_estimation = 'robust'),
   method = 'simple' # speeds up grad()

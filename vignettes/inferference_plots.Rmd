@@ -4,8 +4,8 @@ author: "Bradley Saul"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
+  \VignetteIndexEntry{inferference_plots}
+  \VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
