@@ -1,4 +1,5 @@
-#' Integrand of the group-level propensity score
+#-----------------------------------------------------------------------------#
+#' Default integrand for the group-level propensity score
 #' 
 #' Computes the following function:
 #' \deqn{\prod_{j=1}^{n} (r h_{j}(b))^{A_j}  (1 - r h_{j}(b))^{1 - A_j} 
@@ -7,8 +8,7 @@
 #' dnorm(sd = sqrt(ranef))} 
 #' where \eqn{r} is the randomization scheme. \eqn{X} is the covariate(s) vectors. 
 #' \eqn{fixef} is the vector of fixed effects. \eqn{b} is the random (group-level) effect.
-#' \eqn{ranef} is the random effect variance. Used by \code{\link{wght_calc}} and
-#' \code{\link{score_calc}}.
+#' \eqn{ranef} is the random effect variance. 
 #' 
 #' @param b vector argument of values necessary for \code{\link{integrate}}.
 #' @param x Used by \code{\link{grad}} for taking the derivative with respect an element of
@@ -23,11 +23,12 @@
 #' Defaults to NA.
 #' @param randomization Randomization probability. Defaults to 1.
 #' @param integrate.allocation Either TRUE for including allocation in the product or FALSE 
-#' does not include allocation. See \code{\link{wght_calc}} for more information.
+#' does not include allocation.
 #' 
 #' @return value of the integrand
 #' @export
 #' 
+#-----------------------------------------------------------------------------#
 
 logit_integrand <- function(b, X, A, 
                             fixed.effects,

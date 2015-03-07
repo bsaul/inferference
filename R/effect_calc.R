@@ -1,45 +1,45 @@
 #-----------------------------------------------------------------------------#
-#' Calculate IPW estimates
-#'
-#'  Computes either outcome or effect estimates from the object output by 
-#'  \code{\link{ipw_interference}}.  
-#'  
-#'  @details See \code{\link{direct_effect}}, \code{\link{indirect_effect}},
-#'  \code{\link{total_effect}}, and \code{\link{overall_effect}} for convenient
-#'  wrappers of \code{ipw_effect_calc} to compute common causal effects.
-#'  
-#'  This table summarizes the value that \code{ipw_effect_calc} returns.
-#'  \tabular{llc}{
-#'  Marginal \tab Effect_type    \tab Value returned \cr
-#'  FALSE    \tab 'outcome' \tab \eqn{\hat{Y}(trt.lvl1, alpha1)}{Yhat(trt.lvl1, alpha1)} \cr
-#'  TRUE     \tab 'outcome' \tab \eqn{\hat{Y}(alpha1)}{Yhat(alpha1)}  \cr
-#'  FALSE    \tab 'contrast' \tab 
-#'  \eqn{\hat{Y}(trt.lvl1, alpha1) - \hat{Y}(trt.lvl2, alpha2)}{Yhat(trt.lvl1, alpha1) - Yhat(trt.lvl2, alpha2)} \cr
-#'  TRUE    \tab 'contrast' \tab 
-#'  \eqn{\hat{Y}(alpha1) - \hat{Y}(alpha2)}{Yhat(alpha1) - Yhat(alpha2)} \cr
-#' }
-#'  
-#' @param obj the name of the object created by \code{\link{ipw_interference}}
-#' @param variance_estimation the variance estimation method.  See 
-#' \code{\link{interference}} for details
-#' @param alpha1 the allocation scheme for the outcome of interest or the first
-#' scheme in the constrast of interest. See details.
-#' @param trt.lvl1 the treatment level for the outcome of interest or the first
-#' treatment in the constrast of interest. If marginal = TRUE, this is ignored.
-#' @param alpha2 the second allocation scheme for the contrast of interest.
-#' Ignored if effect_type = 'outcome'.
-#' @param trt.lvl2  the second treatment in the constrast of interest. 
-#' If marginal = TRUE or effect_type = 'outcome', this is ignored.
-#' @param effect_type either 'contrast' or 'outcome'
-#' @param marginal TRUE or FALSE
-#' @param rescale.factor factor by which to rescale values. Defaults to 1.
-#' @param conf.level Confidence level for confidence intervals. Defaults to 0.95.
-#' @param print TRUE/FALSE. If TRUE, the point estimates and confidence interval
-#' are printed to the console. 
-#' @return A \code{data.frame} with 1 record and 4 variables: point (the point
-#'  estimate), variance (the variance estimate), ll (the lower bound of the 
-#'  confidence interval), and ul (the upper bound of the confidence interval).
-#' @export
+# Calculate IPW estimates
+#
+#  Computes either outcome or effect estimates from the object output by 
+#  \code{\link{ipw_interference}}.  
+#  
+#  @details See \code{\link{direct_effect}}, \code{\link{indirect_effect}},
+#  \code{\link{total_effect}}, and \code{\link{overall_effect}} for convenient
+#  wrappers of \code{ipw_effect_calc} to compute common causal effects.
+#  
+#  This table summarizes the value that \code{ipw_effect_calc} returns.
+#  \tabular{llc}{
+#  Marginal \tab Effect_type    \tab Value returned \cr
+#  FALSE    \tab 'outcome' \tab \eqn{\hat{Y}(trt.lvl1, alpha1)}{Yhat(trt.lvl1, alpha1)} \cr
+#  TRUE     \tab 'outcome' \tab \eqn{\hat{Y}(alpha1)}{Yhat(alpha1)}  \cr
+#  FALSE    \tab 'contrast' \tab 
+#  \eqn{\hat{Y}(trt.lvl1, alpha1) - \hat{Y}(trt.lvl2, alpha2)}{Yhat(trt.lvl1, alpha1) - Yhat(trt.lvl2, alpha2)} \cr
+#  TRUE    \tab 'contrast' \tab 
+#  \eqn{\hat{Y}(alpha1) - \hat{Y}(alpha2)}{Yhat(alpha1) - Yhat(alpha2)} \cr
+# }
+#  
+# @param obj the name of the object created by \code{\link{ipw_interference}}
+# @param variance_estimation the variance estimation method.  See 
+# \code{\link{interference}} for details
+# @param alpha1 the allocation scheme for the outcome of interest or the first
+# scheme in the constrast of interest. See details.
+# @param trt.lvl1 the treatment level for the outcome of interest or the first
+# treatment in the constrast of interest. If marginal = TRUE, this is ignored.
+# @param alpha2 the second allocation scheme for the contrast of interest.
+# Ignored if effect_type = 'outcome'.
+# @param trt.lvl2  the second treatment in the constrast of interest. 
+# If marginal = TRUE or effect_type = 'outcome', this is ignored.
+# @param effect_type either 'contrast' or 'outcome'
+# @param marginal TRUE or FALSE
+# @param rescale.factor factor by which to rescale values. Defaults to 1.
+# @param conf.level Confidence level for confidence intervals. Defaults to 0.95.
+# @param print TRUE/FALSE. If TRUE, the point estimates and confidence interval
+# are printed to the console. 
+# @return A \code{data.frame} with 1 record and 4 variables: point (the point
+#  estimate), variance (the variance estimate), ll (the lower bound of the 
+#  confidence interval), and ul (the upper bound of the confidence interval).
+# @export
 #-----------------------------------------------------------------------------#
 
 ipw_effect_calc <- function(obj, 

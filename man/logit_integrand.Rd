@@ -2,7 +2,7 @@
 % Please edit documentation in R/integrands.R
 \name{logit_integrand}
 \alias{logit_integrand}
-\title{Integrand of the group-level propensity score}
+\title{Default integrand for the group-level propensity score}
 \usage{
 logit_integrand(b, X, A, fixed.effects, random.effects = NULL, x = NULL,
   pos = NULL, allocation = NULL, randomization = 1,
@@ -31,7 +31,7 @@ Defaults to NA.}
 \item{randomization}{Randomization probability. Defaults to 1.}
 
 \item{integrate.allocation}{Either TRUE for including allocation in the product or FALSE
-does not include allocation. See \code{\link{wght_calc}} for more information.}
+does not include allocation.}
 }
 \value{
 value of the integrand
@@ -44,7 +44,6 @@ f_b(b; \theta_b)}{ prod(r * plogis(X * fixef + b)^A *
 dnorm(sd = sqrt(ranef))}
 where \eqn{r} is the randomization scheme. \eqn{X} is the covariate(s) vectors.
 \eqn{fixef} is the vector of fixed effects. \eqn{b} is the random (group-level) effect.
-\eqn{ranef} is the random effect variance. Used by \code{\link{wght_calc}} and
-\code{\link{score_calc}}.
+\eqn{ranef} is the random effect variance.
 }
 
