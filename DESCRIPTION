@@ -1,11 +1,11 @@
 Package: inferference
 Type: Package
-Title: inferference
+Title: Methods for causal inference with interference
 Version: 0.4.6
-Date: 2014-12-19
+Date: 2015-03-06
 Author: Bradley Saul
 Maintainer: Bradley Saul <saulb@live.unc.edu>
-Description: Causal inference with interference
+Description: A package that provides methods for estimating causal effects in the presence of interference. Currently it implements the IPW estimators proposed by Tchetgen Tchetgen and Vanderweele (2012).
 Depends:
     R (>= 3.1)
 Imports:
