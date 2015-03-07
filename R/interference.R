@@ -1,31 +1,97 @@
 #-----------------------------------------------------------------------------#
 #' Estimate Causal Effects in presence of interference  
 #'
-#' @param formula the formula used to define the causal model. See vignette for example.
-#' @param propensity_integrand function used as the integrand in computing the IPW weights. 
-#' Defaults to \code{\link{logit_integrand}}.
-#' @param loglihood_integrand function used as the integrand in computing the scores in 
-#' \code{\link{score_calc}}. Defaults to \code{\link{logit_integrand}}.
-#' @param allocations the allocation (coverage) schemes for which to estimate effects. 
-#' Must be in [0, 1].
-#' @param data the analysis data.frame
-#' @param causal_estimation_method currently only supports `ipw`.
-#' @param causal_estimation_options list of options passed to the corresponding 
-#' estimation function. `ipw` is \code{\link{ipw_interference}}
-#' @param rescale.factor factor by which to rescale values. Defaults to 1.
-#' @param model_method One of three options: `glmer`, `glm`, or `oracle`
-#' @param model_options List of options passed to \code{model_method}
-#' @param set_NA_to_0 if TRUE, sets any weights that returned an NA value to 0. 
-#' Defaults to TRUE
-#' @param conf.level Confidence level for confidence intervals. Defaults to 0.95.
-#' @param ... additional arguments passed to other functions such as 
-#' \code{\link{glmer}}, \code{\link{grad}}, \code{\link{integrate}}, and \code{integrand} or \code{likelihood}.
-#' @return Returns a list of overall and group-level IPW point estimates 
-#' (the output of \code{\link{ipw_point_estimates}}), overall and group-level IPW 
-#' point estimates (using the weight derivatives), scores (the output of 
-#' \code{\link{score_matrix}}), the computed weight matrix, the computed 
+#' @param formula The formula used to define the causal model.  Has a minimum 
+#' of 4 parts, separated by \code{|} and \code{~} in a specific structure: 
+#' \code{outcome | exposure ~ propensity covariates | group}. The order matters, 
+#' and the pipes split the data frame into corresponding pieces. The part 
+#' separated by \code{~} is passed to the chosen \code{model_method} used to 
+#' estimate or fix propensity parameters. 
+#' @param propensity_integrand A function, which may be created by the user, 
+#' used to compute the IP weights. This defaults to \code{logit_integrand}, 
+#' which calculates the product of inverse logits for individuals in a group: 
+#' \eqn{\prod_{j = 1}^{n_i} \{r \times h_{ij}(b_i)^{A_{ij}}\}\{1 - r \times 
+#' h_{ij}(b_i)^{1 - A_{ij}} \} f_b(b_i; \theta_s)}{prod(r * plogis(X * fixef + b)^A * 
+#' (1 - r * plogis(X * fixef+ b))^(1 - A)) * 
+#' dnorm(sd = sqrt(ranef))} where \deqn{h_{ij}(b_i) = logit^{-1}
+#' (\mathbf{X}_{ij}\theta_a + b_i)} and \eqn{b_i} is a group-level random effect, 
+#' \eqn{f_b} is a \eqn{N(0, \theta_s)} density, and \eqn{r} is a known 
+#' randomization probability which may be useful if a participation vector is 
+#' included in the \code{formula}. If no random effect was included in the 
+#' \code{formula}, \code{logit_integrand} essentially ignores the random effect 
+#' and \eqn{f_b(b_i, \theta_s)} integrates to 1. See details for arguments that 
+#' can be passed to \code{logit_integrand}
+#' @param loglihood_integrand A function, which may be created by the user, that
+#' defines the log likelihood of the logit model used for \code{robust} variance
+#' estimation. Generally, this will be the same function as 
+#' \code{propensity_integrand}. Indeed, this is the default.
+#' @param allocations a vector of values in [0, 1]. Increasing the number of 
+#' elements of the allocation vector greatly increases computation time; however, 
+#' a larger number of allocations will make plots look nicer. A minimum of two 
+#' allocations is required.
+#' @param data the analysis data frame. This must include all the variables 
+#' defined in the \code{formula}.
+#' @param model_method the method used to estimate or set the propensity model 
+#' parameters. Must be one of \code{'glm'}, \code{'glmer'}, or \code{'oracle'}. 
+#' Defaults to \code{'glmer'}. For a fixed effects only model use \code{'glm'}, 
+#' and to include random effects use\code{'glmer'}. \code{logit_integrand} 
+#' only supports a single random effect for the grouping variable, so if more 
+#' random effects are included in the model, different \code{propensity_integrand}
+#' and \code{loglihood_integrand} functions should be defined. When the propensity 
+#' parameters are known (as in simulations) or if estimating parameters by 
+#' other methods, use the \code{'oracle'} option. See \code{model_options} for
+#' details on how to pass the oracle parameters. 
+#' @param model_options a list of options passed to the function in 
+#' \code{model_method}. Defaults to \code{list(family = binomial(link = 'logit'))}. 
+#' When \code{model_method = 'oracle'}, the list must have two elements 
+#' \code{fixed.effects} and \code{random.effects}. If the model did not include 
+#' random effects, set \code{random.effects = NULL}.
+#' @param causal_estimation_method currently only supports \code{'ipw'}.
+#' @param causal_estimation_options A list with two slots. (1) \code{variance_estimation} is 
+#' either \code{'simple'} or \code{'robust'}. See details. Defaults to \code{'robust'}. (2) 
+#' is \code{set_NA_to_0}. Defaults to \code{TRUE}. When, for example, group sizes 
+#' reach over 1000, the product terms of the propensity diminish to zero. 
+#' This may result in \code{NaN} values for the weights or loglihood. This option
+#' sets such cases to zero.
+#' @param conf.level level for confidence intervals. Defaults to \code{0.95}.
+#' @param rescale.factor a scalar multiplication factor by which to rescale outcomes
+#' and effects. Defaults to \code{1}.
+#' @param ... Used to pass additional arguments to internal functions such as 
+#' \code{numDeriv::grad()} or \code{integrate()}. Additionally, arguments can be 
+#' passed to the \code{propensity_integrand} and \code{loglihood_integrand} functions.
+#'
+#' @details The following formula includes a random effect for the group: \code{outcome | 
+#' exposure ~ propensity covariates + (1|group) | group}. In this instance, the 
+#' group variable appears twice. If the study design includes a "participation" 
+#' variable, this is easily added to the formula: \code{outcome | exposure | 
+#' participation ~ propensity covariates | group}. 
+#' 
+#' \code{logit_integrand} has two options that can be passed via the \code{...} 
+#' argument: 
+#' \itemize{
+#'  \item \code{randomization}: a scalar. This is the \eqn{r} in the formula just 
+#'  above. It defaults to 1 in the case that a \code{participation} vector is not 
+#'  included. The vaccine study example demonstrates use of this argument.
+#'  \item \code{integrate_allocation}: \code{TRUE/FALSE}. When group sizes grow 
+#'  large (over 1000), the product term of \code{logit_integrand} tends quickly to 0. 
+#'  When set to \code{TRUE}, the IP weights tend less quickly to 0. 
+#'  Defaults to \code{FALSE}.
+#' }
+#' 
+#' If the true propensity model is known (e.g. in simulations) use 
+#' \code{variance_estimatation = 'simple'}; otherwise, use the default 
+#' \code{variance_estimatation = 'simple'}. Refer to the web appendix of
+#' \href{http://dx.doi.org/10.1111/biom.12184}{Heydrich-Perez et al. (2014)} 
+#' for complete details.
+#' 
+#' 
+#' @return Returns a list of overall and group-level IPW point estimates, overall 
+#' and group-level IPW point estimates (using the weight derivatives), derivatives
+#' of the loglihood, the computed weight matrix, the computed 
 #' weight derivative array, and a summary.
+#' 
 #' @export
+#' 
 #-----------------------------------------------------------------------------#
 
 interference <- function(formula,
