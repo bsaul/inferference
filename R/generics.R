@@ -1,24 +1,23 @@
 #-----------------------------------------------------------------------------#
-#' Prints a summary of an interference object
+#' Prints a summary of an interference object 
 #'
-#' @rdname summary
-#' @param object object of class 'interference'
+#' @param x object of class 'interference'
 #' @param ... ignored
-#' @export
+#' @method print interference
 #-----------------------------------------------------------------------------#
 
-summary.interference <- function(object, ...)
+print.interference <- function(x, ...)
 {
   
   cols <- c('alpha1', 'trt1', 'alpha2', 'trt2', 'estimate', 'std.error', 'conf.low', 'conf.high')
-  est  <- object$estimates
-#Not defined for glmer class:  form <- as.character(deparse(object$models$propensity_model$formula))
-  form <- object$summary$formula
-  allo <- object$summary$allocations
-  conf <- object$summary$conf.level
-  varm <- object$summary$variance_estimation
-  k <- object$summary$nallocations
-  N <- object$summary$ngroups
+  est  <- x$estimates
+#Not defined for glmer class:  form <- as.character(deparse(x$models$propensity_model$formula))
+  form <- x$summary$formula
+  allo <- x$summary$allocations
+  conf <- x$summary$conf.level
+  varm <- x$summary$variance_estimation
+  k    <- x$summary$nallocations
+  N    <- x$summary$ngroups
   
   mina <- min(allo)
   maxa <- max(allo)
