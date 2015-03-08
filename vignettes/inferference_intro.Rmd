@@ -89,9 +89,9 @@ sample1 <- interference(
   )
 ```
 
-Take a quick look using the (unpolished) `summary` function:
+Take a quick look using the (unpolished) `print` function:
 ```{r, echo = TRUE}
-summary(sample1)
+print(sample1)
 ```
 
 Other pieces that might be interest are the group-level weights:
@@ -159,7 +159,7 @@ sample2 <- interference(
   randomization = 2/3,
   method = 'simple' # speeds up grad()
   )
-summary(sample2)
+print(sample2)
 ```
 
 ## Using oracle parameters w/o the random effects
@@ -175,7 +175,7 @@ sample3 <- interference(
   randomization = 2/3,
   method = 'simple' # speeds up grad()
   )
-summary(sample3)
+print(sample3)
 ```
 
 ## Without the participation variable
@@ -190,7 +190,7 @@ sample4 <- interference(
   causal_estimation_options = list(variance_estimation = 'robust'),
   method = 'simple' # speeds up grad()
   )
-summary(sample4)
+print(sample4)
 ```
 
 ## Defining one's own integrand
@@ -214,7 +214,7 @@ sample5 <- interference(
   # won't work for 'robust' unless addition arguments are defined
   method = 'simple' # speeds up grad()
   )
-summary(sample5)
+print(sample5)
 ```
 
 ## A sample plot
