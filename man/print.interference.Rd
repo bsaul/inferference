@@ -2,7 +2,7 @@
 % Please edit documentation in R/generics.R
 \name{print.interference}
 \alias{print.interference}
-\title{Prints a summary of an interference x}
+\title{Prints a summary of an interference object}
 \usage{
 \method{print}{interference}(x, ...)
 }
@@ -12,6 +12,6 @@
 \item{...}{ignored}
 }
 \description{
-Prints a summary of an interference x
+Prints a summary of an interference object
 }
 
