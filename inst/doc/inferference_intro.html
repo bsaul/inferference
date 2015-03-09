@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="date" content="2015-03-09" />
+
+<title>A Brief Intro to inferference</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20700px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%201%2E35%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%2010px%3B%0A%20%20padding%3A%204px%3B%0A%20%20width%3A%20400px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%20%7B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%200%2E25em%200%2E75em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20white%2Dspace%3A%20pre%2Dwrap%3B%20%20%20%20%2F%2A%20Wrap%20long%20lines%20%2A%2F%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200px%2010px%200px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0A%20%20font%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%200px%3B%0A%7D%0A%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%3A%201px%20solid%20%23DDDDDD%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">A Brief Intro to <code>inferference</code></h1>
+<h4 class="author"><em>Bradley Saul</em></h4>
+<address class="author_afil">
+University of North Carolina<br><h4 class="date"><em>2015-03-09</em></h4>
+</div>
+
+
+<div id="use-of-inferference" class="section level1">
+<h1>Use of <code>inferference</code></h1>
+<p>This is a brief description of how to use the <code>inferference</code> package.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load the package</span>
+<span class="kw">library</span>(inferference)</code></pre>
+<p>I have included a simple dataset generated from <code>rinterferenceSim</code> package: 3000 units, 250 groups, 2 covariates, 21 allocations (0 to 1 by 0.05), using the parameters in the code below. See Perez 2014 for details on how the simulations were structured.</p>
+<pre class="sourceCode r"><code class="sourceCode r">alphaz =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by=</span>.<span class="dv">05</span>) <span class="co"># needed to compute truth</span>
+theta.base &lt;-<span class="st"> </span><span class="kw">c</span>(.<span class="dv">5</span>, -<span class="fl">0.788</span>, -<span class="fl">2.953</span>, -<span class="fl">0.098</span>, -<span class="fl">0.145</span>, <span class="fl">0.351</span>)
+theta.sim &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2727</span>, -<span class="fl">0.0387</span>, .<span class="dv">2719</span>, <span class="fl">1.0859</span>)
+sample_sim &lt;-<span class="st"> </span><span class="kw">sim_interference</span>(<span class="dt">n =</span> <span class="dv">3000</span>, <span class="dt">N =</span> <span class="dv">250</span>, <span class="dt">nsims =</span> <span class="dv">1</span>, 
+                               <span class="dt">base.parameters =</span> theta.base, 
+                               <span class="dt">parameters =</span> theta.sim,
+                               <span class="dt">alphas =</span> alphaz)
+interference_sample &lt;-<span class="st"> </span>sample_sim$sims[[<span class="dv">1</span>]]
+<span class="co">#save(sample_data, file = &quot;data/sample_data.rda&quot;)</span></code></pre>
+<p>Here’s what the data looks like:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(vaccinesim)</code></pre>
+<pre><code>##   y     X1    X2 A B group
+## 1 1 5.3607 1.716 0 0     1
+## 2 0 0.1965 1.731 0 1     1
+## 3 0 0.4846 1.770 1 1     1
+## 4 0 0.8013 1.716 0 1     1
+## 5 0 2.1427 1.772 1 1     1
+## 6 0 1.2861 1.716 0 1     1</code></pre>
+<p>y is the outcome. X1 and X2 are covariates. A is the randomized treatment indicator. B is an indicator of participation in the trial. Group is obvious.</p>
+</div>
+<div id="interference-function" class="section level1">
+<h1><code>interference</code> function</h1>
+<p>The primary function in <code>inferference</code> is <code>interference</code>. Currently, it only supports IPW estimation. <code>interference</code> has several options:</p>
+<ul>
+<li><code>propensity_integrand</code>: a character string that names the function that defines the group-level propensity: <span class="math">\(P(\mathbf{A}_i | \mathbf{X}_i)\)</span>. The default function is <code>logit_integrand</code>. This function handles models with and without random effects. Without random effects, <code>logit_integrand</code> computes: <span class="math">\[
+\prod_{j = 1}^n_i h_{ij}^{A_{ij}}(1 - h_{ij})^{1 - A_{ij}}
+\]</span> where <span class="math">\(h_{ij} = logit^{-1}(\mathbf{X}\hat{\theta})\)</span>; <span class="math">\(\hat{\theta}\)</span> are the estimated parameters from logistic regression using <code>glm</code>. In the case of a random effect, <code>logit_integrand</code> computes: <span class="math">\[
+\prod_{j = 1}^n_i h_{ij}(b_i)^{A_{ij}}(1 - h_{ij}(b_i))^{1 - A_{ij}}f_b(b_i)
+\]</span> where <span class="math">\(h_{ij} = logit^{-1}(\mathbf{X}\hat{\theta} + b)\)</span>; <span class="math">\(\hat{\boldsymbol{\theta}}_f\)</span> are the estimated fixed effect parameters from random effects logistic regression using <code>glmer</code>; <span class="math">\(f_b(\cdot)\)</span> is a <span class="math">\(N(0, \hat{\theta}_r)\)</span> density; <span class="math">\(\hat{\theta}_r\)</span> is the estimated random effect variance. For both cases <code>logit_integrand</code> is passed through the <code>integrate</code> function. Without a random effect, however, this has no effect since <code>integrate(function(b) dnorm(b))</code> equals 1.</li>
+<li>formula: this has a minimum of 4 parts in the following structure:</li>
+<li><code>outcome | exposure ~ propensity covariates | group</code>. If a random effect for the group is included use the following:</li>
+<li><code>outcome | exposure ~ propensity covariates + (1|group) | group</code>. If the study design includes a ‘participation’ variable like in Perez-Heydrich 2014 use the following:</li>
+<li><code>outcome | exposure | participation ~ propensity covariates + (1|group) | group</code>.</li>
+<li>allocations: a vector of treatment allocation strategies. At least 2 allocations must defined.</li>
+<li>data: the data.frame with the outcome, exposure, covariates, and group variables</li>
+<li>model_method: one of <code>oracle</code>, <code>glm</code>, or <code>glmer</code>.</li>
+<li>model_options: options passed to the <code>model_method</code> as a list. For example, for <code>glm</code> or <code>glmer</code> set this equal to <code>list(family = binomial(link = 'logit'))</code>. To use the <code>oracle</code> method, use <code>list(fixed.effects = c(???, ???, etc), random.effects = NULL)</code> or <code>list(fixed.effects = c(???, ???, etc), random.effects = ???)</code></li>
+<li>causal_estimation_options: list of options passed to <code>ipw_interference</code>. <code>list(variance_estimation = 'simple')</code> or <code>list(variance_estimation = 'robust')</code> are the option settings of most interest. ‘robust’ is the default. ‘robust’ uses M-estimation theory to compute the variance, whereas, ‘simple’ computes <span class="math">\(\frac{1}{N^2}\sum_{i= 1}^N (\hat{CE}_i - \hat{CE})^2\)</span>, where <span class="math">\(\hat{CE}\)</span> is point estimate for the causal effect of interest while <span class="math">\(\hat{CE}_i\)</span> is the point estimate for group <span class="math">\(i\)</span>.</li>
+<li>conf.level: the confidence level. defaults to .95.</li>
+<li>rescale.factor: a scaling factor for the causal effects. Defaults to 1.</li>
+<li>… other options passed to <code>grad()</code>, <code>integrate()</code>, or the propensity_integrand function. <code>method = simple</code> will vastly speed up the <code>grad()</code> function.</li>
+</ul>
+</div>
+<div id="examples" class="section level1">
+<h1>Examples</h1>
+<p>Here’s a few samples of <code>interference()</code> based on the data provided.</p>
+<div id="replication-of-perez-heydrich-2014" class="section level2">
+<h2>Replication of Perez-Heydrich 2014</h2>
+<p>The first example follows Perez-Heydrich 2014 and includes a random effect and participation variable. Conditional on participation, subjects were randomized to treatment with probability 2/3, which is the <code>randomization</code> argument. This is an argument in <code>logit_integrand()</code>. This argument defaults to <span class="math">\(1\)</span> and so can be left out if unnecessary (see later examples).</p>
+<pre class="sourceCode r"><code class="sourceCode r">sample1 &lt;-<span class="st"> </span><span class="kw">interference</span>(
+  <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">45</span>,  .<span class="dv">6</span>), <span class="co"># a minimum of 2 is required</span>
+  <span class="dt">formula =</span> y |<span class="st"> </span>A |<span class="st"> </span>B ~<span class="st"> </span>X1 +<span class="st"> </span>X2 +<span class="st"> </span>(<span class="dv">1</span>|group) |<span class="st"> </span>group, 
+  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
+  <span class="dt">randomization =</span> <span class="dv">2</span>/<span class="dv">3</span>,
+  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
+  )</code></pre>
+<pre><code>## [1] &quot;Calculating matrix of IP weights...&quot;
+## [1] &quot;Calculating array of IP weight derivatives...&quot;
+## [1] &quot;Calculating matrix of scores...&quot;
+## [1] &quot;Computing effect estimates...&quot;
+## [1] &quot;Interference complete&quot;</code></pre>
+<p>Take a quick look using the (unpolished) <code>print</code> function:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(sample1)</code></pre>
+<pre><code>##  --------------------------------------------------------------------------
+##                                Model Summary                    
+##  --------------------------------------------------------------------------
+##  Formula: y | A | B ~ X1 + X2 + (1 | group) | group 
+##  Number of groups:  250 
+##  3 allocations were used from 0.3 (min) to 0.6 (max) 
+##  --------------------------------------------------------------------------
+##                           Causal Effect Summary                            
+##                          Confidence level: 0.95                       
+##                          Variance method: robust        
+##  --------------------------------------------------------------------------
+## 
+##  Direct Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##    0.30    0   0.30    1   0.1605   0.02474  0.11201    0.2090
+##    0.60    0   0.60    1   0.1086   0.01856  0.07220    0.1450
+##    0.45    0   0.45    1   0.1339   0.01778  0.09904    0.1687
+## 
+##  Indirect Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##    0.30    0   0.60    0  0.15906   0.02617  0.10776    0.2104
+##    0.30    0   0.45    0  0.08656   0.01732  0.05262    0.1205
+##    0.45    0   0.60    0  0.07250   0.01408  0.04490    0.1001
+## 
+##  Total Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##    0.30    0   0.60    1   0.2676   0.02435   0.2199    0.3154
+##    0.30    0   0.45    1   0.2205   0.02469   0.1721    0.2688
+##    0.45    0   0.60    1   0.1811   0.01840   0.1450    0.2172
+## 
+##  Overall Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##    0.30   NA   0.60   NA  0.17606   0.01925  0.13834    0.2138
+##    0.30   NA   0.45   NA  0.09867   0.01421  0.07082    0.1265
+##    0.45   NA   0.60   NA  0.07740   0.00898  0.05980    0.0950
+## 
+##  --------------------------------------------------------------------------</code></pre>
+<p>Other pieces that might be interest are the group-level weights: <span class="math">\[
+\frac{\prod_{j =1}^{n_i} \alpha^{A_{iij}}(1 - \alpha)^{1 - A_{ij}}}{P(\mathbf{A}_i | \mathbf{X}_i)}
+\]</span> which can accessed:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># the matrix of weights</span>
+<span class="kw">head</span>(sample1$weights)</code></pre>
+<pre><code>##      0.3   0.45     0.6
+## 1 0.9358 1.3137 0.59574
+## 2 0.2018 1.3140 2.75395
+## 3 1.0451 1.8673 1.16436
+## 4 2.7232 1.4569 0.18484
+## 5 1.6131 0.5328 0.03575
+## 6 1.1980 1.6818 0.76269</code></pre>
+<p>The weight ‘derivatives’: <span class="math">\[
+\frac{\prod_{j =1}^{n_i} \alpha^{A_{iij}}(1 - \alpha)^{1 - A_{ij}}}{\frac{d}{d\theta}P(\mathbf{A}_i | \mathbf{X}_i)}
+\]</span> which can accessed:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(sample1$weightd[ , , <span class="dv">1</span>]) <span class="co"># For the 1st allocation </span></code></pre>
+<pre><code>##   (Intercept)     X1      X2 group.(Intercept)
+## 1    -0.03692  1.121 -0.0686           0.40768
+## 2    -0.14939 -0.417 -0.1434          -0.04413
+## 3    -0.39947 -2.625 -0.2049           0.29168
+## 4     0.39974 -8.601  0.4936           1.42415
+## 5     0.69641  6.632  0.8187           0.60616
+## 6    -0.12945 -1.829 -0.1168           0.49903</code></pre>
+<p>The ‘scores’ are but the all the last element in <span class="math">\(\psi(\mathbf{O}, \boldsymbol{\theta})\)</span>, eqn (3) in the web appendix, which can accessed:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(sample1$scores) </code></pre>
+<pre><code>##   (Intercept)       X1      X2 group.(Intercept)
+## 1      0.5272 -2.99287  0.8440           -0.2719
+## 2      0.6102  4.19001  0.5489           -0.1595
+## 3      0.2427 -0.08583  0.1738           -0.5772
+## 4      0.4655  3.74430  0.3534           -0.4215
+## 5     -0.1741 -7.90318 -0.2339           -0.6825
+## 6     -0.5450  0.88822 -0.9972           -0.3152</code></pre>
+<p>Finally, the most important piece, the effect estimates are in a data.frame:</p>
+<pre class="sourceCode r"><code class="sourceCode r">sample1$estimates </code></pre>
+<pre><code>##    alpha1 trt1 alpha2 trt2 marginal effect_type   effect  estimate
+## 1    0.30    0     NA   NA    FALSE     outcome  outcome  0.354295
+## 2    0.45    0     NA   NA    FALSE     outcome  outcome  0.267731
+## 3    0.60    0     NA   NA    FALSE     outcome  outcome  0.195234
+## 4    0.30    1     NA   NA    FALSE     outcome  outcome  0.193796
+## 5    0.45    1     NA   NA    FALSE     outcome  outcome  0.133838
+## 6    0.60    1     NA   NA    FALSE     outcome  outcome  0.086646
+## 7    0.30   NA     NA   NA     TRUE     outcome  outcome  0.306146
+## 8    0.45   NA     NA   NA     TRUE     outcome  outcome  0.207479
+## 9    0.60   NA     NA   NA     TRUE     outcome  outcome  0.130081
+## 10   0.30    1   0.30    0    FALSE    contrast   direct -0.160499
+## 11   0.45    1   0.45    0    FALSE    contrast   direct -0.133893
+## 12   0.60    1   0.60    0    FALSE    contrast   direct -0.108588
+## 13   0.30    0   0.30    1    FALSE    contrast   direct  0.160499
+## 14   0.45    0   0.45    1    FALSE    contrast   direct  0.133893
+## 15   0.60    0   0.60    1    FALSE    contrast   direct  0.108588
+## 16   0.30    0   0.30    0    FALSE    contrast indirect  0.000000
+## 17   0.45    0   0.30    0    FALSE    contrast indirect -0.086565
+## 18   0.60    0   0.30    0    FALSE    contrast indirect -0.159061
+## 19   0.30    1   0.30    1    FALSE    contrast indirect  0.000000
+## 20   0.45    1   0.30    1    FALSE    contrast indirect -0.059958
+## 21   0.60    1   0.30    1    FALSE    contrast indirect -0.107150
+## 22   0.30    0   0.45    0    FALSE    contrast indirect  0.086565
+## 23   0.45    0   0.45    0    FALSE    contrast indirect  0.000000
+## 24   0.60    0   0.45    0    FALSE    contrast indirect -0.072497
+## 25   0.30    1   0.45    1    FALSE    contrast indirect  0.059958
+## 26   0.45    1   0.45    1    FALSE    contrast indirect  0.000000
+## 27   0.60    1   0.45    1    FALSE    contrast indirect -0.047192
+## 28   0.30    0   0.60    0    FALSE    contrast indirect  0.159061
+## 29   0.45    0   0.60    0    FALSE    contrast indirect  0.072497
+## 30   0.60    0   0.60    0    FALSE    contrast indirect  0.000000
+## 31   0.30    1   0.60    1    FALSE    contrast indirect  0.107150
+## 32   0.45    1   0.60    1    FALSE    contrast indirect  0.047192
+## 33   0.60    1   0.60    1    FALSE    contrast indirect  0.000000
+## 34   0.30    1   0.30    0    FALSE    contrast    total -0.160499
+## 35   0.45    1   0.30    0    FALSE    contrast    total -0.220457
+## 36   0.60    1   0.30    0    FALSE    contrast    total -0.267649
+## 37   0.30    1   0.45    0    FALSE    contrast    total -0.073934
+## 38   0.45    1   0.45    0    FALSE    contrast    total -0.133893
+## 39   0.60    1   0.45    0    FALSE    contrast    total -0.181085
+## 40   0.30    1   0.60    0    FALSE    contrast    total -0.001438
+## 41   0.45    1   0.60    0    FALSE    contrast    total -0.061396
+## 42   0.60    1   0.60    0    FALSE    contrast    total -0.108588
+## 43   0.30    0   0.30    1    FALSE    contrast    total  0.160499
+## 44   0.45    0   0.30    1    FALSE    contrast    total  0.073934
+## 45   0.60    0   0.30    1    FALSE    contrast    total  0.001438
+## 46   0.30    0   0.45    1    FALSE    contrast    total  0.220457
+## 47   0.45    0   0.45    1    FALSE    contrast    total  0.133893
+## 48   0.60    0   0.45    1    FALSE    contrast    total  0.061396
+## 49   0.30    0   0.60    1    FALSE    contrast    total  0.267649
+## 50   0.45    0   0.60    1    FALSE    contrast    total  0.181085
+## 51   0.60    0   0.60    1    FALSE    contrast    total  0.108588
+## 52   0.30   NA   0.30   NA     TRUE    contrast  overall  0.000000
+## 53   0.45   NA   0.30   NA     TRUE    contrast  overall -0.098667
+## 54   0.60   NA   0.30   NA     TRUE    contrast  overall -0.176064
+## 55   0.30   NA   0.45   NA     TRUE    contrast  overall  0.098667
+## 56   0.45   NA   0.45   NA     TRUE    contrast  overall  0.000000
+## 57   0.60   NA   0.45   NA     TRUE    contrast  overall -0.077398
+## 58   0.30   NA   0.60   NA     TRUE    contrast  overall  0.176064
+## 59   0.45   NA   0.60   NA     TRUE    contrast  overall  0.077398
+## 60   0.60   NA   0.60   NA     TRUE    contrast  overall  0.000000
+##    std.error conf.low conf.high
+## 1   0.020854  0.31342   0.39517
+## 2   0.014876  0.23857   0.29689
+## 3   0.016208  0.16347   0.22700
+## 4   0.018359  0.15781   0.22978
+## 5   0.011494  0.11131   0.15637
+## 6   0.009470  0.06809   0.10521
+## 7   0.016644  0.27352   0.33877
+## 8   0.010144  0.18760   0.22736
+## 9   0.008728  0.11298   0.14719
+## 10  0.024738 -0.20899  -0.11201
+## 11  0.017782 -0.16874  -0.09904
+## 12  0.018564 -0.14497  -0.07220
+## 13  0.024738  0.11201   0.20899
+## 14  0.017782  0.09904   0.16874
+## 15  0.018564  0.07220   0.14497
+## 16  0.000000  0.00000   0.00000
+## 17  0.017318 -0.12051  -0.05262
+## 18  0.026173 -0.21036  -0.10776
+## 19  0.000000  0.00000   0.00000
+## 20  0.013459 -0.08634  -0.03358
+## 21  0.018918 -0.14423  -0.07007
+## 22  0.017318  0.05262   0.12051
+## 23  0.000000  0.00000   0.00000
+## 24  0.014079 -0.10009  -0.04490
+## 25  0.013459  0.03358   0.08634
+## 26  0.000000  0.00000   0.00000
+## 27  0.008271 -0.06340  -0.03098
+## 28  0.026173  0.10776   0.21036
+## 29  0.014079  0.04490   0.10009
+## 30  0.000000  0.00000   0.00000
+## 31  0.018918  0.07007   0.14423
+## 32  0.008271  0.03098   0.06340
+## 33  0.000000  0.00000   0.00000
+## 34  0.024738 -0.20899  -0.11201
+## 35  0.024688 -0.26884  -0.17207
+## 36  0.024354 -0.31538  -0.21992
+## 37  0.021565 -0.11620  -0.03167
+## 38  0.017782 -0.16874  -0.09904
+## 39  0.018402 -0.21715  -0.14502
+## 40  0.025226 -0.05088   0.04800
+## 41  0.019405 -0.09943  -0.02336
+## 42  0.018564 -0.14497  -0.07220
+## 43  0.024738  0.11201   0.20899
+## 44  0.021565  0.03167   0.11620
+## 45  0.025226 -0.04800   0.05088
+## 46  0.024688  0.17207   0.26884
+## 47  0.017782  0.09904   0.16874
+## 48  0.019405  0.02336   0.09943
+## 49  0.024354  0.21992   0.31538
+## 50  0.018402  0.14502   0.21715
+## 51  0.018564  0.07220   0.14497
+## 52  0.000000  0.00000   0.00000
+## 53  0.014208 -0.12651  -0.07082
+## 54  0.019247 -0.21379  -0.13834
+## 55  0.014208  0.07082   0.12651
+## 56  0.000000  0.00000   0.00000
+## 57  0.008980 -0.09500  -0.05980
+## 58  0.019247  0.13834   0.21379
+## 59  0.008980  0.05980   0.09500
+## 60  0.000000  0.00000   0.00000</code></pre>
+<p>Helper functions for finding effects:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">direct_effect</span>(sample1, .<span class="dv">3</span>) <span class="co">#DE(.3)/ unfortunately de() is a function in utils.</span></code></pre>
+<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type effect estimate std.error
+## 1    0.3    0    0.3    1    FALSE    contrast direct   0.1605   0.02474
+##   conf.low conf.high
+## 1    0.112     0.209</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ie</span>(sample1, .<span class="dv">3</span>, .<span class="dv">6</span>) <span class="co">#IE(.3, .6) </span></code></pre>
+<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type   effect estimate std.error
+## 1    0.3    0    0.6    0    FALSE    contrast indirect   0.1591   0.02617
+##   conf.low conf.high
+## 1   0.1078    0.2104</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">indirect_effect</span>(sample1, .<span class="dv">3</span>, .<span class="dv">6</span>) <span class="co"># same</span></code></pre>
+<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type   effect estimate std.error
+## 1    0.3    0    0.6    0    FALSE    contrast indirect   0.1591   0.02617
+##   conf.low conf.high
+## 1   0.1078    0.2104</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">te</span>(sample1, .<span class="dv">3</span>, .<span class="dv">6</span>) <span class="co">#TE(.3, .6)</span></code></pre>
+<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type effect estimate std.error
+## 1    0.3    0    0.6    1    FALSE    contrast  total   0.2676   0.02435
+##   conf.low conf.high
+## 1   0.2199    0.3154</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">oe</span>(sample1, .<span class="dv">3</span>, .<span class="dv">6</span>) <span class="co">#OE(.3, .6)</span></code></pre>
+<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type  effect estimate std.error
+## 1    0.3   NA    0.6   NA     TRUE    contrast overall   0.1761   0.01925
+##   conf.low conf.high
+## 1   0.1383    0.2138</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># You can use the same functions to get all the effects. This will aid in </span>
+<span class="co"># plotting (see below.)</span>
+
+<span class="co"># All direct effect of constrast Y(0) - Y(1)</span>
+<span class="kw">direct_effect</span>(sample1) </code></pre>
+<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type effect estimate std.error
+## 1   0.30    0   0.30    1    FALSE    contrast direct   0.1605   0.02474
+## 2   0.45    0   0.45    1    FALSE    contrast direct   0.1339   0.01778
+## 3   0.60    0   0.60    1    FALSE    contrast direct   0.1086   0.01856
+##   conf.low conf.high
+## 1  0.11201    0.2090
+## 2  0.09904    0.1687
+## 3  0.07220    0.1450</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># to get Y(1) - Y(0) use trt.lvl1 argument</span>
+<span class="kw">direct_effect</span>(sample1, <span class="dt">trt.lvl1 =</span> <span class="dv">1</span>) </code></pre>
+<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type effect estimate std.error
+## 1   0.30    1   0.30    0    FALSE    contrast direct  -0.1605   0.02474
+## 2   0.45    1   0.45    0    FALSE    contrast direct  -0.1339   0.01778
+## 3   0.60    1   0.60    0    FALSE    contrast direct  -0.1086   0.01856
+##   conf.low conf.high
+## 1  -0.2090  -0.11201
+## 2  -0.1687  -0.09904
+## 3  -0.1450  -0.07220</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Other functions work similarly</span>
+
+<span class="co"># all indirect effects where treatment = 0 compare to an allocation of .3</span>
+<span class="kw">ie</span>(sample1, .<span class="dv">3</span>) </code></pre>
+<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type   effect estimate std.error
+## 1    0.3    0   0.30    0    FALSE    contrast indirect  0.00000   0.00000
+## 2    0.3    0   0.45    0    FALSE    contrast indirect  0.08656   0.01732
+## 3    0.3    0   0.60    0    FALSE    contrast indirect  0.15906   0.02617
+##   conf.low conf.high
+## 1  0.00000    0.0000
+## 2  0.05262    0.1205
+## 3  0.10776    0.2104</code></pre>
+<p>See <code>?direct_effect</code>, <code>?ie</code>, <code>?te</code>, or <code>?oe</code> for options.</p>
+</div>
+<div id="without-random-effects" class="section level2">
+<h2>Without random effects</h2>
+<pre class="sourceCode r"><code class="sourceCode r">sample2 &lt;-<span class="st"> </span><span class="kw">interference</span>(
+  <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">6</span>), <span class="co"># a minimum of 2 is required</span>
+  <span class="dt">formula =</span> y |<span class="st"> </span>A |<span class="st"> </span>B ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
+  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
+  <span class="dt">model_method =</span> <span class="st">'glm'</span>,
+  <span class="dt">model_options =</span> <span class="kw">list</span>(<span class="dt">family =</span> binomial),
+  <span class="dt">randomization =</span> <span class="dv">2</span>/<span class="dv">3</span>,
+  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
+  )</code></pre>
+<pre><code>## [1] &quot;Calculating matrix of IP weights...&quot;
+## [1] &quot;Calculating array of IP weight derivatives...&quot;
+## [1] &quot;Calculating matrix of scores...&quot;
+## [1] &quot;Computing effect estimates...&quot;
+## [1] &quot;Interference complete&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(sample2)</code></pre>
+<pre><code>##  --------------------------------------------------------------------------
+##                                Model Summary                    
+##  --------------------------------------------------------------------------
+##  Formula: y | A | B ~ X1 + X2 | group 
+##  Number of groups:  250 
+##  2 allocations were used from 0.3 (min) to 0.6 (max) 
+##  --------------------------------------------------------------------------
+##                           Causal Effect Summary                            
+##                          Confidence level: 0.95                       
+##                          Variance method: robust        
+##  --------------------------------------------------------------------------
+## 
+##  Direct Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.3    1   0.3801   0.07570  0.23177    0.5285
+##     0.6    0    0.6    1   0.1161   0.04215  0.03353    0.1987
+## 
+##  Indirect Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.6    0   0.2953   0.08351   0.1316    0.4589
+## 
+##  Total Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.6    1   0.4114   0.07698   0.2605    0.5623
+## 
+##  Overall Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3   NA    0.6   NA   0.2509   0.05691   0.1394    0.3624
+## 
+##  --------------------------------------------------------------------------</code></pre>
+</div>
+<div id="using-oracle-parameters-wo-the-random-effects" class="section level2">
+<h2>Using oracle parameters w/o the random effects</h2>
+<pre class="sourceCode r"><code class="sourceCode r">sample3 &lt;-<span class="st"> </span><span class="kw">interference</span>(
+  <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">6</span>), <span class="co"># a minimum of 2 is required</span>
+  <span class="dt">formula =</span> y |<span class="st"> </span>A |<span class="st"> </span>B ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
+  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
+  <span class="dt">model_method =</span> <span class="st">'oracle'</span>,
+  <span class="dt">model_options =</span> <span class="kw">list</span>(<span class="dt">fixed.effects =</span> <span class="kw">c</span>(<span class="fl">0.2727</span>, -<span class="fl">0.0387</span>, .<span class="dv">2719</span>),
+                       <span class="dt">random.effects =</span> <span class="ot">NULL</span>),
+  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'simple'</span>),
+  <span class="dt">randomization =</span> <span class="dv">2</span>/<span class="dv">3</span>,
+  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
+  )</code></pre>
+<pre><code>## [1] &quot;Calculating matrix of IP weights...&quot;
+## [1] &quot;Computing effect estimates...&quot;
+## [1] &quot;Interference complete&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(sample3)</code></pre>
+<pre><code>##  --------------------------------------------------------------------------
+##                                Model Summary                    
+##  --------------------------------------------------------------------------
+##  Formula: y | A | B ~ X1 + X2 | group 
+##  Number of groups:  250 
+##  2 allocations were used from 0.3 (min) to 0.6 (max) 
+##  --------------------------------------------------------------------------
+##                           Causal Effect Summary                            
+##                          Confidence level: 0.95                       
+##                          Variance method: simple        
+##  --------------------------------------------------------------------------
+## 
+##  Direct Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.3    1  0.51883   0.09880  0.32519    0.7125
+##     0.6    0    0.6    1  0.09991   0.02622  0.04851    0.1513
+## 
+##  Indirect Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.6    0   0.5162    0.1071   0.3064    0.7261
+## 
+##  Total Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.6    1   0.6161    0.1042   0.4119    0.8204
+## 
+##  Overall Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3   NA    0.6   NA   0.4205   0.07675   0.2701    0.5709
+## 
+##  --------------------------------------------------------------------------</code></pre>
+</div>
+<div id="without-the-participation-variable" class="section level2">
+<h2>Without the participation variable</h2>
+<p>Suppose we don’t have the participation variable and estimate the treatment probability directly, just leave out the <code>randomization</code> argument and modify the formula:</p>
+<pre class="sourceCode r"><code class="sourceCode r">sample4 &lt;-<span class="st"> </span><span class="kw">interference</span>(
+  <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">6</span>), <span class="co"># a minimum of 2 is required</span>
+  <span class="dt">formula =</span> y |<span class="st"> </span>A ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
+  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
+  <span class="dt">model_method =</span> <span class="st">'glm'</span>,
+  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'robust'</span>),
+  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
+  )</code></pre>
+<pre><code>## [1] &quot;Calculating matrix of IP weights...&quot;
+## [1] &quot;Calculating array of IP weight derivatives...&quot;
+## [1] &quot;Calculating matrix of scores...&quot;
+## [1] &quot;Computing effect estimates...&quot;
+## [1] &quot;Interference complete&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(sample4)</code></pre>
+<pre><code>##  --------------------------------------------------------------------------
+##                                Model Summary                    
+##  --------------------------------------------------------------------------
+##  Formula: y | A ~ X1 + X2 | group 
+##  Number of groups:  250 
+##  2 allocations were used from 0.3 (min) to 0.6 (max) 
+##  --------------------------------------------------------------------------
+##                           Causal Effect Summary                            
+##                          Confidence level: 0.95                       
+##                          Variance method: robust        
+##  --------------------------------------------------------------------------
+## 
+##  Direct Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.3    1   0.3622   0.06846  0.22805    0.4964
+##     0.6    0    0.6    1   0.1158   0.03900  0.03938    0.1923
+## 
+##  Indirect Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.6    0    0.272   0.07107   0.1327    0.4113
+## 
+##  Total Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.6    1   0.3878   0.06584   0.2588    0.5169
+## 
+##  Overall Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3   NA    0.6   NA   0.2328   0.04754   0.1397     0.326
+## 
+##  --------------------------------------------------------------------------</code></pre>
+</div>
+<div id="defining-ones-own-integrand" class="section level2">
+<h2>Defining one’s own integrand</h2>
+<p>Let’s say you want to fix the group level propensity to be .5. I don’t know why you’d want to do this, but this illustrates how to write your own function. The function required three arguments: <code>b</code>, <code>x</code>, and <code>pos</code>. <code>b</code> must be the first argument. <code>x</code> and <code>pos</code> are necessary for the <code>grad()</code>, and I will describe how to use these later.</p>
+<pre class="sourceCode r"><code class="sourceCode r">myFUN &lt;-<span class="st"> </span>function(b, x, pos){
+  <span class="kw">return</span>(.<span class="dv">5</span> *<span class="st"> </span><span class="kw">dnorm</span>(b))
+}
+
+<span class="kw">integrate</span>(myFUN, <span class="dt">l =</span> -<span class="ot">Inf</span>, <span class="dt">u =</span> <span class="ot">Inf</span>) <span class="co"># returns 0.5</span></code></pre>
+<pre><code>## 0.5 with absolute error &lt; 4.7e-05</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">sample5 &lt;-<span class="st"> </span><span class="kw">interference</span>(
+  <span class="dt">propensity_integrand =</span> <span class="st">'myFUN'</span>,
+  <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">6</span>), <span class="co"># a minimum of 2 is required</span>
+  <span class="dt">formula =</span> y |<span class="st"> </span>A ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
+  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
+  <span class="dt">model_method =</span> <span class="st">'glm'</span>,
+  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'simple'</span>),
+  <span class="co"># won't work for 'robust' unless addition arguments are defined</span>
+  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
+  )</code></pre>
+<pre><code>## [1] &quot;Calculating matrix of IP weights...&quot;
+## [1] &quot;Computing effect estimates...&quot;
+## [1] &quot;Interference complete&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(sample5)</code></pre>
+<pre><code>##  --------------------------------------------------------------------------
+##                                Model Summary                    
+##  --------------------------------------------------------------------------
+##  Formula: y | A ~ X1 + X2 | group 
+##  Number of groups:  250 
+##  2 allocations were used from 0.3 (min) to 0.6 (max) 
+##  --------------------------------------------------------------------------
+##                           Causal Effect Summary                            
+##                          Confidence level: 0.95                       
+##                          Variance method: simple        
+##  --------------------------------------------------------------------------
+## 
+##  Direct Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error  conf.low conf.high
+##     0.3    0    0.3    1 0.004928 0.0018947 0.0012149  0.008642
+##     0.6    0    0.6    1 0.001124 0.0004795 0.0001841  0.002064
+## 
+##  Indirect Effects
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.6    0 0.004436   0.00151 0.001477  0.007394
+## 
+##  Total Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3    0    0.6    1  0.00556  0.001883  0.00187   0.00925
+## 
+##  Overall Effects 
+##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
+##     0.3   NA    0.6   NA 0.003632  0.001166 0.001346  0.005917
+## 
+##  --------------------------------------------------------------------------</code></pre>
+</div>
+<div id="a-sample-plot" class="section level2">
+<h2>A sample plot</h2>
+<p>Here’s a simple plot of direct effects. Run the <code>interference</code> function with a larger number of allocations (this will take longer!):</p>
+<pre class="sourceCode r"><code class="sourceCode r">sample6 &lt;-<span class="st"> </span><span class="kw">interference</span>(
+  <span class="dt">allocations =</span> <span class="kw">seq</span>(.<span class="dv">3</span>, .<span class="dv">6</span>, <span class="dt">by =</span> .<span class="dv">01</span>), 
+  <span class="dt">formula =</span> y |<span class="st"> </span>A ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
+  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
+  <span class="dt">model_method =</span> <span class="st">'glm'</span>,
+  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'robust'</span>),
+  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
+  )</code></pre>
+<pre><code>## [1] &quot;Calculating matrix of IP weights...&quot;
+## [1] &quot;Calculating array of IP weight derivatives...&quot;
+## [1] &quot;Calculating matrix of scores...&quot;
+## [1] &quot;Computing effect estimates...&quot;
+## [1] &quot;Interference complete&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look at the direct effects</span>
+deff &lt;-<span class="st"> </span><span class="kw">direct_effect</span>(sample6)
+
+<span class="co"># Plot the point estimates</span>
+<span class="kw">plot</span>(deff$alpha1, deff$estimate, <span class="dt">type =</span> <span class="st">'l'</span>)</code></pre>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAYAAAAUg66AAAAD8GlDQ1BJQ0MgUHJvZmlsZQAAOI2NVd1v21QUP4lvXKQWP6Cxjg4Vi69VU1u5GxqtxgZJk6XpQhq5zdgqpMl1bhpT1za2021Vn/YCbwz4A4CyBx6QeEIaDMT2su0BtElTQRXVJKQ9dNpAaJP2gqpwrq9Tu13GuJGvfznndz7v0TVAx1ea45hJGWDe8l01n5GPn5iWO1YhCc9BJ/RAp6Z7TrpcLgIuxoVH1sNfIcHeNwfa6/9zdVappwMknkJsVz19HvFpgJSpO64PIN5G+fAp30Hc8TziHS4miFhheJbjLMMzHB8POFPqKGKWi6TXtSriJcT9MzH5bAzzHIK1I08t6hq6zHpRdu2aYdJYuk9Q/881bzZa8Xrx6fLmJo/iu4/VXnfH1BB/rmu5ScQvI77m+BkmfxXxvcZcJY14L0DymZp7pML5yTcW61PvIN6JuGr4halQvmjNlCa4bXJ5zj6qhpxrujeKPYMXEd+q00KR5yNAlWZzrF+Ie+uNsdC/MO4tTOZafhbroyXuR3Df08bLiHsQf+ja6gTPWVimZl7l/oUrjl8OcxDWLbNU5D6JRL2gxkDu16fGuC054OMhclsyXTOOFEL+kmMGs4i5kfNuQ62EnBuam8tzP+Q+tSqhz9SuqpZlvR1EfBiOJTSgYMMM7jpYsAEyqJCHDL4dcFFTAwNMlFDUUpQYiadhDmXteeWAw3HEmA2s15k1RmnP4RHuhBybdBOF7MfnICmSQ2SYjIBM3iRvkcMki9IRcnDTthyLz2Ld2fTzPjTQK+Mdg8y5nkZfFO+se9LQr3/09xZr+5GcaSufeAfAww60mAPx+q8u/bAr8rFCLrx7s+vqEkw8qb+p26n11Aruq6m1iJH6PbWGv1VIY25mkNE8PkaQhxfLIF7DZXx80HD/A3l2jLclYs061xNpWCfoB6WHJTjbH0mV35Q/lRXlC+W8cndbl9t2SfhU+Fb4UfhO+F74GWThknBZ+Em4InwjXIyd1ePnY/Psg3pb1TJNu15TMKWMtFt6ScpKL0ivSMXIn9QtDUlj0h7U7N48t3i8eC0GnMC91dX2sTivgloDTgUVeEGHLTizbf5Da9JLhkhh29QOs1luMcScmBXTIIt7xRFxSBxnuJWfuAd1I7jntkyd/pgKaIwVr3MgmDo2q8x6IdB5QH162mcX7ajtnHGN2bov71OU1+U0fqqoXLD0wX5ZM005UHmySz3qLtDqILDvIL+iH6jB9y2x83ok898GOPQX3lk3Itl0A+BrD6D7tUjWh3fis58BXDigN9yF8M5PJH4B8Gr79/F/XRm8m241mw/wvur4BGDj42bzn+Vmc+NL9L8GcMn8F1kAcXgSteGGAAAlX0lEQVR4Ae2dB5jcxN2HqQZTjenVZzA1YHrvNXSIAdPLRw8JHULvkNBbIHRiCPijmB4IHdOLaaF3H2BMABtwTDMGvu/9+XZAJ3b3tLrVrnb393+e9ySNpBnp3d3RzEi7N9FEDhuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARuwARvIo4GJ83hQDXJM+3Gcv4cxDXK8PszWM/Adp7wJjM3rqbsCSv/KDGPXo8EVUHqH3jNbAw+R/Qrw72yLSZ/7ZOl3bfk9f8DAf+GpljdhAXk18FZeDywc1yRhxlMbsAEbqLUBV0DVNz43WU5X/Wydow00nwFXQNV/TfuR5bNg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" alt="plot of chunk unnamed-chunk-15" /></p>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+---
+title: "A Brief Intro to `inferference`"
+author: 
+- name : "Bradley Saul"
+  affiliation: "University of North Carolina"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{inferference_intro}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# Use of `inferference` 
+
+This is a brief description of how to use the `inferference` package.
+
+```{r, echo = TRUE}
+# load the package
+library(inferference)
+```
+
+I have included a simple dataset generated from `rinterferenceSim` package: 3000 units, 250 groups, 2 covariates, 21 allocations (0 to 1 by 0.05), using the parameters in the code below. See Perez 2014 for details on how the simulations were structured.
+
+
+```{r, echo=TRUE, eval=FALSE}
+alphaz = seq(0, 1, by=.05) # needed to compute truth
+theta.base <- c(.5, -0.788, -2.953, -0.098, -0.145, 0.351)
+theta.sim <- c(0.2727, -0.0387, .2719, 1.0859)
+sample_sim <- sim_interference(n = 3000, N = 250, nsims = 1, 
+                               base.parameters = theta.base, 
+                               parameters = theta.sim,
+                               alphas = alphaz)
+interference_sample <- sample_sim$sims[[1]]
+#save(sample_data, file = "data/sample_data.rda")
+```
+
+Here's what the data looks like:
+```{r}
+head(vaccinesim)
+```
+
+y is the outcome. X1 and X2 are covariates. A is the randomized treatment indicator. B is an indicator of participation in the trial. Group is obvious.
+
+# `interference` function
+
+The primary function in `inferference` is `interference`. Currently, it only supports IPW estimation. `interference` has several options:
+
+* `propensity_integrand`: a character string that names the function that defines the group-level propensity: $P(\mathbf{A}_i | \mathbf{X}_i)$. The default function is `logit_integrand`. This function handles models with and without random effects. Without random effects, `logit_integrand` computes:
+\[
+\prod_{j = 1}^n_i h_{ij}^{A_{ij}}(1 - h_{ij})^{1 - A_{ij}}
+\]
+where $h_{ij} = logit^{-1}(\mathbf{X}\hat{\theta})$; $\hat{\theta}$ are the estimated parameters from logistic regression using `glm`. In the case of a random effect, `logit_integrand` computes:
+\[
+\prod_{j = 1}^n_i h_{ij}(b_i)^{A_{ij}}(1 - h_{ij}(b_i))^{1 - A_{ij}}f_b(b_i)
+\]
+where $h_{ij} = logit^{-1}(\mathbf{X}\hat{\theta} + b)$; $\hat{\boldsymbol{\theta}}_f$ are the estimated fixed effect parameters from random effects logistic regression using `glmer`; $f_b(\cdot)$ is a $N(0, \hat{\theta}_r)$ density; $\hat{\theta}_r$ is the estimated random effect variance. For both cases `logit_integrand` is passed through the `integrate` function. Without a random effect, however, this has no effect since `integrate(function(b) dnorm(b))` equals 1.
+* formula: this has a minimum of 4 parts in the following structure:
+  * `outcome | exposure ~ propensity covariates | group`. 
+If a random effect for the group is included use the following: 
+  * `outcome | exposure ~ propensity covariates + (1|group) | group`.
+If the study design includes a 'participation' variable like in Perez-Heydrich 2014 use the following:
+  * `outcome | exposure | participation ~ propensity covariates + (1|group) | group`.
+* allocations: a vector of treatment allocation strategies. At least 2 allocations must defined.
+* data: the data.frame with the outcome, exposure, covariates, and group variables
+* model_method: one of `oracle`, `glm`, or `glmer`.
+* model_options: options passed to the `model_method` as a list. For example, for `glm` or `glmer` set this equal to `list(family = binomial(link = 'logit'))`. To use the `oracle` method, use `list(fixed.effects = c(???, ???, etc), random.effects = NULL)` or `list(fixed.effects = c(???, ???, etc), random.effects = ???)`
+* causal_estimation_options: list of options passed to `ipw_interference`. `list(variance_estimation = 'simple')` or `list(variance_estimation = 'robust')` are the option settings of most interest. 'robust' is the default.
+'robust' uses M-estimation theory to compute the variance, whereas, 'simple' computes $\frac{1}{N^2}\sum_{i= 1}^N (\hat{CE}_i - \hat{CE})^2$, where $\hat{CE}$ is point estimate for the causal effect of interest while $\hat{CE}_i$ is the point estimate for group $i$.
+* conf.level: the confidence level. defaults to .95.
+* rescale.factor: a scaling factor for the causal effects. Defaults to 1.
+* ... other options passed to `grad()`, `integrate()`, or the propensity_integrand function. `method = simple` will vastly speed up the `grad()` function. 
+
+# Examples
+
+Here's a few samples of `interference()` based on the data provided. 
+
+## Replication of Perez-Heydrich 2014
+
+The first example follows Perez-Heydrich 2014 and includes a random effect and participation variable. Conditional on participation, subjects were randomized to treatment with probability 2/3, which is the `randomization` argument. This is an argument in `logit_integrand()`. This argument defaults to $1$ and so can be left out if unnecessary (see later examples). 
+
+```{r, echo=TRUE}
+sample1 <- interference(
+  allocations = c(.3, .45,  .6), # a minimum of 2 is required
+  formula = y | A | B ~ X1 + X2 + (1|group) | group, 
+  data = vaccinesim, # name of the data frame
+  randomization = 2/3,
+  method = 'simple' # speeds up grad()
+  )
+```
+
+Take a quick look using the (unpolished) `print` function:
+```{r, echo = TRUE}
+print(sample1)
+```
+
+Other pieces that might be interest are the group-level weights:
+\[
+\frac{\prod_{j =1}^{n_i} \alpha^{A_{iij}}(1 - \alpha)^{1 - A_{ij}}}{P(\mathbf{A}_i | \mathbf{X}_i)}
+\]
+which can accessed:
+```{r, echo = TRUE}
+# the matrix of weights
+head(sample1$weights)
+```
+
+The weight 'derivatives':
+\[
+\frac{\prod_{j =1}^{n_i} \alpha^{A_{iij}}(1 - \alpha)^{1 - A_{ij}}}{\frac{d}{d\theta}P(\mathbf{A}_i | \mathbf{X}_i)}
+\]
+which can accessed:
+```{r, echo = TRUE}
+head(sample1$weightd[ , , 1]) # For the 1st allocation 
+```
+
+The 'scores' are but the all the last element in $\psi(\mathbf{O}, \boldsymbol{\theta})$, eqn (3) in the web appendix, which can accessed:
+```{r, echo = TRUE}
+head(sample1$scores) 
+```
+
+Finally, the most important piece, the effect estimates are in a data.frame:
+```{r, echo = TRUE}
+sample1$estimates 
+```
+
+Helper functions for finding effects:
+```{r, echo=TRUE}
+direct_effect(sample1, .3) #DE(.3)/ unfortunately de() is a function in utils.
+ie(sample1, .3, .6) #IE(.3, .6) 
+indirect_effect(sample1, .3, .6) # same
+te(sample1, .3, .6) #TE(.3, .6)
+oe(sample1, .3, .6) #OE(.3, .6)
+
+# You can use the same functions to get all the effects. This will aid in 
+# plotting (see below.)
+
+# All direct effect of constrast Y(0) - Y(1)
+direct_effect(sample1) 
+
+# to get Y(1) - Y(0) use trt.lvl1 argument
+direct_effect(sample1, trt.lvl1 = 1) 
+
+# Other functions work similarly
+
+# all indirect effects where treatment = 0 compare to an allocation of .3
+ie(sample1, .3) 
+```
+See `?direct_effect`, `?ie`, `?te`, or `?oe` for options.
+
+
+## Without random effects
+```{r, echo=TRUE}
+sample2 <- interference(
+  allocations = c(.3, .6), # a minimum of 2 is required
+  formula = y | A | B ~ X1 + X2 | group,
+  data = vaccinesim, # name of the data frame
+  model_method = 'glm',
+  model_options = list(family = binomial),
+  randomization = 2/3,
+  method = 'simple' # speeds up grad()
+  )
+print(sample2)
+```
+
+## Using oracle parameters w/o the random effects
+```{r, echo=TRUE}
+sample3 <- interference(
+  allocations = c(.3, .6), # a minimum of 2 is required
+  formula = y | A | B ~ X1 + X2 | group,
+  data = vaccinesim, # name of the data frame
+  model_method = 'oracle',
+  model_options = list(fixed.effects = c(0.2727, -0.0387, .2719),
+                       random.effects = NULL),
+  causal_estimation_options = list(variance_estimation = 'simple'),
+  randomization = 2/3,
+  method = 'simple' # speeds up grad()
+  )
+print(sample3)
+```
+
+## Without the participation variable
+
+Suppose we don't have the participation variable and estimate the treatment probability directly, just leave out the `randomization` argument and modify the formula:
+```{r, echo=TRUE}
+sample4 <- interference(
+  allocations = c(.3, .6), # a minimum of 2 is required
+  formula = y | A ~ X1 + X2 | group,
+  data = vaccinesim, # name of the data frame
+  model_method = 'glm',
+  causal_estimation_options = list(variance_estimation = 'robust'),
+  method = 'simple' # speeds up grad()
+  )
+print(sample4)
+```
+
+## Defining one's own integrand
+
+Let's say you want to fix the group level propensity to be .5. I don't know why you'd want to do this, but this illustrates how to write your own function. The function required three arguments: `b`, `x`, and `pos`. `b` must be the first argument. `x` and `pos` are necessary for the `grad()`, and  I will describe how to use these later.
+
+```{r, echo = TRUE}
+myFUN <- function(b, x, pos){
+  return(.5 * dnorm(b))
+}
+
+integrate(myFUN, l = -Inf, u = Inf) # returns 0.5
+
+sample5 <- interference(
+  propensity_integrand = 'myFUN',
+  allocations = c(.3, .6), # a minimum of 2 is required
+  formula = y | A ~ X1 + X2 | group,
+  data = vaccinesim, # name of the data frame
+  model_method = 'glm',
+  causal_estimation_options = list(variance_estimation = 'simple'),
+  # won't work for 'robust' unless addition arguments are defined
+  method = 'simple' # speeds up grad()
+  )
+print(sample5)
+```
+
+## A sample plot
+
+Here's a simple plot of direct effects. Run the `interference` function with a larger number of allocations (this will take longer!):
+
+```{r, echo = TRUE}
+sample6 <- interference(
+  allocations = seq(.3, .6, by = .01), 
+  formula = y | A ~ X1 + X2 | group,
+  data = vaccinesim, # name of the data frame
+  model_method = 'glm',
+  causal_estimation_options = list(variance_estimation = 'robust'),
+  method = 'simple' # speeds up grad()
+  )
+
+# Look at the direct effects
+deff <- direct_effect(sample6)
+
+# Plot the point estimates
+plot(deff$alpha1, deff$estimate, type = 'l')
+```
