@@ -1,4 +1,6 @@
 .Rproj.user
+.Rbuildignore
 .Rhistory
 .RData
-inst/doc
+inferference.Rproj
+.DS_Store
