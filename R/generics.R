@@ -4,6 +4,7 @@
 #' @param x object of class 'interference'
 #' @param ... ignored
 #' @method print interference
+#' @export
 #-----------------------------------------------------------------------------#
 
 print.interference <- function(x, ...)
