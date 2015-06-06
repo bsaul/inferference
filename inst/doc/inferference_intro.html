@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="date" content="2015-03-09" />
+<meta name="date" content="2015-06-06" />
 
 <title>A Brief Intro to inferference</title>
 
@@ -54,7 +54,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h1 class="title">A Brief Intro to <code>inferference</code></h1>
 <h4 class="author"><em>Bradley Saul</em></h4>
 <address class="author_afil">
-University of North Carolina<br><h4 class="date"><em>2015-03-09</em></h4>
+University of North Carolina<br><h4 class="date"><em>2015-06-06</em></h4>
 </div>
 
 
@@ -101,7 +101,7 @@ interference_sample &lt;-<span class="st"> </span>sample_sim$sims[[<span class="
 <li>data: the data.frame with the outcome, exposure, covariates, and group variables</li>
 <li>model_method: one of <code>oracle</code>, <code>glm</code>, or <code>glmer</code>.</li>
 <li>model_options: options passed to the <code>model_method</code> as a list. For example, for <code>glm</code> or <code>glmer</code> set this equal to <code>list(family = binomial(link = 'logit'))</code>. To use the <code>oracle</code> method, use <code>list(fixed.effects = c(???, ???, etc), random.effects = NULL)</code> or <code>list(fixed.effects = c(???, ???, etc), random.effects = ???)</code></li>
-<li>causal_estimation_options: list of options passed to <code>ipw_interference</code>. <code>list(variance_estimation = 'simple')</code> or <code>list(variance_estimation = 'robust')</code> are the option settings of most interest. ‘robust’ is the default. ‘robust’ uses M-estimation theory to compute the variance, whereas, ‘simple’ computes <span class="math">\(\frac{1}{N^2}\sum_{i= 1}^N (\hat{CE}_i - \hat{CE})^2\)</span>, where <span class="math">\(\hat{CE}\)</span> is point estimate for the causal effect of interest while <span class="math">\(\hat{CE}_i\)</span> is the point estimate for group <span class="math">\(i\)</span>.</li>
+<li>causal_estimation_options: list of options passed to <code>ipw_interference</code>. <code>list(variance_estimation = 'naive')</code> or <code>list(variance_estimation = 'robust')</code> are the option settings of most interest. ‘robust’ is the default. ‘robust’ uses M-estimation theory to compute the variance, whereas, ‘naive’ computes <span class="math">\(\frac{1}{N^2}\sum_{i= 1}^N (\hat{CE}_i - \hat{CE})^2\)</span>, where <span class="math">\(\hat{CE}\)</span> is point estimate for the causal effect of interest while <span class="math">\(\hat{CE}_i\)</span> is the point estimate for group <span class="math">\(i\)</span>.</li>
 <li>conf.level: the confidence level. defaults to .95.</li>
 <li>rescale.factor: a scaling factor for the causal effects. Defaults to 1.</li>
 <li>… other options passed to <code>grad()</code>, <code>integrate()</code>, or the propensity_integrand function. <code>method = simple</code> will vastly speed up the <code>grad()</code> function.</li>
@@ -440,7 +440,7 @@ interference_sample &lt;-<span class="st"> </span>sample_sim$sims[[<span class="
   <span class="dt">model_method =</span> <span class="st">'oracle'</span>,
   <span class="dt">model_options =</span> <span class="kw">list</span>(<span class="dt">fixed.effects =</span> <span class="kw">c</span>(<span class="fl">0.2727</span>, -<span class="fl">0.0387</span>, .<span class="dv">2719</span>),
                        <span class="dt">random.effects =</span> <span class="ot">NULL</span>),
-  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'simple'</span>),
+  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'naive'</span>),
   <span class="dt">randomization =</span> <span class="dv">2</span>/<span class="dv">3</span>,
   <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
   )</code></pre>
@@ -457,7 +457,7 @@ interference_sample &lt;-<span class="st"> </span>sample_sim$sims[[<span class="
 ##  --------------------------------------------------------------------------
 ##                           Causal Effect Summary                            
 ##                          Confidence level: 0.95                       
-##                          Variance method: simple        
+##                          Variance method: naive        
 ##  --------------------------------------------------------------------------
 ## 
 ##  Direct Effects
@@ -542,7 +542,7 @@ interference_sample &lt;-<span class="st"> </span>sample_sim$sims[[<span class="
   <span class="dt">formula =</span> y |<span class="st"> </span>A ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
   <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
   <span class="dt">model_method =</span> <span class="st">'glm'</span>,
-  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'simple'</span>),
+  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'naive'</span>),
   <span class="co"># won't work for 'robust' unless addition arguments are defined</span>
   <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
   )</code></pre>
@@ -559,7 +559,7 @@ interference_sample &lt;-<span class="st"> </span>sample_sim$sims[[<span class="
 ##  --------------------------------------------------------------------------
 ##                           Causal Effect Summary                            
 ##                          Confidence level: 0.95                       
-##                          Variance method: simple        
+##                          Variance method: naive        
 ##  --------------------------------------------------------------------------
 ## 
 ##  Direct Effects

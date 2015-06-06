@@ -48,7 +48,7 @@
 #' random effects, set \code{random.effects = NULL}.
 #' @param causal_estimation_method currently only supports \code{'ipw'}.
 #' @param causal_estimation_options A list with two slots. (1) \code{variance_estimation} is 
-#' either \code{'simple'} or \code{'robust'}. See details. Defaults to \code{'robust'}. (2) 
+#' either \code{'naive'} or \code{'robust'}. See details. Defaults to \code{'robust'}. (2) 
 #' is \code{set_NA_to_0}. Defaults to \code{TRUE}. When, for example, group sizes 
 #' reach over 1000, the product terms of the propensity diminish to zero. 
 #' This may result in \code{NaN} values for the weights or loglihood. This option
@@ -79,8 +79,8 @@
 #' }
 #' 
 #' If the true propensity model is known (e.g. in simulations) use 
-#' \code{variance_estimatation = 'simple'}; otherwise, use the default 
-#' \code{variance_estimatation = 'simple'}. Refer to the web appendix of
+#' \code{variance_estimatation = 'naive'}; otherwise, use the default 
+#' \code{variance_estimatation = 'robust'}. Refer to the web appendix of
 #' \href{http://dx.doi.org/10.1111/biom.12184}{Heydrich-Perez et al. (2014)} 
 #' for complete details.
 #' 

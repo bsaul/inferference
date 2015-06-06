@@ -13,7 +13,7 @@
 # @param G group assignment vector
 # @param fixed.effects vector of fixed effects
 # @param random.effects vector of random effects 
-# @param variance_estimation currently supports 'robust' or 'simple'
+# @param variance_estimation currently supports 'robust' or 'naive'
 # @param ... additional arguments passed to other functions such as 
 # \code{\link{glmer}}, \code{\link{grad}}, and \code{integrand} or \code{likelihood}.
 # @return Returns a list of overall and group-level IPW point estimates 

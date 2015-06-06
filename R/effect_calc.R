@@ -155,7 +155,7 @@ ipw_effect_calc <- function(obj,
     
     ## Sandwich Variance Estimate ##
     ave <- ((U21 - 2*V21) %*% solve(V11) %*% t(U21) + V22)/N * rescale.factor^2
-  } else if(variance_estimation == 'simple'){
+  } else if(variance_estimation == 'naive'){
     ave <- (1/(N^2)) * (sum((pe_grp_diff)^2, na.rm = T)) * rescale.factor^2
   }
   

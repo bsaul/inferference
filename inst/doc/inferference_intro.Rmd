@@ -65,8 +65,8 @@ If the study design includes a 'participation' variable like in Perez-Heydrich 2
 * data: the data.frame with the outcome, exposure, covariates, and group variables
 * model_method: one of `oracle`, `glm`, or `glmer`.
 * model_options: options passed to the `model_method` as a list. For example, for `glm` or `glmer` set this equal to `list(family = binomial(link = 'logit'))`. To use the `oracle` method, use `list(fixed.effects = c(???, ???, etc), random.effects = NULL)` or `list(fixed.effects = c(???, ???, etc), random.effects = ???)`
-* causal_estimation_options: list of options passed to `ipw_interference`. `list(variance_estimation = 'simple')` or `list(variance_estimation = 'robust')` are the option settings of most interest. 'robust' is the default.
-'robust' uses M-estimation theory to compute the variance, whereas, 'simple' computes $\frac{1}{N^2}\sum_{i= 1}^N (\hat{CE}_i - \hat{CE})^2$, where $\hat{CE}$ is point estimate for the causal effect of interest while $\hat{CE}_i$ is the point estimate for group $i$.
+* causal_estimation_options: list of options passed to `ipw_interference`. `list(variance_estimation = 'naive')` or `list(variance_estimation = 'robust')` are the option settings of most interest. 'robust' is the default.
+'robust' uses M-estimation theory to compute the variance, whereas, 'naive' computes $\frac{1}{N^2}\sum_{i= 1}^N (\hat{CE}_i - \hat{CE})^2$, where $\hat{CE}$ is point estimate for the causal effect of interest while $\hat{CE}_i$ is the point estimate for group $i$.
 * conf.level: the confidence level. defaults to .95.
 * rescale.factor: a scaling factor for the causal effects. Defaults to 1.
 * ... other options passed to `grad()`, `integrate()`, or the propensity_integrand function. `method = simple` will vastly speed up the `grad()` function. 
@@ -171,7 +171,7 @@ sample3 <- interference(
   model_method = 'oracle',
   model_options = list(fixed.effects = c(0.2727, -0.0387, .2719),
                        random.effects = NULL),
-  causal_estimation_options = list(variance_estimation = 'simple'),
+  causal_estimation_options = list(variance_estimation = 'naive'),
   randomization = 2/3,
   method = 'simple' # speeds up grad()
   )
@@ -210,7 +210,7 @@ sample5 <- interference(
   formula = y | A ~ X1 + X2 | group,
   data = vaccinesim, # name of the data frame
   model_method = 'glm',
-  causal_estimation_options = list(variance_estimation = 'simple'),
+  causal_estimation_options = list(variance_estimation = 'naive'),
   # won't work for 'robust' unless addition arguments are defined
   method = 'simple' # speeds up grad()
   )

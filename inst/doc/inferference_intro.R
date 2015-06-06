@@ -82,7 +82,7 @@ sample3 <- interference(
   model_method = 'oracle',
   model_options = list(fixed.effects = c(0.2727, -0.0387, .2719),
                        random.effects = NULL),
-  causal_estimation_options = list(variance_estimation = 'simple'),
+  causal_estimation_options = list(variance_estimation = 'naive'),
   randomization = 2/3,
   method = 'simple' # speeds up grad()
   )
@@ -112,7 +112,7 @@ sample5 <- interference(
   formula = y | A ~ X1 + X2 | group,
   data = vaccinesim, # name of the data frame
   model_method = 'glm',
-  causal_estimation_options = list(variance_estimation = 'simple'),
+  causal_estimation_options = list(variance_estimation = 'naive'),
   # won't work for 'robust' unless addition arguments are defined
   method = 'simple' # speeds up grad()
   )
