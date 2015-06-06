@@ -1,7 +1,7 @@
 Package: inferference
 Type: Package
 Title: Methods for Causal Inference with Interference
-Version: 0.4.61
+Version: 0.4.62
 Date: 2015-03-08
 Author: Bradley Saul
 Maintainer: Bradley Saul <saulb@live.unc.edu>
