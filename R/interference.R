@@ -104,9 +104,9 @@ interference <- function(formula,
                          causal_estimation_method = 'ipw',
                          causal_estimation_options = list(set_NA_to_0 = TRUE, 
                                                           variance_estimation = 'robust'),
-                         conf.level = 0.95,
+                         conf.level     = 0.95,
                          rescale.factor = 1,   
-                         runSilent=F, #Enables/disables printing of function progress #BB 2015-06-23
+                         runSilent      = F, #Enables/disables printing of function progress #BB 2015-06-23
                          ...)
 {
   ## Necessary bits ##
@@ -202,13 +202,13 @@ interference <- function(formula,
                             allocations          = allocations,
                             fixed.effects        = fixed.effects, 
                             random.effects       = random.effects,
-                            runSilent               = runSilent,  #BB 2015-06-23
+                            runSilent            = runSilent,  #BB 2015-06-23
                             Y = Y, X = X, A = A, B = B, G = G))
   
     ipw <- do.call(ipw_interference, args = ipw_args)
     out <- append(out, ipw)
     
-    if(runSilent!=T){print('Computing effect estimates...')} #BB 2015-06-23
+    if(runSilent != T){print('Computing effect estimates...')} #BB 2015-06-23
     
     estimate_args <- list(obj = ipw,
                           variance_estimation = causal_estimation_options$variance_estimation,
@@ -256,6 +256,6 @@ interference <- function(formula,
   
   class(out) <- "interference"
   
-  if(runSilent!=T){print('Interference complete')} #BB 2015-06-23
+  if(runSilent != T){print('Interference complete')} #BB 2015-06-23
   return(out)
 }

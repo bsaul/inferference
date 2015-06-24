@@ -24,7 +24,7 @@ wght_deriv_array <- function(integrand,
                              X, A, G,
                              fixed.effects,
                              random.effects,
-                             runSilent=F, #BB 2015-06-23 #pass in from ipw_interference()
+                             runSilent = F, #BB 2015-06-23 #pass in from ipw_interference()
                              ...)
 {
   ## Gather necessary bits ##
@@ -41,7 +41,7 @@ wght_deriv_array <- function(integrand,
   ## Warnings ##
 
   ## Compute weight (derivative) for each group, parameter, and alpha level ##
-  if(runSilent!=T){print('Calculating array of IP weight derivatives...')} #BB 2015-06-23
+  if(runSilent != T){print('Calculating array of IP weight derivatives...')} #BB 2015-06-23
   
   w.list <- lapply(aa, function(allocation){
     w <- by(XX, INDICES = G, simplify = TRUE, 

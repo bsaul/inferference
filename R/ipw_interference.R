@@ -32,7 +32,7 @@ ipw_interference <- function(propensity_integrand,
                              random.effects,
                              variance_estimation,
                              set_NA_to_0 = TRUE,
-                             runSilent=F, #BB 2015-06-23 pass runSilent in from interference()
+                             runSilent   = F, #BB 2015-06-23 pass runSilent in from interference()
                              ...)
 {
   dots <- list(...)
@@ -50,9 +50,9 @@ ipw_interference <- function(propensity_integrand,
                         list(integrand = propensity_integrand, 
                              allocations = allocations, 
                              X = X, A = A, G = G,
-                             fixed.effects = fixed.effects,
+                             fixed.effects  = fixed.effects,
                              random.effects = random.effects,
-                             runSilent=runSilent #BB 2015-06-23
+                             runSilent      = runSilent #BB 2015-06-23
                              ))
   #### Prepare output ####
   out <- list()  
@@ -87,7 +87,7 @@ ipw_interference <- function(propensity_integrand,
                                      A = B, # Use B for treatment in scores
                                      fixed.effects  = fixed.effects,
                                      random.effects = random.effects,
-                                     runSilent         = runSilent #BB 2015-06-23
+                                     runSilent      = runSilent #BB 2015-06-23
                                      ))
     
     # set randomization scheme to 1 for scores for logit_integrand

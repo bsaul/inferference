@@ -18,7 +18,7 @@ score_matrix <- function(integrand,
                          X, A, G, 
                          fixed.effects,
                          random.effects,
-                         runSilent=F, #BB 2015-06-23 #Pass in from ipw_interference()
+                         runSilent = F, #BB 2015-06-23 #Pass in from ipw_interference()
                          ...)
 {
   ## Warnings ##
@@ -38,7 +38,7 @@ score_matrix <- function(integrand,
                      get_args(integrate, dots))
   fargs <- append(int.args, get_args(numDeriv::grad, dots))
   
-  if(runSilent!=T){print("Calculating matrix of scores...")} #BB 2015-06-23
+  if(runSilent != T){print("Calculating matrix of scores...")} #BB 2015-06-23
   s.list <- by(XX, INDICES = G, simplify = TRUE, 
                FUN = function(xx) {
                args <- append(fargs, 
