@@ -25,6 +25,7 @@ wght_matrix <- function(integrand,
                         X, A, G,
                         fixed.effects,
                         random.effects = NULL,
+                        runSilent = F, #pass runSilent in from interference higher function  ipw_interference #BB 2015-06-23 
                         ...)
 {
   ## Gather necessary bits ##
@@ -34,7 +35,7 @@ wght_matrix <- function(integrand,
   gg <- sort(unique(G))
   
   ## Compute weight for each group and allocation level ##
-  print('Calculating matrix of IP weights...')
+  if(runSilent != T){print('Calculating matrix of IP weights...')} #BB 2015-06-23
   
   w.list <- lapply(aa, function(allocation){
     w <- by(cbind(X, A), INDICES = G, simplify = FALSE, 
