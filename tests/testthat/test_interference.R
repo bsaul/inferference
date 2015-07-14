@@ -1,7 +1,9 @@
 context("Interference functions")
 
-test_that("Interfence() works in various situations", {
+test_that("Interference() works in various situations", {
   testdt <- subset(vaccinesim, group %in% 1:10)
+  testdt2 <- data.frame(x = c(1, 1, 1, 0), y = c(1, 0, 1, 0), g = c(1,1,2,2))
+
   allos  <- c(.35, .4)
   
   # Using GLMER with random effect: should not give error
@@ -19,6 +21,15 @@ test_that("Interfence() works in various situations", {
                             formula = y | A | B ~ X1 | group,
                             model_method = 'glmer',
                             method = 'simple'))
+  
+  # Using GLMER when random effect == 0: should fail
+  expect_error(interference(data = testdt2,
+                            allocations = allos,
+                            propensity_integrand = 'logit_integrand',
+                            formula = y | x ~ (1|g) | g,
+                            model_method = 'glmer',
+                            method = 'simple'))
+  
   # Using GLM: should pass
   expect_that(interference(data = testdt,
                            allocations = allos,

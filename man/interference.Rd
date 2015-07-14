@@ -9,7 +9,7 @@ interference(formula, propensity_integrand = "logit_integrand",
   model_method = "glmer", model_options = list(family = binomial(link =
   "logit")), causal_estimation_method = "ipw",
   causal_estimation_options = list(set_NA_to_0 = TRUE, variance_estimation =
-  "robust"), conf.level = 0.95, rescale.factor = 1, ...)
+  "robust"), conf.level = 0.95, rescale.factor = 1, runSilent = T, ...)
 }
 \arguments{
 \item{formula}{The formula used to define the causal model.  Has a minimum
