@@ -106,7 +106,7 @@ interference <- function(formula,
                                                           variance_estimation = 'robust'),
                          conf.level     = 0.95,
                          rescale.factor = 1,   
-                         runSilent      = F, #Enables/disables printing of function progress #BB 2015-06-23
+                         runSilent      = T, #Enables/disables printing of function progress #BB 2015-06-23
                          ...)
 {
   ## Necessary bits ##
@@ -174,6 +174,10 @@ interference <- function(formula,
     fixed.effects  <- lme4::getME(propensity_model, 'fixef')
     random.effects <- lme4::getME(propensity_model, 'theta')
     X <- lme4::getME(propensity_model, "X")
+    if(sum(random.effects == 0) > 0){
+      stop('At least one random effect was estimated as 0. This will lead to a
+           non-invertible matrix if using robust variance estimation.')
+    }
   } else if(model_method == "glm"){
     propensity_model <- do.call("glm", args = estimation_args)
     fixed.effects  <- coef(propensity_model)
