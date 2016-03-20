@@ -178,11 +178,17 @@ interference <- function(formula,
       stop('At least one random effect was estimated as 0. This will lead to a
            non-invertible matrix if using robust variance estimation.')
     }
+    ##use link_obj$linkinv( eta ) to get value of E(Y)=mu=linkinv(eta), as link(E(Y))=eta 
+    link_obj <- stats::make.link((model_options$family)$link)
+    
   } else if(model_method == "glm"){
     propensity_model <- do.call("glm", args = estimation_args)
     fixed.effects  <- coef(propensity_model)
     random.effects <- NULL
     X <- model.matrix(propensity_model)
+    ##use link_obj$linkinv( eta ) to get value of E(Y)=mu=linkinv(eta), as link(E(Y))=eta 
+    link_obj <- stats::make.link((model_options$family)$link)
+    
   } else if(model_method == "oracle"){
     fixed.effects  <- model_options[[1]]
     random.effects <- model_options[[2]]
@@ -207,6 +213,7 @@ interference <- function(formula,
                             fixed.effects        = fixed.effects, 
                             random.effects       = random.effects,
                             runSilent            = runSilent,  #BB 2015-06-23
+                            inv_link_fun         = link_obj$linkinv, ## BB 2016-03-20 
                             Y = Y, X = X, A = A, B = B, G = G))
   
     ipw <- do.call(ipw_interference, args = ipw_args)

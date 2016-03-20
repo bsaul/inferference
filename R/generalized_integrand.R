@@ -11,7 +11,7 @@ generalized_integrand <- function(b, X, A,
                             reff_dist = list(
                               dens = stats::dnorm,
                               mean=0),
-                            link_fun)
+                            inv_link_fun)
 {
   p  <- length(fixed.effects)
   re <- random.effects[1]
@@ -36,8 +36,8 @@ generalized_integrand <- function(b, X, A,
     stop("reff_dist needs to provide a density and a mean parameter for generalized_integrand")
   }
   
-  if(is.null(link_fun)){
-    stop("Must specify link_fun in generalized_integrand")
+  if(is.null(inv_link_fun)){
+    stop("Must specify inv_link_fun in generalized_integrand")
   }
   
   ## For taking derivative w.r.t. a parameter ##
@@ -48,9 +48,9 @@ generalized_integrand <- function(b, X, A,
   
   ## Calculations ## 
   if(is.null(re) || re <= 0){
-    pr.b <- randomization * (link_fun(X %*% params[1:p]))
+    pr.b <- randomization * (inv_link_fun(X %*% params[1:p]))
   } else {
-    pr.b <- randomization * (link_fun(drop(outer(X %*% params[1:p], b, '+'))))
+    pr.b <- randomization * (inv_link_fun(drop(outer(X %*% params[1:p], b, '+'))))
   }
   if(integrate.allocation == FALSE){
     hh <- dbinom(A, 1, pr.b)
