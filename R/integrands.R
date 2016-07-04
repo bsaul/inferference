@@ -31,16 +31,13 @@
 #-----------------------------------------------------------------------------#
 
 logit_integrand <- function(b, X, A, 
-                            fixed.effects,
-                            random.effects = NULL,
-                            x = NULL, 
-                            pos = NULL, 
+                            parameters,
                             allocation = NULL, 
                             randomization = 1, 
                             integrate.allocation = FALSE)
 {
-  p  <- length(fixed.effects)
-  re <- random.effects[1]
+  p     <- ncol(X)
+  theta <- parameters 
   
   ## In the case of an intercept-only model, X needs to be converted to matrix
   # for the warning to work
@@ -49,39 +46,38 @@ logit_integrand <- function(b, X, A,
   }
   
   ## Warnings ##
-  if(p != ncol(X)){
-    stop('The number of fixed effect parameters is not equal to the number \n
-         of columns in the covariate matrix')
-  }
+  # if(p != ncol(X)){
+  #   stop('The number of fixed effect parameters is not equal to the number \n
+  #        of columns in the covariate matrix')
+  # }
   
   if(length(A) != nrow(X)){
-    stop('Length of treatment vector is not equal to number of observations')
+    stop('Length of treatment vector is not equal to number of observations in
+         X matrix')
   }
   
-
-  ## For taking derivative w.r.t. a parameter ##
-  params <- c(fixed.effects, re)
-  if(!is.null(pos)){
-    params[pos] <- x
-  }
+  # Check whether to ignore random effect
+  check_re <- (length(theta) == p || theta[p + 1] <= 0)
   
   ## Calculations ## 
-  if(is.null(re) || re <= 0){
-    pr.b <- randomization * (plogis(X %*% params[1:p]))
+  if(check_re){
+    pr.b <- randomization * (plogis(X %*% theta[1:p]))
   } else {
-    pr.b <- randomization * (plogis(drop(outer(X %*% params[1:p], b, '+'))))
+    pr.b <- randomization * (plogis(drop(outer(X %*% theta[1:p], b, '+'))))
   }
+  
   if(integrate.allocation == FALSE){
     hh <- dbinom(A, 1, pr.b)
   } else {
     hh <- (pr.b/allocation)^A * ((1-pr.b)/(1 - allocation))^(1-A)
   }
-  if(is.null(re) || re <= 0){
+  
+  if(check_re){
     # in this way dnorm integrates to one when integrating from -Inf to Inf
-    out <- prod(hh) * dnorm(b, mean=0, sd = 1) 
+    out <- exp(sum(log(hh))) * dnorm(b, mean=0, sd = 1) 
   } else {
-    hha <- apply(hh, 2, prod)
-    out <- hha * dnorm(b, mean=0, sd = params[p + 1])
+    hha <- apply(hh, 2, function(x) exp(sum(log(x))))
+    out <- hha * dnorm(b, mean=0, sd = theta[p + 1])
   }
   
   return(out)
