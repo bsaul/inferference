@@ -11,8 +11,7 @@
 # @param B 'participation' vector. Defaults to A in the case there is no
 # participation variable.
 # @param G group assignment vector
-# @param fixed.effects vector of fixed effects
-# @param random.effects vector of random effects 
+# @param parameters a list of fixed_effects and random_effects
 # @param variance_estimation currently supports 'robust' or 'naive'
 # @param ... additional arguments passed to other functions such as 
 # \code{\link{glmer}}, \code{\link{grad}}, and \code{integrand} or \code{likelihood}.
@@ -28,11 +27,10 @@ ipw_interference <- function(propensity_integrand,
                              loglihood_integrand = propensity_integrand,
                              allocations,
                              Y, X, A, B = A, G, 
-                             fixed.effects, 
-                             random.effects,
+                             parameters,
                              variance_estimation,
                              set_NA_to_0 = TRUE,
-                             runSilent   = T, #BB 2015-06-23 pass runSilent in from interference()
+                             runSilent   = TRUE, #BB 2015-06-23 pass runSilent in from interference()
                              ...)
 {
   dots <- list(...)
@@ -47,22 +45,23 @@ ipw_interference <- function(propensity_integrand,
   integrate_args <- get_args(FUN = integrate, args_list = dots)
   
   weight_args <- append(append(integrand_args, integrate_args),
-                        list(integrand = propensity_integrand, 
+                        list(integrand   = propensity_integrand, 
                              allocations = allocations, 
                              X = X, A = A, G = G,
-                             fixed.effects  = fixed.effects,
-                             random.effects = random.effects,
-                             runSilent      = runSilent #BB 2015-06-23
+                             parameters = parameters,
+                             runSilent  = runSilent #BB 2015-06-23
                              ))
   #### Prepare output ####
   out <- list()  
 
   ## Compute Weights ##
   weights <- do.call(wght_matrix, args = weight_args)
+  
   if(variance_estimation == 'robust'){
     weightd <- do.call(wght_deriv_array, args = append(weight_args, grad_args))  
-  } 
+  }
   
+
   ## replace any missing weights with 0 ##
   if(set_NA_to_0 == TRUE) {
     weights[is.na(weights)] <- 0
@@ -74,7 +73,8 @@ ipw_interference <- function(propensity_integrand,
   
   #### COMPUTE ESTIMATES AND OUTPUT ####
   estimate_args <- append(point_est_args, list(Y = Y, G = G, A = A))
-  point_args <- append(estimate_args, list(weights = weights))
+  point_args    <- append(estimate_args, list(weights = weights))
+
 
   #### Calculate output ####
   out$point_estimates <- do.call(ipw_point_estimates, args = point_args)
@@ -85,9 +85,8 @@ ipw_interference <- function(propensity_integrand,
     score_args <- append(sargs, list(integrand = loglihood_integrand,
                                      X = X, G = G, 
                                      A = B, # Use B for treatment in scores
-                                     fixed.effects  = fixed.effects,
-                                     random.effects = random.effects,
-                                     runSilent      = runSilent #BB 2015-06-23
+                                     parameters = parameters,
+                                     runSilent  = runSilent #BB 2015-06-23
                                      ))
     
     # set randomization scheme to 1 for scores for logit_integrand
