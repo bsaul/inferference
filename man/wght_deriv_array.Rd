@@ -8,6 +8,8 @@ wght_deriv_array(parameters, integrand, allocations, X, A, G,
   runSilent = FALSE, ...)
 }
 \arguments{
+\item{parameters}{vector of parameters passed to \code{integrand}}
+
 \item{integrand}{the function to passed to the argument 'f' of \code{\link{integrate}},
 which is part of \code{\link{wght_calc}}.}
 
@@ -20,10 +22,6 @@ which is part of \code{\link{wght_calc}}.}
 \item{G}{vector of group assignments}
 
 \item{...}{additional arguments passed to integrand}
-
-\item{fixed.effects}{vector of fixed effect parameters}
-
-\item{random.effects}{OPTIONAL vector random effect parameters}
 }
 \value{
 a length(unique(group)) X length(params) X length(alphas) array of

@@ -10,15 +10,13 @@ wght_deriv_calc(integrand, parameters, allocation, hide.errors = TRUE, ...)
 \item{integrand}{the function to passed to the argument 'f' of \code{\link{integrate}},
 which is part of \code{\link{wght_calc}}.}
 
+\item{parameters}{vector of parameters passed to \code{integrand}}
+
 \item{allocation}{the allocation ratio for which to compute the weights}
 
 \item{hide.errors}{print \code{grad} error messages. Defaults to TRUE.}
 
 \item{...}{additional arguments passed to integrand}
-
-\item{fixed.effects}{vector of fixed effect parameters}
-
-\item{random.effects}{vector random effect parameters}
 }
 \value{
 vector of derivatives with respect to element of params

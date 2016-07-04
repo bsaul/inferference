@@ -10,8 +10,7 @@
 #' @param X covariate matrix
 #' @param A vector of treatment assignments
 #' @param G vector of group assignments
-#' @param fixed.effects vector of fixed effect parameters
-#' @param random.effects OPTIONAL vector random effect parameters
+#' @param parameters vector of parameters passed to \code{integrand}
 #' @param ... additional arguments passed to integrand
 #' @return a length(unique(group)) X length(params) X length(alphas) array of
 #' group weight derivatives

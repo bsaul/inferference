@@ -7,6 +7,8 @@
 score_calc(parameters, integrand, hide.errors = TRUE, ...)
 }
 \arguments{
+\item{parameters}{vector of parameters passed to \code{integrand}}
+
 \item{integrand}{function to used for the integrand.
 Defaults to \code{\link{logit_integrand}}.}
 
@@ -14,10 +16,6 @@ Defaults to \code{\link{logit_integrand}}.}
 Defaults to true.}
 
 \item{...}{additional arguments pass to the integrand function.}
-
-\item{fixed.effects}{vector of fixed effect parameters.}
-
-\item{random.effects}{OPTIONAL vector random effect parameters.}
 }
 \value{
 length(theta) vector of scores

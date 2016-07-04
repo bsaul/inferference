@@ -16,12 +16,10 @@ score_matrix(integrand, X, A, G, parameters, runSilent = FALSE, ...)
 
 \item{G}{vector of group assignments}
 
+\item{parameters}{vector of parameters passed to \code{integrand}}
+
 \item{...}{additional arguments passed to \code{integrand} or \code{\link{grad}}.
 For example, one can change the \code{method} argument in \code{grad}.}
-
-\item{fixed.effects}{vector of fixed effect parameters}
-
-\item{random.effects}{OPTIONAL vector random effect parameters}
 }
 \value{
 N X length(params) matrix of scores

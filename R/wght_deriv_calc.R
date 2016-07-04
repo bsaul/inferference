@@ -6,8 +6,7 @@
 #' 
 #' @param integrand the function to passed to the argument 'f' of \code{\link{integrate}},
 #' which is part of \code{\link{wght_calc}}.
-#' @param fixed.effects vector of fixed effect parameters
-#' @param random.effects vector random effect parameters
+#' @param parameters vector of parameters passed to \code{integrand}
 #' @param allocation the allocation ratio for which to compute the weights
 #' @param hide.errors print \code{grad} error messages. Defaults to TRUE.
 #' @param ... additional arguments passed to integrand

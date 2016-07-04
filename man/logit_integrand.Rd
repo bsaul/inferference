@@ -10,9 +10,12 @@ logit_integrand(b, X, A, parameters, allocation = NULL, randomization = 1,
 \arguments{
 \item{b}{vector argument of values necessary for \code{\link{integrate}}.}
 
-\item{X}{n by length(fixed.effects) matrix of covariates.}
+\item{X}{n by length(fixed effects) matrix of covariates.}
 
 \item{A}{vector of observed treatments (0,1)}
+
+\item{parameters}{vector of fixed effect (and random effect if applicable). 
+Random effect should be last element in vector.}
 
 \item{allocation}{The allocation strategy. Required if include.allocations == TRUE. 
 Defaults to NA.}
@@ -26,11 +29,6 @@ does not include allocation.}
 params. Only used if \code{pos} is not NULL.}
 
 \item{pos}{The position of theta for which to take the derivative. Defaults to NULL.}
-
-\item{fixed.effects}{vector of fixed effect parameters.}
-
-\item{random.effects}{OPTIONAL vector of random effect parameters. If provided, 
-only the first element is used. If this element is <= 0, it is ignored.}
 }
 \value{
 value of the integrand

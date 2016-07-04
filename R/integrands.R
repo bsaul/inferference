@@ -14,10 +14,9 @@
 #' @param x Used by \code{\link{grad}} for taking the derivative with respect an element of
 #' params. Only used if \code{pos} is not NULL.
 #' @param pos The position of theta for which to take the derivative. Defaults to NULL.
-#' @param X n by length(fixed.effects) matrix of covariates.
-#' @param fixed.effects vector of fixed effect parameters.
-#' @param random.effects OPTIONAL vector of random effect parameters. If provided, 
-#' only the first element is used. If this element is <= 0, it is ignored.
+#' @param X n by length(fixed effects) matrix of covariates.
+#' @param parameters vector of fixed effect (and random effect if applicable). 
+#' Random effect should be last element in vector.
 #' @param A vector of observed treatments (0,1)
 #' @param allocation The allocation strategy. Required if include.allocations == TRUE. 
 #' Defaults to NA.

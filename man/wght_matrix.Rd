@@ -20,11 +20,9 @@ wght_matrix(integrand, allocations, X, A, G, parameters, runSilent = FALSE,
 
 \item{G}{vector of group assignments}
 
+\item{parameters}{vector of parameters passed to \code{integrand}}
+
 \item{...}{additional arguments passed to \code{integrand}}
-
-\item{fixed.effects}{vector of fixed effect parameters}
-
-\item{random.effects}{OPTIONAL vector random effect parameters}
 }
 \value{
 a length(unique(group)) X length(alphas) matrix of group weights
