@@ -66,7 +66,8 @@ test_that("weights calculations equal", {
                            allocations = aaa,
                            X = XXX, A = AAA, G = GGG,
                            parameters = c(fff, 5),
-                           randomization = .5), mmm2,
+                           randomization = .5,
+                           runSilent = TRUE), mmm2,
                tolerance = 1e-6)
   
   # Checking weight derivative calculations
@@ -74,7 +75,8 @@ test_that("weights calculations equal", {
                            allocations = aaa,
                            X = XXX, A = AAA, G = GGG,
                            parameters = c(fff, 5),
-                           randomization = .5), mmm3,
+                           randomization = .5,
+                           runSilent = TRUE), mmm3,
                tolerance = 1e-6, check.attributes = FALSE)
   
 })
