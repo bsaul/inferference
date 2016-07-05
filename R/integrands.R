@@ -34,14 +34,14 @@ logit_integrand <- function(b, X, A,
                             allocation = A, 
                             randomization = 1)
 {
-  p     <- ncol(X)
-  theta <- parameters 
-  
   ## In the case of an intercept-only model, X needs to be converted to matrix
   # for the warning to work
   if(!is.matrix(X)){
     X <- as.matrix(X)
   }
+  
+  theta <- parameters 
+  p <- ncol(X)
   
   ## Warnings ##
   # if(p != ncol(X)){
