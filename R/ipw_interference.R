@@ -82,11 +82,6 @@ ipw_interference <- function(propensity_integrand,
     # set randomization scheme to 1 for scores for logit_integrand
     score_args$randomization <- 1
     
-    # If integrate.allocation is used in the integrand (as in logit_integrand)
-    # set this argument to FALSE
-    if('integrate.allocation' %in% names(formals(loglihood_integrand))){
-      score_args$integrate.allocation <- FALSE
-    }
     out$Upart           <- do.call(ipw_point_estimates, args = U_args)
     out$scores          <- do.call(score_matrix, args = score_args)
   } 
