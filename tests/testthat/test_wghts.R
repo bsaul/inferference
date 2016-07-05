@@ -50,8 +50,7 @@ test_that("weights calculations equal", {
                          allocation = .9, 
                          X = XXX[1:2, ], A = AAA[1:2], 
                          parameters = c(fff, 1), 
-                         randomization = .5,
-                         integrate.allocation = TRUE), 0.492904177726425)
+                         randomization = .5), 0.492904177726425)
   
   # Checking derivative calculations
   expect_equal(wght_deriv_calc(integrand = logit_integrand, 
@@ -67,8 +66,7 @@ test_that("weights calculations equal", {
                            allocations = aaa,
                            X = XXX, A = AAA, G = GGG,
                            parameters = c(fff, 5),
-                           randomization = .5, 
-                           integrate.allocation = TRUE), mmm2,
+                           randomization = .5), mmm2,
                tolerance = 1e-6)
   
   # Checking weight derivative calculations
@@ -76,8 +74,7 @@ test_that("weights calculations equal", {
                            allocations = aaa,
                            X = XXX, A = AAA, G = GGG,
                            parameters = c(fff, 5),
-                           randomization = .5, 
-                           integrate.allocation = TRUE), mmm3,
+                           randomization = .5), mmm3,
                tolerance = 1e-6, check.attributes = FALSE)
   
 })

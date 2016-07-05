@@ -20,8 +20,7 @@ test_that("Value of Logit Integrand equals", {
                   A = c(0, 1), 
                   parameters =  c(.1, .1, 1), 
                   randomization = .5,
-                  allocation = .5,
-                  integrate.allocation =TRUE ), c(0.315030116031820,
+                  allocation = .5 ), c(0.315030116031820,
                                                   0.228523182468669))
                
 })

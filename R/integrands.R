@@ -32,8 +32,7 @@
 logit_integrand <- function(b, X, A, 
                             parameters,
                             allocation = NULL, 
-                            randomization = 1, 
-                            integrate.allocation = FALSE)
+                            randomization = 1)
 {
   p     <- ncol(X)
   theta <- parameters 
@@ -65,11 +64,7 @@ logit_integrand <- function(b, X, A,
     pr.b <- randomization * (plogis(drop(outer(X %*% theta[1:p], b, '+'))))
   }
   
-  if(integrate.allocation == FALSE){
-    hh <- dbinom(A, 1, pr.b)
-  } else {
-    hh <- (pr.b/allocation)^A * ((1-pr.b)/(1 - allocation))^(1-A)
-  }
+  hh <- (pr.b/allocation)^A * ((1-pr.b)/(1 - allocation))^(1-A)
   
   if(check_re){
     # in this way dnorm integrates to one when integrating from -Inf to Inf

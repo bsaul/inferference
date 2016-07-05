@@ -61,11 +61,6 @@ wght_calc <- function(parameters,
     args$allocation <- allocation
   }
   
-  # Integrate.allocation argument in logit_integrand() defines
-  # where allocation term is computed: in the numerator or denominator
-  allocation.denom <- ifelse(!'integrate.allocation' %in% dot.names, FALSE,
-                             ifelse(args$integrate.allocation == TRUE, TRUE, FALSE))
-  
   ## Compute the integral ##
   # if any of the products within the integrand return Inf, then return NA
   # else return the result of integration
@@ -74,12 +69,7 @@ wght_calc <- function(parameters,
   PrA <- if(is(f, 'try-error')) NA else f$value
 
   ## Compute the weight ##
-  if(allocation.denom == TRUE){
-    weight <- 1/PrA
-  } else {
-    ppp    <- prod(allocation^A * (1-allocation)^(1-A))
-    weight <- ppp/PrA
-  }
+  weight <- 1/PrA
 
   return(weight)
 }
