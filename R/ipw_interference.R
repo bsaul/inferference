@@ -29,7 +29,6 @@ ipw_interference <- function(propensity_integrand,
                              Y, X, A, B = A, G, 
                              parameters,
                              variance_estimation,
-                             set_NA_to_0 = TRUE,
                              runSilent   = TRUE, #BB 2015-06-23 pass runSilent in from interference()
                              ...)
 {
@@ -61,15 +60,6 @@ ipw_interference <- function(propensity_integrand,
     weightd <- do.call(wght_deriv_array, args = append(weight_args, grad_args))  
   }
   
-
-  ## replace any missing weights with 0 ##
-  if(set_NA_to_0 == TRUE) {
-    weights[is.na(weights)] <- 0
-    if(variance_estimation == 'robust'){ 
-      weightd[is.na(weightd)] <- 0 
-      out$weightd <- weightd
-    }
-  }
   
   #### COMPUTE ESTIMATES AND OUTPUT ####
   estimate_args <- append(point_est_args, list(Y = Y, G = G, A = A))
@@ -99,10 +89,6 @@ ipw_interference <- function(propensity_integrand,
     }
     out$Upart           <- do.call(ipw_point_estimates, args = U_args)
     out$scores          <- do.call(score_matrix, args = score_args)
-    ## replace any scores with 0 ##
-    if(set_NA_to_0 == TRUE) {
-      out$scores[is.na(out$scores)] <- 0
-    }
   } 
 
   out$weights <- weights
