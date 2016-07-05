@@ -69,7 +69,7 @@ ipw_effect_calc <- function(obj,
   
   ## Necessary bits ##
   N  <- dim(obj$weights)[1] 
-  p  <- dim(obj$weightd)[2] 
+  p  <- dim(obj$scores)[2] 
   k  <- length(allocations)
   l  <- dim(obj$point_estimates$outcomes$overall)[2]
   a1 <- as.character(alpha1)
