@@ -8,8 +8,8 @@ interference(formula, propensity_integrand = "logit_integrand",
   loglihood_integrand = propensity_integrand, allocations, data,
   model_method = "glmer", model_options = list(family = binomial(link =
   "logit")), causal_estimation_method = "ipw",
-  causal_estimation_options = list(set_NA_to_0 = TRUE, variance_estimation =
-  "robust"), conf.level = 0.95, rescale.factor = 1, runSilent = TRUE, ...)
+  causal_estimation_options = list(variance_estimation = "robust"),
+  conf.level = 0.95, rescale.factor = 1, runSilent = TRUE, ...)
 }
 \arguments{
 \item{formula}{The formula used to define the causal model.  Has a minimum 
@@ -66,12 +66,8 @@ random effects, set \code{random.effects = NULL}.}
 
 \item{causal_estimation_method}{currently only supports \code{'ipw'}.}
 
-\item{causal_estimation_options}{A list with two slots. (1) \code{variance_estimation} is 
-either \code{'naive'} or \code{'robust'}. See details. Defaults to \code{'robust'}. (2) 
-is \code{set_NA_to_0}. Defaults to \code{TRUE}. When, for example, group sizes 
-reach over 1000, the product terms of the propensity diminish to zero. 
-This may result in \code{NaN} values for the weights or loglihood. This option
-sets such cases to zero.}
+\item{causal_estimation_options}{A list. Current options are: (1) \code{variance_estimation} is 
+either \code{'naive'} or \code{'robust'}. See details. Defaults to \code{'robust'}.}
 
 \item{conf.level}{level for confidence intervals. Defaults to \code{0.95}.}
 
