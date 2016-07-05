@@ -159,6 +159,10 @@ interference <- function(formula,
     stop('The group variable must have at least 2 groups (more is better).')
   }
   
+  if(!(causal_estimation_options$variance_estimation %in% c('naive', 'robust'))){
+    stop("The variance estimation method should be 'naive' or 'robust'")
+  }
+  
   #### Compute Parameter Estimates ####
 
   estimation_args <- append(list(formula = propensity_formula, data = data), 

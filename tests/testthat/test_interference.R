@@ -39,12 +39,30 @@ test_that("Interference() works in various situations", {
                            method = 'simple'), NA)
   
   # Using GLM without intercept: should pass
-  expect_output(interference(data = testdt,
+  expect_error(interference(data = testdt,
                            allocations = allos,
                            propensity_integrand = 'logit_integrand',
                            formula = y | A | B ~ 1 | group,
                            model_method = 'glm',
-                           method = 'simple'))
+                           method = 'simple'), NA)
+  
+  # Using GLM without intercept with simple variance estimation: should pass
+  expect_error(interference(data = testdt,
+                            allocations = allos,
+                            propensity_integrand = 'logit_integrand',
+                            formula = y | A | B ~ 1 | group,
+                            model_method = 'glm',
+                            causal_estimation_options = list(variance_estimation = 'naive'),
+                            method = 'simple'), NA)
+  
+  # Using GLM without intercept with nonsense variance estimation: should fail
+  expect_error(interference(data = testdt,
+                            allocations = allos,
+                            propensity_integrand = 'logit_integrand',
+                            formula = y | A | B ~ 1 | group,
+                            model_method = 'glm',
+                            causal_estimation_options = list(variance_estimation = 'jfklas'),
+                            method = 'simple'))
   
   # Using Oracle without parameters defined: should fail
   expect_error(interference(data = testdt,
