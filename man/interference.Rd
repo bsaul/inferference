@@ -23,7 +23,7 @@ estimate or fix propensity parameters.}
 used to compute the IP weights. This defaults to \code{logit_integrand}, 
 which calculates the product of inverse logits for individuals in a group: 
 \eqn{\prod_{j = 1}^{n_i} \{r \times h_{ij}(b_i)^{A_{ij}}\}\{1 - r \times 
-h_{ij}(b_i)^{1 - A_{ij}} \} f_b(b_i; \theta_s)}{prod(r * plogis(X * fixef + b)^A * 
+h_{ij}(b_i)\}^{1 - A_{ij}} f_b(b_i; \theta_s)}{prod(r * plogis(X * fixef + b)^A * 
 (1 - r * plogis(X * fixef+ b))^(1 - A)) * 
 dnorm(sd = sqrt(ranef))} where \deqn{h_{ij}(b_i) = logit^{-1}
 (\mathbf{X}_{ij}\theta_a + b_i)} and \eqn{b_i} is a group-level random effect, 
@@ -111,5 +111,12 @@ If the true propensity model is known (e.g. in simulations) use
 \code{variance_estimatation = 'robust'}. Refer to the web appendix of
 \href{http://dx.doi.org/10.1111/biom.12184}{Heydrich-Perez et al. (2014)} 
 for complete details.
+}
+\references{
+Perez-Heydrich, C., Hudgens, M. G., Halloran, M. E., Clemens, J. D., Ali, M., & Emch, M. E. (2014). 
+Assessing effects of cholera vaccination in the presence of interference. Biometrics, 70(3), 731-741.
+
+Tchetgen Tchetgen, E. J., & VanderWeele, T. J. (2012). On causal inference in the presence of interference. 
+Statistical Methods in Medical Research, 21(1), 55-75.
 }
 
