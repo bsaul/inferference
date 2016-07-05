@@ -25,7 +25,7 @@
 #' defines the log likelihood of the logit model used for \code{robust} variance
 #' estimation. Generally, this will be the same function as 
 #' \code{propensity_integrand}. Indeed, this is the default.
-#' @param allocations a vector of values in [0, 1]. Increasing the number of 
+#' @param allocations a vector of values in (0, 1). Increasing the number of 
 #' elements of the allocation vector greatly increases computation time; however, 
 #' a larger number of allocations will make plots look nicer. A minimum of two 
 #' allocations is required.
@@ -43,16 +43,12 @@
 #' details on how to pass the oracle parameters. 
 #' @param model_options a list of options passed to the function in 
 #' \code{model_method}. Defaults to \code{list(family = binomial(link = 'logit'))}. 
-#' When \code{model_method = 'oracle'}, the list must have two elements 
-#' \code{fixed.effects} and \code{random.effects}. If the model did not include 
+#' When \code{model_method = 'oracle'}, the list must have two elements (1)
+#' \code{fixed_effects} and (2) \code{random_effects}. If the model did not include 
 #' random effects, set \code{random.effects = NULL}.
 #' @param causal_estimation_method currently only supports \code{'ipw'}.
-#' @param causal_estimation_options A list with two slots. (1) \code{variance_estimation} is 
-#' either \code{'naive'} or \code{'robust'}. See details. Defaults to \code{'robust'}. (2) 
-#' is \code{set_NA_to_0}. Defaults to \code{TRUE}. When, for example, group sizes 
-#' reach over 1000, the product terms of the propensity diminish to zero. 
-#' This may result in \code{NaN} values for the weights or loglihood. This option
-#' sets such cases to zero.
+#' @param causal_estimation_options A list. Current options are: (1) \code{variance_estimation} is 
+#' either \code{'naive'} or \code{'robust'}. See details. Defaults to \code{'robust'}. 
 #' @param conf.level level for confidence intervals. Defaults to \code{0.95}.
 #' @param rescale.factor a scalar multiplication factor by which to rescale outcomes
 #' and effects. Defaults to \code{1}.
@@ -102,11 +98,10 @@ interference <- function(formula,
                          model_method = "glmer",
                          model_options = list(family = binomial(link = 'logit')),
                          causal_estimation_method = 'ipw',
-                         causal_estimation_options = list(set_NA_to_0 = TRUE, 
-                                                          variance_estimation = 'robust'),
+                         causal_estimation_options = list(variance_estimation = 'robust'),
                          conf.level     = 0.95,
                          rescale.factor = 1,   
-                         runSilent      = T, #Enables/disables printing of function progress #BB 2015-06-23
+                         runSilent      = TRUE, 
                          ...)
 {
   ## Necessary bits ##
@@ -152,8 +147,8 @@ interference <- function(formula,
     stop('Logit integrand is designed to handle only 1 random effect.')
   }
   
-  if(min(allocations) < 0 | max(allocations) > 1){
-    stop('Allocations must be between 0 and 1 (inclusive)')
+  if(min(allocations) <= 0 | max(allocations) >= 1){
+    stop('Allocations must be between 0 and 1')
   }
   
   if(length(allocations) < 2){
@@ -169,26 +164,29 @@ interference <- function(formula,
   estimation_args <- append(list(formula = propensity_formula, data = data), 
                             model_options)
   
+  parameters <- list()
+  
   if(model_method == "glmer"){
     propensity_model <- do.call(lme4::glmer, args = estimation_args)
-    fixed.effects  <- lme4::getME(propensity_model, 'fixef')
-    random.effects <- lme4::getME(propensity_model, 'theta')
+    parameters$fixed_effects  <- lme4::getME(propensity_model, 'fixef')
+    parameters$random_effects <- lme4::getME(propensity_model, 'theta')
     X <- lme4::getME(propensity_model, "X")
-    if(sum(random.effects == 0) > 0){
+    
+    if(sum(parameters$random_effects == 0) > 0){
       stop('At least one random effect was estimated as 0. This will lead to a
            non-invertible matrix if using robust variance estimation.')
     }
   } else if(model_method == "glm"){
     propensity_model <- do.call("glm", args = estimation_args)
-    fixed.effects  <- coef(propensity_model)
-    random.effects <- NULL
+    parameters$fixed_effects  <- coef(propensity_model)
+    parameters$random_effects <- NULL
     X <- model.matrix(propensity_model)
   } else if(model_method == "oracle"){
-    fixed.effects  <- model_options[[1]]
-    random.effects <- model_options[[2]]
+    parameters$fixed_effects  <- model_options[[1]]
+    parameters$random_effects <- model_options[[2]]
     X <- model.matrix(propensity_formula, data)
     
-    if(length(fixed.effects) != ncol(X)){
+    if(length(parameters$fixed_effects) != ncol(X)){
       stop('oracle fixed effects vector must have length of # of columns of X')
     }
   }
@@ -204,15 +202,14 @@ interference <- function(formula,
                        list(propensity_integrand = integrandFUN, 
                             loglihood_integrand  = likelihoodFUN,
                             allocations          = allocations,
-                            fixed.effects        = fixed.effects, 
-                            random.effects       = random.effects,
-                            runSilent            = runSilent,  #BB 2015-06-23
+                            parameters           = unlist(parameters),
+                            runSilent            = runSilent, 
                             Y = Y, X = X, A = A, B = B, G = G))
   
     ipw <- do.call(ipw_interference, args = ipw_args)
     out <- append(out, ipw)
     
-    if(runSilent != T){print('Computing effect estimates...')} #BB 2015-06-23
+    if(runSilent != TRUE){print('Computing effect estimates...')} #BB 2015-06-23
     
     estimate_args <- list(obj = ipw,
                           variance_estimation = causal_estimation_options$variance_estimation,
@@ -251,7 +248,7 @@ interference <- function(formula,
                       conf.level   = conf.level,
                       ngroups      = N, 
                       nallocations = k,
-                      npredictors  = length(fixed.effects),
+                      npredictors  = length(parameters$fixed_effects),
                       ntreatments  = l,
                       allocations  = allocations,
                       treatments   = trt_lvls,
@@ -260,6 +257,6 @@ interference <- function(formula,
   
   class(out) <- "interference"
   
-  if(runSilent != T){print('Interference complete')} #BB 2015-06-23
+  if(runSilent != TRUE){print('Interference complete')} #BB 2015-06-23
   return(out)
 }
