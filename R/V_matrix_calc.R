@@ -52,16 +52,7 @@ V_matrix <- function(scores,
     }
   }
   
-  ## Create the V matrix for each group ##
-  V_i <- array(dim = c(p+1, p+1, N))
-  
-  for(ii in 1:N){
-    hold <- c(scores[ii, ], xx[ii])
-    V_i[ , , ii] <- hold %*% t(hold)
-  }
-  
-  ## Create final V matrix by taking the mean of each element across groups ##
-  V <- apply(V_i, 1:2, sum, na.rm = T)/N
-
-  return(V)
+  ee <- cbind(scores, xx)
+  V <- crossprod(ee)/N
+  V
 }
