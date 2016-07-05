@@ -29,10 +29,10 @@ wght_deriv_calc <- function(integrand,
                      get_args(integrate, dots))
   
   args <- append(append(int.args, get_args(numDeriv::grad, dots)),
-                 list(func           = wght_calc, 
-                      integrand      = integrand, 
-                      allocation     = allocation,
-                      x     = parameters))
+                 list(func       = wght_calc, 
+                      integrand  = integrand, 
+                      allocation = allocation,
+                      x          = parameters))
   
   dervs <- do.call(numDeriv::grad, args = args)
 
