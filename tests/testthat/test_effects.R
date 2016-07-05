@@ -13,22 +13,26 @@ test_that("retrieval functions work", {
                        method = 'simple')
   values <- c('estimate', 'std.error', 'conf.low', 'conf.high')
   # Direct effects
-  expect_equivalent(as.numeric(as.matrix(direct_effect(test, .4)[values])), 
+  expect_equal(as.numeric(as.matrix(direct_effect(test, .4)[values])), 
                     c(0.24673529536089, 0.122468329766916, 
-                      0.00670177977095976, 0.48676881095082))
+                      0.00670177977095976, 0.48676881095082),
+                    tolerance = 1e-6)
   # Indirect effects
-  expect_equivalent(as.numeric(as.matrix(ie(test, .35, .4)[values])), 
+  expect_equal(as.numeric(as.matrix(ie(test, .35, .4)[values])), 
                     c(0.0666863333283656, 0.0679513395569612, 
-                      -0.0664958449045302, 0.199868511561261))
+                      -0.0664958449045302, 0.199868511561261),
+                    tolerance = 1e-6)
   
   # Total effects
-  expect_equivalent(as.numeric(as.matrix(te(test, .35, .4)[values])), 
+  expect_equal(as.numeric(as.matrix(te(test, .35, .4)[values])), 
                     c(0.313421628689255  , 0.14769062385725, 
-                      0.0239533250747932, 0.602889932303717))
+                      0.0239533250747932, 0.602889932303717),
+               tolerance = 1e-6)
   
   # Overall effects
-  expect_equivalent(as.numeric(as.matrix(oe(test, .35, .4)[values])), 
+  expect_equal(as.numeric(as.matrix(oe(test, .35, .4)[values])), 
                     c(0.094375104083545  , 0.0714379954812212, 
-                      -0.0456407941873837, 0.234391002354474))
+                      -0.0456407941873837, 0.234391002354474),
+                    tolerance = 1e-6)
 })
 
