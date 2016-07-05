@@ -8,8 +8,8 @@ test_that("Interference() works in various situations", {
   
   # Using GLMER with random effect: should not give error
   expect_error(interference(data = testdt,
-                          allocations = allos,
-                          propensity_integrand = 'logit_integrand',
+                           allocations = allos,
+                           propensity_integrand = 'logit_integrand',
                            formula = y | A | B ~ X1 + (1|group) | group,
                            model_method = 'glmer',
                            method = 'simple'), NA)
