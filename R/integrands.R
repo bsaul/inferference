@@ -56,7 +56,7 @@ logit_integrand <- function(b, X, A,
   
   # Check whether to ignore random effect
   check_re <- (length(theta) == p || theta[p + 1] <= 0)
-
+  
   ## Calculations ## 
   if(check_re){
     pr.b <- randomization * (plogis(X %*% theta[1:p]))
