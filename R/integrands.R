@@ -55,10 +55,10 @@ logit_integrand <- function(b, X, A,
   }
   
   # Check whether to ignore random effect
-  check_re <- (length(theta) == p || theta[p + 1] <= 0)
-  
+  ignore_re <- (length(theta) == p || theta[p + 1] <= 0)
+
   ## Calculations ## 
-  if(check_re){
+  if(ignore_re){
     pr.b <- randomization * (plogis(X %*% theta[1:p]))
   } else {
     pr.b <- randomization * (plogis(drop(outer(X %*% theta[1:p], b, '+'))))
@@ -66,7 +66,7 @@ logit_integrand <- function(b, X, A,
   
   hh <- (pr.b/allocation)^A * ((1-pr.b)/(1 - allocation))^(1-A)
   
-  if(check_re){
+  if(ignore_re){
     # in this way dnorm integrates to one when integrating from -Inf to Inf
     out <- exp(sum(log(hh))) * dnorm(b, mean=0, sd = 1) 
   } else {
