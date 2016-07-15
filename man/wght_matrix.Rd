@@ -5,7 +5,7 @@
 \title{Creates a number of groups by number of allocation schemes matrix of group weights.
 Allocation schemes are selected by the user.}
 \usage{
-wght_matrix(integrand, allocations, X, A, G, parameters, runSilent = FALSE,
+wght_matrix(integrand, allocations, X, A, G, parameters, runSilent = TRUE,
   ...)
 }
 \arguments{

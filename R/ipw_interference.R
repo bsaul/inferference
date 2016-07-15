@@ -29,7 +29,7 @@ ipw_interference <- function(propensity_integrand,
                              Y, X, A, B = A, G, 
                              parameters,
                              variance_estimation,
-                             runSilent   = TRUE, #BB 2015-06-23 pass runSilent in from interference()
+                             runSilent   = TRUE, 
                              ...)
 {
   dots <- list(...)

@@ -24,7 +24,7 @@ wght_matrix <- function(integrand,
                         allocations, 
                         X, A, G,
                         parameters,
-                        runSilent = FALSE, 
+                        runSilent = TRUE, 
                         ...)
 {
   ## Gather necessary bits ##

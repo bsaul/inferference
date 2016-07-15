@@ -5,7 +5,7 @@
 \title{Create an array of group weight derivatives}
 \usage{
 wght_deriv_array(parameters, integrand, allocations, X, A, G,
-  runSilent = FALSE, ...)
+  runSilent = TRUE, ...)
 }
 \arguments{
 \item{parameters}{vector of parameters passed to \code{integrand}}

@@ -118,7 +118,7 @@ interference <- function(formula,
   len_rhs         <- length(cformula)[2]
 
   ## For the sake of consistency downstream, reorder data frame by groups ##
-  group_var <- attr(terms(cformula, lhs = 0, rhs = len_rhs), 'term.labels')
+  group_var <- attr(stats::terms(cformula, lhs = 0, rhs = len_rhs), 'term.labels')
   data <- data[order(data[ , group_var]), ]
   
   ## Parse out the formula into necessary pieces ##
@@ -188,7 +188,7 @@ interference <- function(formula,
     propensity_model <- do.call("glm", args = estimation_args)
     parameters$fixed_effects  <- stats::coef(propensity_model)
     parameters$random_effects <- NULL
-    X <- model.matrix(propensity_model)
+    X <- stats::model.matrix(propensity_model)
   } else if(model_method == "oracle"){
     parameters$fixed_effects  <- model_options[[1]]
     parameters$random_effects <- model_options[[2]]

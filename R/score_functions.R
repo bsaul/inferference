@@ -8,6 +8,7 @@
 #' @param ... additional arguments passed to \code{integrand} function.
 #' @return value of log likelihood
 #' @export
+#' @importFrom methods is
 #-----------------------------------------------------------------------------#
 
 log_likelihood <- function(parameters,

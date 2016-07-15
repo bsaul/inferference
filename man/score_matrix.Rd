@@ -4,7 +4,7 @@
 \alias{score_matrix}
 \title{Calculate matrix of log Likelihood derivatives}
 \usage{
-score_matrix(integrand, X, A, G, parameters, runSilent = FALSE, ...)
+score_matrix(integrand, X, A, G, parameters, runSilent = TRUE, ...)
 }
 \arguments{
 \item{integrand}{function passed to \code{\link{log_likelihood}}. Defaults to
@@ -17,6 +17,8 @@ score_matrix(integrand, X, A, G, parameters, runSilent = FALSE, ...)
 \item{G}{vector of group assignments}
 
 \item{parameters}{vector of parameters passed to \code{integrand}}
+
+\item{runSilent}{If FALSE, prints errors to console. Defaults to TRUE.}
 
 \item{...}{additional arguments passed to \code{integrand} or \code{\link{grad}}.
 For example, one can change the \code{method} argument in \code{grad}.}

@@ -7,6 +7,7 @@
 #' @param A vector of treatment assignments
 #' @param G vector of group assignments
 #' @param parameters vector of parameters passed to \code{integrand}
+#' @param runSilent If FALSE, prints errors to console. Defaults to TRUE.
 #' @param ... additional arguments passed to \code{integrand} or \code{\link{grad}}.
 #' For example, one can change the \code{method} argument in \code{grad}.
 #' @return N X length(params) matrix of scores
@@ -16,7 +17,7 @@
 score_matrix <- function(integrand,
                          X, A, G, 
                          parameters,
-                         runSilent = FALSE, 
+                         runSilent = TRUE, 
                          ...)
 {
   ## Warnings ##
@@ -33,7 +34,7 @@ score_matrix <- function(integrand,
   
   ## Compute score for each group and parameter ##
   int.args <- append(get_args(integrand, dots),
-                     get_args(integrate, dots))
+                     get_args(stats::integrate, dots))
   fargs <- append(int.args, get_args(numDeriv::grad, dots))
   
   if(!runSilent) print("Calculating matrix of scores...")

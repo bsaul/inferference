@@ -22,7 +22,7 @@ wght_deriv_array <- function(parameters,
                              integrand, 
                              allocations, 
                              X, A, G,
-                             runSilent = FALSE, 
+                             runSilent = TRUE, 
                              ...)
 {
   ## Gather necessary bits ##
