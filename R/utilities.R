@@ -277,3 +277,50 @@ overall_effect <- function(object,
 #-----------------------------------------------------------------------------#
 
 oe <- overall_effect
+
+#-----------------------------------------------------------------------------#
+#' Plot histograms of weights from an interference object
+#' 
+#' @param obj an \code{interference} object
+#' @parma allocations optional numeric vector of allocations for which to print
+#' histogram. If NULL (the default), five allocations selected evenly from the 
+#' first allocation to the last are printed.
+#' @param ... additional arguments passed to \link{\code{hist}}
+#' @return histogram of group-level weights
+#' @export
+#' @examples
+#' test <- interference(y | A ~ X1 + (1|group) | group, data = vaccinesim, 
+#'                    allocations = c(.1, .2,))
+#' diagnose_weights(test, allocations = c(.1, .2))
+#-----------------------------------------------------------------------------#
+
+diagnose_weights <- function(obj, allocations = NULL, ...){
+  
+  if(!is.null(allocations)){
+    if(!all(allocations %in% as.numeric(dimnames(obj$weight)[[2]]))){
+      stop('Allocations argument must only include allocation levels used in interference call.')
+    } else {
+      which_cols <- which(allocations %in% as.numeric(dimnames(obj$weight)[[2]]))
+      w <- obj$weights[ , c(which_cols), drop = FALSE]  
+    }
+  } else {
+    n <- ncol(obj$weights)
+    if(n > 5){ 
+      # Use first and last allocations plus 4 in between
+      m   <- ceiling(median(1:n))
+      m_1 <- ceiling(median(1:(n/2)))
+      m_2 <- ceiling(median((n/2):n))
+      w <- obj$weights[ , c(1, m_1, m, m_2 ,n), drop = FALSE]
+    } else {
+      w <- obj$weights
+    }
+  }
+  
+  for(j in 1:ncol(w)) {
+    hist(w[ , j], 
+         main = expression("Histogram of " * frac(pi[i](alpha), Pr(bold(A)[i] *'|'* bold(L)[i]))),
+         xlab = substitute(alpha * " = " * a, list(a = dimnames(w)[[2]][j])),
+         ...)
+  }
+  
+}
