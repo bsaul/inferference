@@ -5,7 +5,7 @@
 \alias{vaccinesim}
 \title{Vaccine Study Sample Data}
 \format{a dataset with 6 variables and 3000 rows
-\describe{
+\itemize{
    \item{y}{the outcome (0 - no cholera; 1 - cholera)}
    \item{X1}{an individual's age (in decades)}
    \item{X2}{an individual's distance from river}
@@ -13,9 +13,6 @@
    \item{B}{an indicator of participation (0 - did not participant in vaccine trial, 1 - did participate)}
    \item{group}{group membership}
  }}
-\usage{
-vaccinesim
-}
 \description{
 A sample dataset based on the simulations of a cholera vaccine trial 
 in \href{http://dx.doi.org/10.1111/biom.12184}{Heydrich-Perez et al. (2014)}

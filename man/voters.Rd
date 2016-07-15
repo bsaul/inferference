@@ -5,7 +5,7 @@
 \alias{voters}
 \title{Voting Contagion Experiment Data}
 \format{a dataset with 21 variables and 7722 rows
-\describe{
+\itemize{
    \item{family}{household ID}
    \item{denver}{1 = subject in Denver, 0 = Minneapolis}
    \item{treatment}{1 = voting encouragement, 2 = recycling message, 3 = not contacted}
@@ -18,9 +18,6 @@
  }}
 \source{
 \url{http://www3.nd.edu/~dnickers/data.php}
-}
-\usage{
-voters
 }
 \description{
 A dataset of a voting contagion experiment. For complete documentation, see 
