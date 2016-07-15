@@ -282,16 +282,12 @@ oe <- overall_effect
 #' Plot histograms of weights from an interference object
 #' 
 #' @param obj an \code{interference} object
-#' @parma allocations optional numeric vector of allocations for which to print
+#' @param allocations optional numeric vector of allocations for which to print
 #' histogram. If NULL (the default), five allocations selected evenly from the 
 #' first allocation to the last are printed.
 #' @param ... additional arguments passed to \link{\code{hist}}
 #' @return histogram of group-level weights
 #' @export
-#' @examples
-#' test <- interference(y | A ~ X1 + (1|group) | group, data = vaccinesim, 
-#'                    allocations = c(.1, .2,))
-#' diagnose_weights(test, allocations = c(.1, .2))
 #-----------------------------------------------------------------------------#
 
 diagnose_weights <- function(obj, allocations = NULL, ...){
