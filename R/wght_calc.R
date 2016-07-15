@@ -19,6 +19,7 @@
 #' @param ... other arguments passed to integrand.
 #' @return scalar result of the integral
 #' @export
+#' @importFrom methods is
 #'
 #-----------------------------------------------------------------------------#
 
@@ -64,8 +65,8 @@ wght_calc <- function(parameters,
   # if any of the products within the integrand return Inf, then return NA
   # else return the result of integration
   
-  f <- try(do.call("stats::integrate", args = args), silent = TRUE)
-  PrA <- if(methods::is(f, 'try-error')) NA else f$value
+  f <- try(do.call(stats::integrate, args = args), silent = TRUE)
+  PrA <- if(is(f, 'try-error')) NA else f$value
 
   ## Compute the weight ##
   weight <- 1/PrA
