@@ -37,7 +37,7 @@ print.interference <- function(x, ...)
   oe  <- est[est$effect == "overall" & est$alpha1 == mina & est$alpha2 == maxa, cols ]
   
   if(length(allo) > 2){
-    meda <- quantile(allo, probs = .5, type = 3)
+    meda <- stats::quantile(allo, probs = .5, type = 3)
     de3  <- est[est$effect == "direct" & est$trt1 == 0 & est$trt2 == 1 & est$alpha1 == meda, cols ]
     de   <- rbind(de, de3)
     

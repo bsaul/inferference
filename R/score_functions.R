@@ -28,12 +28,12 @@ log_likelihood <- function(parameters,
     dots$upper <- Inf
   }
   
-  int.args <- append(get_args(integrate, dots),
+  int.args <- append(get_args(stats::integrate, dots),
                      get_args(integrand, dots))
   args <- append(int.args, list(f = integrand, parameters = parameters))
   
   ## Calculuation ##
-  attempt <- try(do.call(integrate, args = args))
+  attempt <- try(do.call(stats::integrate, args = args))
   val <- if(is(attempt, 'try-error')) NA else attempt$value
 
   return(log(val))
@@ -67,7 +67,7 @@ score_calc <- function(parameters,
   
   ## Function arguments ##
   int.args <- append(get_args(integrand, dots),
-                     get_args(integrate, dots))
+                     get_args(stats::integrate, dots))
   fargs    <- append(int.args, get_args(numDeriv::grad, dots))
   
   args     <- append(fargs,

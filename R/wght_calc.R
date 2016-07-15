@@ -13,10 +13,9 @@
 #' \deqn{\frac{\prod_{j=1}^n \alpha^A_j (1 - \alpha)^(1-
 #' A_j)}{Pr(A|X)}}{prod(allocation^A(1 - allocation)^A) / integrate(integrand)}
 #' 
+#' @param parameters vector of parameter values
 #' @param integrand function to pass to the argument 'f' of \code{\link{integrate}}.
 #' @param allocation the allocation ratio for which to compute the weight
-#' @param x OPTIONAL argument necessary for \code{\link{grad}} when using \code{\link{wght_deriv_calc}}.
-#' @param pos OPTIONAL argument necessary for \code{\link{logit_integrand}} when using \code{\link{wght_deriv_calc}}.
 #' @param ... other arguments passed to integrand.
 #' @return scalar result of the integral
 #' @export
@@ -49,7 +48,7 @@ wght_calc <- function(parameters,
     dots$upper <- Inf
   }
   
-  int.args <- append(get_args(integrate, dots),
+  int.args <- append(get_args(stats::integrate, dots),
                      list(f = integrand, parameters = parameters))
   
   args <- append(get_args(integrand, dots), int.args)
@@ -65,8 +64,8 @@ wght_calc <- function(parameters,
   # if any of the products within the integrand return Inf, then return NA
   # else return the result of integration
   
-  f <- try(do.call("integrate", args = args), silent = TRUE)
-  PrA <- if(is(f, 'try-error')) NA else f$value
+  f <- try(do.call("stats::integrate", args = args), silent = TRUE)
+  PrA <- if(methods::is(f, 'try-error')) NA else f$value
 
   ## Compute the weight ##
   weight <- 1/PrA

@@ -6,8 +6,8 @@
 \usage{
 interference(formula, propensity_integrand = "logit_integrand",
   loglihood_integrand = propensity_integrand, allocations, data,
-  model_method = "glmer", model_options = list(family = binomial(link =
-  "logit")), causal_estimation_method = "ipw",
+  model_method = "glmer", model_options = list(family = stats::binomial(link
+  = "logit")), causal_estimation_method = "ipw",
   causal_estimation_options = list(variance_estimation = "robust"),
   conf.level = 0.95, rescale.factor = 1, runSilent = TRUE, ...)
 }
@@ -73,6 +73,8 @@ either \code{'naive'} or \code{'robust'}. See details. Defaults to \code{'robust
 
 \item{rescale.factor}{a scalar multiplication factor by which to rescale outcomes
 and effects. Defaults to \code{1}.}
+
+\item{runSilent}{if FALSE, status of computations are printed to console. Defaults to TRUE.}
 
 \item{...}{Used to pass additional arguments to internal functions such as 
 \code{numDeriv::grad()} or \code{integrate()}. Additionally, arguments can be 

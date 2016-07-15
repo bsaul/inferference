@@ -13,7 +13,7 @@ diagnose_weights(obj, allocations = NULL, ...)
 histogram. If NULL (the default), five allocations selected evenly from the 
 first allocation to the last are printed.}
 
-\item{...}{additional arguments passed to \link{\code{hist}}}
+\item{...}{additional arguments passed to \code{\link{hist}}}
 }
 \value{
 histogram of group-level weights

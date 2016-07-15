@@ -7,15 +7,13 @@
 wght_calc(parameters, integrand, allocation, ...)
 }
 \arguments{
+\item{parameters}{vector of parameter values}
+
 \item{integrand}{function to pass to the argument 'f' of \code{\link{integrate}}.}
 
 \item{allocation}{the allocation ratio for which to compute the weight}
 
 \item{...}{other arguments passed to integrand.}
-
-\item{x}{OPTIONAL argument necessary for \code{\link{grad}} when using \code{\link{wght_deriv_calc}}.}
-
-\item{pos}{OPTIONAL argument necessary for \code{\link{logit_integrand}} when using \code{\link{wght_deriv_calc}}.}
 }
 \value{
 scalar result of the integral

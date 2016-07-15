@@ -20,14 +20,6 @@ Random effect should be last element in vector.}
 Defaults to NA.}
 
 \item{randomization}{Randomization probability. Defaults to 1.}
-
-\item{x}{Used by \code{\link{grad}} for taking the derivative with respect an element of
-params. Only used if \code{pos} is not NULL.}
-
-\item{pos}{The position of theta for which to take the derivative. Defaults to NULL.}
-
-\item{integrate.allocation}{Either TRUE for including allocation in the product or FALSE 
-does not include allocation.}
 }
 \value{
 value of the integrand

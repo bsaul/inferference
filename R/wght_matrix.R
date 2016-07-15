@@ -13,6 +13,7 @@
 #' @param A vector of treatment assignments
 #' @param G vector of group assignments
 #' @param parameters vector of parameters passed to \code{integrand}
+#' @param runSilent if FALSE, errors are printed to console. Defaults to TRUE.
 #' @param ... additional arguments passed to \code{integrand}
 #' @return a length(unique(group)) X length(alphas) matrix of group weights
 #' @export

@@ -26,7 +26,7 @@ wght_deriv_calc <- function(integrand,
   
   ## Integrand and  arguments ##
   int.args <- append(get_args(integrand, dots),
-                     get_args(integrate, dots))
+                     get_args(stats::integrate, dots))
   
   args <- append(append(int.args, get_args(numDeriv::grad, dots)),
                  list(func       = wght_calc, 

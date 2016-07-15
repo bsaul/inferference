@@ -285,7 +285,7 @@ oe <- overall_effect
 #' @param allocations optional numeric vector of allocations for which to print
 #' histogram. If NULL (the default), five allocations selected evenly from the 
 #' first allocation to the last are printed.
-#' @param ... additional arguments passed to \link{\code{hist}}
+#' @param ... additional arguments passed to \code{\link{hist}}
 #' @return histogram of group-level weights
 #' @export
 #-----------------------------------------------------------------------------#
@@ -303,9 +303,9 @@ diagnose_weights <- function(obj, allocations = NULL, ...){
     n <- ncol(obj$weights)
     if(n > 5){ 
       # Use first and last allocations plus 4 in between
-      m   <- ceiling(median(1:n))
-      m_1 <- ceiling(median(1:(n/2)))
-      m_2 <- ceiling(median((n/2):n))
+      m   <- ceiling(stats::median(1:n))
+      m_1 <- ceiling(stats::median(1:(n/2)))
+      m_2 <- ceiling(stats::median((n/2):n))
       w <- obj$weights[ , c(1, m_1, m, m_2 ,n), drop = FALSE]
     } else {
       w <- obj$weights
@@ -313,7 +313,7 @@ diagnose_weights <- function(obj, allocations = NULL, ...){
   }
   
   for(j in 1:ncol(w)) {
-    hist(w[ , j], 
+    graphics::hist(w[ , j], 
          main = expression("Histogram of " * frac(pi[i](alpha), Pr(bold(A)[i] *'|'* bold(L)[i]))),
          xlab = substitute(alpha * " = " * a, list(a = dimnames(w)[[2]][j])),
          ...)

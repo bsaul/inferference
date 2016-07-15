@@ -52,6 +52,7 @@
 #' @param conf.level level for confidence intervals. Defaults to \code{0.95}.
 #' @param rescale.factor a scalar multiplication factor by which to rescale outcomes
 #' and effects. Defaults to \code{1}.
+#' @param runSilent if FALSE, status of computations are printed to console. Defaults to TRUE.
 #' @param ... Used to pass additional arguments to internal functions such as 
 #' \code{numDeriv::grad()} or \code{integrate()}. Additionally, arguments can be 
 #' passed to the \code{propensity_integrand} and \code{loglihood_integrand} functions.
@@ -99,7 +100,7 @@ interference <- function(formula,
                          allocations,
                          data,
                          model_method = "glmer",
-                         model_options = list(family = binomial(link = 'logit')),
+                         model_options = list(family = stats::binomial(link = 'logit')),
                          causal_estimation_method = 'ipw',
                          causal_estimation_options = list(variance_estimation = 'robust'),
                          conf.level     = 0.95,
@@ -132,7 +133,7 @@ interference <- function(formula,
     B <- A
   }
   
-  propensity_formula <- formula(terms(cformula, lhs = len_lhs, rhs = -2))
+  propensity_formula <- formula(stats::terms(cformula, lhs = len_lhs, rhs = -2))
   random.count <- length(lme4::findbars(propensity_formula))
 
   trt_lvls     <- sort(unique(A))
@@ -185,13 +186,13 @@ interference <- function(formula,
     }
   } else if(model_method == "glm"){
     propensity_model <- do.call("glm", args = estimation_args)
-    parameters$fixed_effects  <- coef(propensity_model)
+    parameters$fixed_effects  <- stats::coef(propensity_model)
     parameters$random_effects <- NULL
     X <- model.matrix(propensity_model)
   } else if(model_method == "oracle"){
     parameters$fixed_effects  <- model_options[[1]]
     parameters$random_effects <- model_options[[2]]
-    X <- model.matrix(propensity_formula, data)
+    X <- stats::model.matrix(propensity_formula, data)
     
     if(length(parameters$fixed_effects) != ncol(X)){
       stop('oracle fixed effects vector must have length of # of columns of X')

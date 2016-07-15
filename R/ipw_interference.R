@@ -41,7 +41,7 @@ ipw_interference <- function(propensity_integrand,
   point_est_args <- get_args(FUN = ipw_point_estimates, args_list = dots)
   loglihood_args <- get_args(FUN = loglihood_integrand, args_list = dots)
   grad_args      <- get_args(FUN = numDeriv::grad, args_list = dots)
-  integrate_args <- get_args(FUN = integrate, args_list = dots)
+  integrate_args <- get_args(FUN = stats::integrate, args_list = dots)
   
   weight_args <- append(append(integrand_args, integrate_args),
                         list(integrand   = propensity_integrand, 

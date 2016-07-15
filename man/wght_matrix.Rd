@@ -22,6 +22,8 @@ wght_matrix(integrand, allocations, X, A, G, parameters, runSilent = FALSE,
 
 \item{parameters}{vector of parameters passed to \code{integrand}}
 
+\item{runSilent}{if FALSE, errors are printed to console. Defaults to TRUE.}
+
 \item{...}{additional arguments passed to \code{integrand}}
 }
 \value{

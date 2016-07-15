@@ -21,6 +21,8 @@ which is part of \code{\link{wght_calc}}.}
 
 \item{G}{vector of group assignments}
 
+\item{runSilent}{if FALSE, errors are printed to console. Defaults to TRUE.}
+
 \item{...}{additional arguments passed to integrand}
 }
 \value{
