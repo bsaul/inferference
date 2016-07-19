@@ -9,7 +9,8 @@ interference(formula, propensity_integrand = "logit_integrand",
   model_method = "glmer", model_options = list(family = stats::binomial(link
   = "logit")), causal_estimation_method = "ipw",
   causal_estimation_options = list(variance_estimation = "robust"),
-  conf.level = 0.95, rescale.factor = 1, runSilent = TRUE, ...)
+  conf.level = 0.95, rescale.factor = 1, integrate_allocation = TRUE,
+  runSilent = TRUE, ...)
 }
 \arguments{
 \item{formula}{The formula used to define the causal model.  Has a minimum 
@@ -73,6 +74,9 @@ either \code{'naive'} or \code{'robust'}. See details. Defaults to \code{'robust
 
 \item{rescale.factor}{a scalar multiplication factor by which to rescale outcomes
 and effects. Defaults to \code{1}.}
+
+\item{integrate_allocation}{Indicator of whether the integrand function uses 
+the allocation parameter. Defaults to TRUE.}
 
 \item{runSilent}{if FALSE, status of computations are printed to console. Defaults to TRUE.}
 
