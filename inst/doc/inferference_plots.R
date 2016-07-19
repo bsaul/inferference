@@ -1,8 +1,8 @@
-## ----, echo = TRUE, eval = TRUE------------------------------------------
+## ---- echo = TRUE, eval = TRUE-------------------------------------------
 library(inferference)
 head(vaccinesim)
 
-## ----, echo = TRUE, eval = TRUE------------------------------------------
+## ---- echo = TRUE, eval = TRUE-------------------------------------------
 example1 <- interference(
     formula = y | A | B ~ X1 + X2 + (1|group) | group, 
     allocations = seq(.2,.8, by = .1), 
@@ -10,7 +10,7 @@ example1 <- interference(
     randomization = 2/3,
     method = 'simple')
 
-## ----, echo = TRUE-------------------------------------------------------
+## ---- echo = TRUE--------------------------------------------------------
 deff <- direct_effect(example1)
 x <- deff$alpha1
 y <- as.numeric(deff$estimate)
@@ -24,7 +24,7 @@ polygon(c(x, rev(x)), c(u, rev(l)), col = 'skyblue', border = NA)
 lines(x, y, cex = 2)
 
 
-## ----, echo = TRUE-------------------------------------------------------
+## ---- echo = TRUE--------------------------------------------------------
 ieff.4 <- ie(example1, allocation1 = .4)
 x <- ieff.4$alpha2
 y <- as.numeric(ieff.4$estimate)
@@ -37,7 +37,7 @@ polygon(c(x, rev(x)), c(u, rev(l)), col = 'skyblue', border = NA)
 lines(x, y, cex = 2)
 
 
-## ----, echo = TRUE-------------------------------------------------------
+## ---- echo = TRUE--------------------------------------------------------
 ieff <- subset(example1$estimates, effect == 'indirect')
 x <- sort(unique(ieff$alpha1))
 y <- sort(unique(ieff$alpha2))
