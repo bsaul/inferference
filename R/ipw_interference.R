@@ -30,6 +30,7 @@ ipw_interference <- function(propensity_integrand,
                              parameters,
                              variance_estimation,
                              runSilent   = TRUE, 
+                             integrate_allocation,
                              ...)
 {
   dots <- list(...)
@@ -48,7 +49,8 @@ ipw_interference <- function(propensity_integrand,
                              allocations = allocations, 
                              X = X, A = A, G = G,
                              parameters = parameters,
-                             runSilent  = runSilent #BB 2015-06-23
+                             runSilent  = runSilent, #BB 2015-06-23
+                             integrate_allocation = integrate_allocation
                              ))
   #### Prepare output ####
   out <- list()  

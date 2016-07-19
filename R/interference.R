@@ -56,6 +56,7 @@
 #' @param ... Used to pass additional arguments to internal functions such as 
 #' \code{numDeriv::grad()} or \code{integrate()}. Additionally, arguments can be 
 #' passed to the \code{propensity_integrand} and \code{loglihood_integrand} functions.
+#' @inheritParams wght_calc
 #'
 #' @details The following formula includes a random effect for the group: \code{outcome | 
 #' exposure ~ propensity covariates + (1|group) | group}. In this instance, the 
@@ -104,7 +105,8 @@ interference <- function(formula,
                          causal_estimation_method = 'ipw',
                          causal_estimation_options = list(variance_estimation = 'robust'),
                          conf.level     = 0.95,
-                         rescale.factor = 1,   
+                         rescale.factor = 1,
+                         integrate_allocation = TRUE,
                          runSilent      = TRUE, 
                          ...)
 {
@@ -151,7 +153,7 @@ interference <- function(formula,
     stop('Logit integrand is designed to handle only 1 random effect.')
   }
   
-  if(min(allocations) <= 0 | max(allocations) >= 1){
+  if(min(allocations) < 0 | max(allocations) > 1){
     stop('Allocations must be between 0 and 1')
   }
   
@@ -212,6 +214,7 @@ interference <- function(formula,
                             allocations          = allocations,
                             parameters           = unlist(parameters),
                             runSilent            = runSilent, 
+                            integrate_allocation = integrate_allocation,
                             Y = Y, X = X, A = A, B = B, G = G))
   
     ipw <- do.call(ipw_interference, args = ipw_args)
