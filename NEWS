@@ -1,7 +1,9 @@
 inferference 0.5.0
 ----------------------------------------------------------------
 
-* Eliminates `set_NA_to_0` and `integrate_allocation` options to `interference`. The default is now to include the allocation parameter in the weight term. 
+* Eliminates `set_NA_to_0` to `interference`. 
+
+* Modifies the `integrate_allocation` argument to `interference`. The default is now to include the allocation parameter in the weight term. 
 
 * Adds `diagnose_weights` function which prints histograms of group-level weights.
 
