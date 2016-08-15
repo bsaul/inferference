@@ -314,7 +314,8 @@ diagnose_weights <- function(obj, allocations = NULL, ...){
   
   for(j in 1:ncol(w)) {
     graphics::hist(w[ , j], 
-         main = expression("Histogram of " * frac(pi[i](alpha), Pr(bold(A)[i] *'|'* bold(L)[i]))),
+         main = '',
+         # main = expression("Histogram of " * frac(pi[i](alpha), Pr(bold(A)[i] *'|'* bold(L)[i]))),
          xlab = substitute(alpha * " = " * a, list(a = dimnames(w)[[2]][j])),
          ...)
   }
