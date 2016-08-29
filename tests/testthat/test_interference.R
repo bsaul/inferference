@@ -10,7 +10,7 @@ test_that("Interference() works in various situations", {
   expect_error(interference(data = testdt,
                            allocations = allos,
                            propensity_integrand = 'logit_integrand',
-                           formula = y | A | B ~ X1 + (1|group) | group,
+                           formula = Y | A | B ~ X1 + (1|group) | group,
                            model_method = 'glmer',
                            method = 'simple'), NA)
   
@@ -18,7 +18,7 @@ test_that("Interference() works in various situations", {
   expect_error(interference(data = testdt,
                             allocations = allos,
                             propensity_integrand = 'logit_integrand',
-                            formula = y | A | B ~ X1 | group,
+                            formula = Y | A | B ~ X1 | group,
                             model_method = 'glmer',
                             method = 'simple'))
   
@@ -34,7 +34,7 @@ test_that("Interference() works in various situations", {
   expect_error(interference(data = testdt,
                            allocations = allos,
                            propensity_integrand = 'logit_integrand',
-                           formula = y | A | B ~ X1 | group,
+                           formula = Y | A | B ~ X1 | group,
                            model_method = 'glm',
                            method = 'simple'), NA)
   
@@ -42,7 +42,7 @@ test_that("Interference() works in various situations", {
   expect_error(interference(data = testdt,
                            allocations = allos,
                            propensity_integrand = 'logit_integrand',
-                           formula = y | A | B ~ 1 | group,
+                           formula = Y | A | B ~ 1 | group,
                            model_method = 'glm',
                            method = 'simple'), NA)
   
@@ -50,7 +50,7 @@ test_that("Interference() works in various situations", {
   expect_error(interference(data = testdt,
                             allocations = allos,
                             propensity_integrand = 'logit_integrand',
-                            formula = y | A | B ~ 1 | group,
+                            formula = Y | A | B ~ 1 | group,
                             model_method = 'glm',
                             causal_estimation_options = list(variance_estimation = 'naive'),
                             method = 'simple'), NA)
@@ -59,7 +59,7 @@ test_that("Interference() works in various situations", {
   expect_error(interference(data = testdt,
                             allocations = allos,
                             propensity_integrand = 'logit_integrand',
-                            formula = y | A | B ~ 1 | group,
+                            formula = Y | A | B ~ 1 | group,
                             model_method = 'glm',
                             causal_estimation_options = list(variance_estimation = 'jfklas'),
                             method = 'simple'))
@@ -68,7 +68,7 @@ test_that("Interference() works in various situations", {
   expect_error(interference(data = testdt,
                            allocations = allos,
                            propensity_integrand = 'logit_integrand',
-                           formula = y | A | B ~ X1 | group,
+                           formula = Y | A | B ~ X1 | group,
                            model_method = 'oracle',
                            method = 'simple'))
 
@@ -76,7 +76,7 @@ test_that("Interference() works in various situations", {
   expect_error(interference(data = testdt,
                            allocations = allos,
                            propensity_integrand = 'logit_integrand',
-                           formula = y | A | B ~ X1 | group,
+                           formula = Y | A | B ~ X1 | group,
                            model_method = 'oracle',
                            model_options = list(fixed.effects = c(1,.5), random.effects = NULL),
                            method = 'simple'), NA) 

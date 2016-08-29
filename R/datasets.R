@@ -7,7 +7,7 @@
 #' @docType data
 #' @format a dataset with 6 variables and 3000 rows
 #' \itemize{
-#'    \item{y}{the outcome (0 - no cholera; 1 - cholera)}
+#'    \item{Y}{the outcome (0 - no cholera; 1 - cholera)}
 #'    \item{X1}{an individual's age (in decades)}
 #'    \item{X2}{an individual's distance from river}
 #'    \item{A}{an indicator of vaccination (0 - no vaccine; 1 - vaccine)}

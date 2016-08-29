@@ -6,7 +6,7 @@ test_that("retrieval functions work", {
   
   test <- interference(data = testdt,
                        propensity_integrand = 'logit_integrand',
-                       formula = y | A | B ~ X1 + (1|group) | group,
+                       formula = Y | A | B ~ X1 + (1|group) | group,
                        allocations = allos,
                        model_method = 'glmer',
                        causal_estimation_options = list(variance_estimation = 'robust'),
