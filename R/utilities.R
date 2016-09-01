@@ -149,7 +149,8 @@ direct_effect <- function(object,
               ce$alpha2 == allocation & ce$trt2 == !trt.lvl1*1, ]
   }
   rownames(out) <- NULL
-  return(out)
+  out[ , c('alpha1', 'trt1', 'alpha2', 'trt2', 
+           'estimate', 'std.error', 'conf.low', 'conf.high')]
 }
 
 #-----------------------------------------------------------------------------#
@@ -186,7 +187,8 @@ indirect_effect <- function(object,
   }
   
   rownames(out) <- NULL
-  return(out)
+  out[ , c('alpha1', 'trt1', 'alpha2', 'trt2', 
+           'estimate', 'std.error', 'conf.low', 'conf.high')]
 }
 
 #-----------------------------------------------------------------------------#
@@ -231,7 +233,8 @@ total_effect <- function(object,
   }
 
   rownames(out) <- NULL
-  return(out)
+  out[ , c('alpha1', 'trt1', 'alpha2', 'trt2', 
+           'estimate', 'std.error', 'conf.low', 'conf.high')]
 }
 
 #-----------------------------------------------------------------------------#
@@ -268,7 +271,8 @@ overall_effect <- function(object,
   }
 
   rownames(out) <- NULL
-  return(out)
+  out[ , c('alpha1', 'trt1', 'alpha2', 'trt2', 
+           'estimate', 'std.error', 'conf.low', 'conf.high')]
 }
 
 #-----------------------------------------------------------------------------#
