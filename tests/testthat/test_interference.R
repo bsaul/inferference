@@ -1,7 +1,7 @@
 context("Interference functions")
 
 test_that("Interference() works in various situations", {
-  testdt <- subset(vaccinesim, group %in% 1:10)
+  testdt  <- subset(vaccinesim, group %in% 1:10)
   testdt2 <- data.frame(x = c(1, 1, 1, 0), y = c(1, 0, 1, 0), g = c(1,1,2,2))
 
   allos  <- c(.35, .4)
