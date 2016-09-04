@@ -4,7 +4,7 @@ head(vaccinesim)
 
 ## ---- echo = TRUE, eval = TRUE-------------------------------------------
 example1 <- interference(
-    formula = y | A | B ~ X1 + X2 + (1|group) | group, 
+    formula = Y | A | B ~ X1 + X2 + (1|group) | group, 
     allocations = seq(.2,.8, by = .1), 
     data = vaccinesim, 
     randomization = 2/3,
