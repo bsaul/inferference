@@ -11,9 +11,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2016-07-19" />
+<meta name="date" content="2016-09-03" />
 
-<title>A Brief Intro to inferference</title>
+<title>inferference Vignette</title>
 
 
 
@@ -56,6 +56,16 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
+<style type="text/css">
+  p.abstract{
+    text-align: center;
+    font-weight: bold;
+  }
+  div.abstract{
+    margin: auto;
+    width: 90%;
+  }
+</style>
 
 
 <link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
@@ -67,81 +77,183 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">A Brief Intro to <code>inferference</code></h1>
+<h1 class="title toc-ignore"><code>inferference</code> Vignette</h1>
 <h4 class="author"><em>Bradley Saul</em></h4>
 <address class="author_afil">
-University of North Carolina<br><h4 class="date"><em>2016-07-19</em></h4>
+University of North Carolina<br><h4 class="author"><em>Michael Hudgens</em></h4>
+<address class="author_afil">
+University of North Carolina<br><h4 class="date"><em>2016-09-03</em></h4>
+<div class="abstract">
+<p class="abstract">Abstract</p>
+In causal inference, interference occurs when the treatment of one subject affects the outcome of other subjects. Interference can distort research conclusions about causal effects when not accounted for properly. In the absence of interference, inverse probability weighted (IPW) estimators are commonly used to estimate causal effects from observational data. Recently, IPW estimators have been extended to handle interference.  proposed IPW methods to estimate direct and indirect (or spillover) effects that allow for interference between individuals within groups. In this paper, we present , an  package that computes these IPW causal effect estimates when interference may be present within groups. We illustrate use of the package with examples from political science and infectious disease.
+</div>
 
 
 
-<div id="use-of-inferference" class="section level1">
-<h1>Use of <code>inferference</code></h1>
-<p>This is a brief description of how to use the <code>inferference</code> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load the package</span>
-<span class="kw">library</span>(inferference)</code></pre></div>
-<p>I have included a simple dataset generated from <code>rinterferenceSim</code> package: 3000 units, 250 groups, 2 covariates, 21 allocations (0 to 1 by 0.05), using the parameters in the code below. See Perez 2014 for details on how the simulations were structured.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alphaz =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by=</span>.<span class="dv">05</span>) <span class="co"># needed to compute truth</span>
-theta.base &lt;-<span class="st"> </span><span class="kw">c</span>(.<span class="dv">5</span>, -<span class="fl">0.788</span>, -<span class="fl">2.953</span>, -<span class="fl">0.098</span>, -<span class="fl">0.145</span>, <span class="fl">0.351</span>)
-theta.sim &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2727</span>, -<span class="fl">0.0387</span>, .<span class="dv">2719</span>, <span class="fl">1.0859</span>)
-sample_sim &lt;-<span class="st"> </span><span class="kw">sim_interference</span>(<span class="dt">n =</span> <span class="dv">3000</span>, <span class="dt">N =</span> <span class="dv">250</span>, <span class="dt">nsims =</span> <span class="dv">1</span>, 
-                               <span class="dt">base.parameters =</span> theta.base, 
-                               <span class="dt">parameters =</span> theta.sim,
-                               <span class="dt">alphas =</span> alphaz)
-interference_sample &lt;-<span class="st"> </span>sample_sim$sims[[<span class="dv">1</span>]]
-<span class="co">#save(sample_data, file = &quot;data/sample_data.rda&quot;)</span></code></pre></div>
-<p>Here’s what the data looks like:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(vaccinesim)</code></pre></div>
-<pre><code>##   y        X1       X2 A B group
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Interference occurs when the treatment (or exposure) of one subject affects the outcome of other subjects . Without accounting for interference, measuring only a treatment’s direct effect may be misleading. For example, a vaccine’s direct effect on an individual in a group with a large proportion of vaccinated individuals can be small. However, the protective, indirect effect from other group members’ vaccinations may be large. In this case the vaccine may be judged to be ineffective based on the direct effect despite possibly having great public health utility due to the indirect effect . Other areas where interference may be present include criminology , developmental psychology , econometrics , education , imaging , political science , social media and network analysis , sociology , and spatial analyses .</p>
+<p>Inverse probability weighted (IPW) methods are often used to estimate causal effects when interference is absent . Recent developments have extended IPW estimators to estimate causal effects when interference may be present in either randomized or observational studies.  proposed estimators for observational studies assuming partial interference , i.e., individuals can be partitioned into groups where there may be interference between individuals in the same group but not between individuals in different groups. Partial interference could be reasonable, for example, in study of bovine disease where physical separation of herds precludes pathogen transmission between herds. On the other hand, if birds or farm workers could spread the pathogen between herds, then partial interference may be questionable. The  IPW estimators require a model for the group-level propensity score (i.e., the probability of a group’s observed treatment allocation). The large sample properties of these estimators were derived by .</p>
+<p>To date, software for analysis of causal effects in the presence of interference is limited. Without interference, the   package  provides tools to compute IPW estimators . Existing interference-related  packages, including   and  , were designed for analysis of randomized experiments. In this paper, we present the  package  which computes the  IPW estimators and the large sample variance estimators developed by .</p>
+<p>The outline for the remainder of this paper is as follows. The next section provides background on interference and an overview of the mathematical concepts and notation. Section  describes the package’s main features. Sections  and  demonstrate the software with examples from public health and political science. The example in Section  shows advanced features of the package. We discuss computational issues with IPW estimators when groups have large numbers of individuals in Section . We conclude with a brief discussion and future directions in Section .</p>
+</div>
+<div id="preliminaries" class="section level1">
+<h1>Preliminaries</h1>
+<div id="a-brief-history-of-interference" class="section level2">
+<h2>A Brief History of Interference</h2>
+<p>Much of causal inference assumes that the exposure of one individual does not affect the outcomes of other individuals, i.e., there is no interference between individuals.  bundled no interference with the assumption that treatments for all units are comparable (no hidden forms of treatment) into the “Stable Unit Treatment Value Assumption” (SUTVA). Despite sporadic efforts, the research community gave little attention to this assumption until the early 2000s. One approach to relaxing the no interference assumption is to assume partial interference. Under this assumption, space, time, and/or social network groupings preclude interference between individuals in different groups, but interference may occur within a group.</p>
+<p>, , and  developed methods based on the assumption of partial interference to estimate causal effects in the presence of interference. When an experimenter randomizes units – by design – at the group and individual levels,  defined estimators that, under certain assumptions, are unbiased for a treatment’s direct and indirect (or spillover) effects.</p>
+<p>Observational studies complicate estimation of interference effects.  proposed IPW estimators of causal effects based on group-level propensity scores for non-randomized treatment allocation. They showed these estimators to be unbiased when the propensity score is known.  derived the large sample properties of these estimators when the propensity scores are unknown but correctly modeled. They applied these results to draw inference about the direct and indirect effects of cholera vaccination in Matlab, Bangladesh.</p>
+</div>
+<div id="basic-partial-interference-setup" class="section level2">
+<h2>Basic partial interference setup</h2>
+<p>Consider <span class="math inline">\(N\)</span> individuals partitioned into <span class="math inline">\(m\)</span> groups, each with <span class="math inline">\(n_i\)</span> individuals for <span class="math inline">\(i = 1, \dots, m\)</span>. The triplet <span class="math inline">\((Y_{ij}, A_{ij}, \mathbf{X}_{ij})\)</span> represents the observed outcome, treatment, and baseline covariate vector, respectively, for individual <span class="math inline">\(j\)</span> in group <span class="math inline">\(i\)</span>. We let capitalized letters denote random variables, and lowercase letters (e.g., <span class="math inline">\((y_{ij}, a_{ij}, \mathbf{x}_{ij})\)</span>) denote observed or realized values. Let <span class="math inline">\(\mathbf{X}_{i}\)</span> and <span class="math inline">\(\mathbf{A}_i\)</span> be the matrix of baseline covariates and vector of treatment allocations for members of group <span class="math inline">\(i\)</span>. Let <span class="math inline">\(\mathbf{A}_{i,-j} = (A_{i1}, \dots, A_{ij-1}, A_{ij+1}, \dots, A_{in_i})\)</span> represent a group’s treatment allocation excluding the <span class="math inline">\(j\)</span>th subject. Let <span class="math inline">\(Y_{ij}(a_{ij}, \mathbf{a}_{i,-j}) = Y_{ij}(\mathbf{a}_i)\)</span> be the potential outcome for individual <span class="math inline">\(j\)</span> in group <span class="math inline">\(i\)</span> if, possibly contrary to fact, group <span class="math inline">\(i\)</span> received <span class="math inline">\(\mathbf{a}_i\)</span>. By causal consistency, <span class="math inline">\(Y_{ij} = Y_{ij}(\mathbf{A}_i)\)</span> . Let <span class="math inline">\(\mathbf{Y}_i\)</span> be the vector of potential outcomes for group <span class="math inline">\(i\)</span>. By assuming no interference between groups, an individual’s potential outcome may depend only on the treatment allocation of its group. The set <span class="math inline">\(\mathcal{A}(n_i)\)</span> contains all of group <span class="math inline">\(i\)</span>’s possible treatment vectors. With a binary treatment, <span class="math inline">\(A_{ij} \in \{a_1, a_2\}\)</span>, this set has <span class="math inline">\(2^{n_i}\)</span> elements.</p>
+<div id="estimands" class="section level3">
+<h3>Estimands</h3>
+<p>Without interference, researchers often estimate an average treatment effect, which contrasts the average outcome for two treatment allocations: the entire population treated versus the entire population untreated. With interference, causal estimands may be defined in terms of the continuum of treatment allocation strategies between those extremes. In , we consider Bernoulli-type allocation strategies proposed by , where individuals independently receive treatment with probability <span class="math inline">\(\alpha\)</span>. For this allocation strategy, the probability of a group’s treatment vector is denoted as <span class="math inline">\(\pi_{i}(\mathbf{A}_i; \alpha) = \prod_{j = 1}^{n_i} \alpha^{A_{ij}}(1 - \alpha)^{1 - A_{ij}}\)</span> and, excluding the <span class="math inline">\(j\)</span>th subject, <span class="math inline">\(\pi_{i}(\mathbf{A}_{i, -j}; \alpha) = \prod_{k = 1, k \neq j}^{n_i} \alpha^{A_{ik}}(1 - \alpha)^{1 - A_{ik}}.\)</span> The analyst may compute the estimators described below over a range of <span class="math inline">\(\alpha\)</span>’s to explore hypothetical underlying treatment allocations. In their analysis of a cholera vaccine study,  examined strategies between <span class="math inline">\(\alpha = 0.3\)</span> and <span class="math inline">\(\alpha = 0.6\)</span> because 75% of the groups had observed vaccine coverages in that range.</p>
+<p>Define an individual’s average potential outcome when assigned treatment <span class="math inline">\(a\)</span> under strategy <span class="math inline">\(\alpha\)</span> by</p>
+<p><span class="math display">\[
+\overline{Y}_{ij}(a; \alpha) = \sum_{\mathbf{a}_{i, -j} \in \mathcal{A}(n_i - 1)} Y_{ij}(a, \mathbf{a}_{i, -j}) \pi_i(\mathbf{a}_{i, -j}; \alpha).
+\]</span></p>
+<p>In words, <span class="math inline">\(\overline{Y}_{ij}(a; \alpha)\)</span> is a weighted average of individual <span class="math inline">\(j\)</span>’s potential outcomes under possible treatment vectors of the other <span class="math inline">\(n_{i} - 1\)</span> subjects in group <span class="math inline">\(i\)</span> weighted by the probability of each treatment vector. Similarly, define the marginal individual average potential outcome by</p>
+<p><span class="math display">\[
+\overline{Y}_{ij}(\alpha) = \sum_{\mathbf{a}_{i} \in \mathcal{A}(n_i)} Y_{ij}(\mathbf{a}_{i}) \pi_i(\mathbf{a}_{i}; \alpha).
+\]</span></p>
+<p>Here, the weighted average of individual <span class="math inline">\(j\)</span>’s potential outcomes is across all group treatment vectors in <span class="math inline">\(\mathcal{A}(n_i)\)</span>.</p>
+<p>A simple mean of individual average potential outcomes within a cluster defines group average potential outcomes. Then group-level estimands are averaged to make population-level estimands. For example, <span class="math inline">\(\overline{Y}(a; \alpha) = \sum_{i = 1}^m \{\sum_{j = 1}^{n_i} \overline{Y}_{ij}(a; \alpha)/n_i \} /m\)</span> is the population-level average outcome when individuals receive treatment <span class="math inline">\(a\)</span> and their group adopts allocation strategy <span class="math inline">\(\alpha\)</span>. Likewise, <span class="math inline">\(\overline{Y}(\alpha) = \sum_{i = 1}^m \{ \sum_{j = 1}^{n_i} \overline{Y}_{ij}(\alpha)/n_i \} /m\)</span> is the population-level average outcome when groups adopt allocation strategy <span class="math inline">\(\alpha\)</span>.</p>
+<p>Contrasts of the population average potential outcomes define causal effects.  describe four causal effects: direct, indirect, total, and overall . The direct (or unit-level treatment) effect compares average potential outcomes within a single allocation strategy:</p>
+<p><span class="math display">\[
+\overline{DE}(\alpha) = \overline{Y}(a_1; \alpha)  - \overline{Y}(a_2; \alpha).
+\]</span></p>
+<p>An indirect effect compares a treatment’s average potential outcomes under different allocation strategies:</p>
+<p><span class="math display">\[
+\overline{IE}(\alpha, \alpha') = \overline{Y}(a_1; \alpha)  - \overline{Y}(a_1; \alpha'). 
+\]</span></p>
+<p>For a binary treatment, there are two indirect effects for a fixed <span class="math inline">\((\alpha, \alpha')\)</span> pair: one for <span class="math inline">\(a_1\)</span> and one for <span class="math inline">\(a_2\)</span>. If interference is not present, then the indirect effect equals zero. The total effect accounts for both the direct and indirect effects:</p>
+<p><span class="math display">\[
+\overline{TE}(\alpha, \alpha') = \overline{Y}(a_1; \alpha)  - \overline{Y}(a_2; \alpha'). 
+\]</span></p>
+<p>The overall effect contrasts the marginal average potential outcomes for two allocation strategies:</p>
+<p><span class="math display">\[
+\overline{OE}(\alpha, \alpha') = \overline{Y}(\alpha)  - \overline{Y}(\alpha'). 
+\]</span></p>
+<p>See  and  for further discussion of these causal estimands.</p>
+</div>
+</div>
+<div id="ipw-estimation" class="section level2">
+<h2>IPW estimation</h2>
+<p> proposed IPW estimators of the causal estimands defined above assuming partial interference. Their estimator weights an individual’s outcome by the inverse of the group-level propensity score, <span class="math inline">\(\Pr(\mathbf{A}_i | \mathbf{X}_i)\)</span>, the probability of a group’s treatment allocation given the covariates of the group’s individuals.  showed the IPW estimators to be unbiased when the group-level propensities are known, under the following assumptions:</p>
+<ol style="list-style-type: decimal">
+<li>Conditional Independence: <span class="math inline">\(\Pr(\mathbf{A}_i = \mathbf{a}_i | \mathbf{X}_i, \mathbf{Y}_i) = \Pr(\mathbf{A}_i = \mathbf{a}_i | \mathbf{X}_i)\)</span></li>
+<li>Positivity: <span class="math inline">\(\Pr(\mathbf{A}_i = \mathbf{a}_i | \mathbf{X}_i) &gt; 0 \quad \forall \mathbf{a}_i \in \mathcal{A}(n_i)\)</span></li>
+</ol>
+<p>The true propensity scores are not generally known in observational studies and must be estimated.  suggested estimating <span class="math inline">\(\Pr(\mathbf{A}_i | \mathbf{X}_i)\)</span> using a generalized mixed effects model. We denote these models as <span class="math inline">\(f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i; \boldsymbol{\theta}_x, \theta_s)\)</span>, where <span class="math inline">\(\boldsymbol{\theta}_x\)</span> represents fixed effects parameters and <span class="math inline">\(\theta_s\)</span> a group random effect parameter. Model parameters may be estimated by maximum likelihood methods, which we denote <span class="math inline">\(\widehat{\boldsymbol{\theta}} = (\hat{\boldsymbol{\theta}}_x, \hat{\theta}_s)\)</span>. For a binary treatment, a model for the group’s propensity score might be:</p>
+\begin{equation} \label{eq:propensity}
+f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i; \boldsymbol{\theta}_x, \theta_s) = \int \prod_{j = 1}^{n_i} h_{ij}(b_i; \boldsymbol{\theta}_x)^{A_{ij}} \{ 1 - h_{ij}(b_i; \boldsymbol{\theta}_x) \}^{1 - A_{ij}} f_b(b_i; \theta_s) db_i 
+\end{equation}
+<p>where <span class="math inline">\(h_{ij}(b_i; \boldsymbol{\theta}_x) = \Pr(A_{ij} = 1 | \mathbf{X}_{ij}, b_i, \boldsymbol{\theta}_x) = \mbox{logit}^{-1}(\mathbf{X}_{ij}\boldsymbol{\theta}_x + b_i)\)</span> and <span class="math inline">\(f_b(\cdot; \theta_s)\)</span> is the density of a Normal random variable with mean 0 and variance <span class="math inline">\(\theta_s\)</span>. This is the default group-level propensity score model in ; the examples below show how the user can modify the default group propensity score model. Validity of inferences drawn using the methods described below requires correct specification of the group propensity score model. Therefore, it is important in practice to conduct diagnostics to assess the fit of the model employed. For example, if  is assumed, then the  diagnostic test can be used to assess whether the random effects are Normally distributed.</p>
+<p>The IPW estimator for the group-level average potential outcomes is a straightforward weighted sum,</p>
+\begin{equation} \label{eq:ipw}
+\widehat{Y}_i^{ipw}(a, \alpha) = \frac{\sum_{j = 1}^{n_i} \pi_i(\mathbf{A}_{i, -j}; \alpha) I(A_{ij} = a) Y_{ij} }{n_i f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i; \widehat{\boldsymbol{\theta}})   },
+\end{equation}
+<p>as is the estimator for group-level marginal potential outcomes,</p>
+\begin{equation} \label{eq:marg_ipw}
+\widehat{Y}_i^{ipw}(\alpha) = \frac{\sum_{j = 1}^{n_i} \pi_i(\mathbf{A}_{i}; \alpha) Y_{ij} }{n_i  f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i;\widehat{\boldsymbol{\theta}})   }.
+\end{equation}
+<p>From  and , one constructs population-level average potential outcome and marginal population-level average potential outcome estimators by <span class="math inline">\(\widehat{Y}^{ipw}(a; \alpha) = \sum_{i = 1}^m \widehat{Y}_i^{ipw}(a; \alpha)/m\)</span> and <span class="math inline">\(\widehat{Y}^{ipw}(\alpha) = \sum_{i = 1}^m \widehat{Y}_i^{ipw}(\alpha)/m\)</span>. Estimators for direct, indirect, total, and overall effects simply contrast population-level estimators,</p>
+\begin{align*}
+\widehat{DE}(\alpha) &amp;= \widehat{Y}^{ipw}(a_1; \alpha) - \widehat{Y}^{ipw}(a_2; \alpha)  \\
+\widehat{IE}(\alpha, \alpha') &amp;= \widehat{Y}^{ipw}(a_1; \alpha) - \widehat{Y}^{ipw}(a_1; \alpha')  \\
+\widehat{TE}(\alpha, \alpha') &amp;= \widehat{Y}^{ipw}(a_1; \alpha) - \widehat{Y}^{ipw}(a_2; \alpha')  \\
+\widehat{OE}(\alpha, \alpha') &amp;= \widehat{Y}^{ipw}(\alpha) - \widehat{Y}^{ipw}(\alpha').
+\end{align*}
+<div id="ipw-variance-estimation" class="section level3">
+<h3>IPW variance estimation</h3>
+<p> derived asymptotic distributions of the IPW estimators using standard estimating equation theory. Briefly, the IPW estimators above are consistent and asymptotically Normal as the number of groups <span class="math inline">\(m\)</span> tends to infinity. When the group-level propensity scores are known (as in the case of simulation or randomized studies), a large sample estimator of the variance of <span class="math inline">\(\widehat{DE}(\alpha)\)</span> is</p>
+<p><span class="math display">\[
+\frac{1}{m^2}\sum_{i = 1}^m \left\{\widehat{DE}_i(\alpha) - \widehat{DE}(\alpha) \right\}^2 \; .
+\]</span></p>
+<p>Results for <span class="math inline">\(\widehat{IE}\)</span>, <span class="math inline">\(\widehat{TE}\)</span>, and <span class="math inline">\(\widehat{OE}\)</span> are analogous. As explained below, when  in the  function, this formula is used to compute standard errors and Wald-type confidence intervals.</p>
+<p>When the propensity scores are unknown and instead estimated using a parametric model, computing variance estimators is more complicated and involves derivatives of the group propensity with respect to each parameter and derivatives of the propensity model’s log likelihood. The supplementary materials in  contain the mathematical details, and this method is available with the  option. The  option computes consistent variance estimates which account for the estimation of the weights, whereas the  option computes variance estimates described in the preceding paragraph which ignore estimation of the weights and are conservative (i.e., tend to be too large).</p>
+</div>
+</div>
+</div>
+<div id="using-inferference" class="section level1">
+<h1>Using inferference</h1>
+<div id="users-guide" class="section level2">
+<h2>User’s guide</h2>
+<p>To start, install the package from CRAN using . The list below details the arguments for , the primary function in . Special attention should be given to the  and  arguments.</p>
+<ul>
+<li>: formula used to define the causal model.  has a minimum of 4 parts, separated by  and  in a specific structure: . The order matters, and the pipes () split the data frame into corresponding pieces . The  piece is passed as a single formula to the chosen  (defined below) used to estimate or fix propensity parameters.
+<ul>
+<li>The following includes a random effect for the group: . In this instance, the group variable appears twice.</li>
+<li>If the study design includes a `participation’ variable (as in both examples below), this is easily added to the formula: .</li>
+</ul></li>
+<li>: a function, which may be created by the user, used to compute the IP weights. This defaults to the function , which calculates the product of inverse logits for individuals in a group: <span class="math inline">\(\prod_{j = 1}^{n_i} \{r h_{ij}(b_i)\}^{A_{ij}}\{1 - r h_{ij}(b_i)\}^{1 - A_{ij}} f_b(b_i; \theta_s)\)</span>, where <span class="math inline">\(h_{ij}(b_i) = \mbox{logit}^{-1}(\mathbf{X}_{ij}\theta_x + b_i)\)</span>, <span class="math inline">\(b_i\)</span> is a group-level random effect, <span class="math inline">\(f_b\)</span> is a <span class="math inline">\(N(0, \theta_s)\)</span> density, and <span class="math inline">\(r\)</span> is a known constant. In an observational study typically <span class="math inline">\(r = 1\)</span>. The examples below include individual randomized experiments in which case <span class="math inline">\(r\)</span> denotes the randomization probability among trial participants.  is the integrand of  where <span class="math inline">\(h_{ij}(b_i)\)</span> is scaled by a constant <span class="math inline">\(r\)</span> term. If no random effect is included in the ,  ignores the random effect. IP weights are computed by numerically integrating  over the random effect distribution using by  to which arguments may be passed via  (see below). The default  also takes the following argument that can be passed via the  argument in :
+<ul>
+<li>: a scalar. This is the <span class="math inline">\(r\)</span> in the formula just above. It defaults to 1 in the case that a  vector is not included. The vaccine study example in Section  demonstrates use of this argument.</li>
+</ul></li>
+<li>: a function, which may be created by the user, that defines the log likelihood of the propensity score model. This should generally be the same function as , which is the default.</li>
+<li>: a vector of values in <span class="math inline">\([0, 1]\)</span>. These are the <span class="math inline">\(\alpha\)</span>’s defined in Section . Increasing the number of elements of the allocation vector increases computation time; however, a larger number of allocations will make plotted effect estimates smoother. A minimum of two allocations is required.</li>
+<li>: the analysis data frame. This must include all the variables defined in the .</li>
+<li>: the method used to estimate or set the propensity model parameters. Must be one of , , or . For a fixed effects only model use , or to include random effects use ’s  .  only supports a single random effect for the grouping variable, corresponding to <span class="math inline">\(b_i\)</span>. When the propensity parameters are known (as in simulations) or if estimating parameters for the propensity model outside of , use the  option. See  for details on how to pass the oracle parameters. Defaults to .</li>
+<li>: a list of options passed to the function in . Defaults to . When , the list must have two elements,  and . If the model does not include random effects, set .</li>
+<li>: currently only supports and defaults to .</li>
+<li>: a list with a single item , which is either  or . See Section  for details. Defaults to .</li>
+<li>: level for confidence intervals. Defaults to .</li>
+<li>: a scalar multiplication factor by which to rescale outcomes and effects. Defaults to .</li>
+<li>: indicator of whether the integrand function uses the allocation parameter. Defaults to TRUE.</li>
+<li>: used to pass additional arguments to internal functions such as  or . Arguments can also be passed to the  and  functions.</li>
+</ul>
+</div>
+<div id="the-interference-object" class="section level2">
+<h2>The interference object</h2>
+<p>An  call results in an  object of class  which contains:</p>
+<ul>
+<li>: a data frame of causal effect estimates;</li>
+<li>: the  or  object;</li>
+<li>: a list of objects summarizing the causal model such as the number of groups, number of allocations, and the formula used in the  call;</li>
+<li>: (# of groups) <span class="math inline">\(\times\)</span> (# of allocations) matrix of group-level weights: <span class="math display">\[
+w_{i, k} = \frac{\pi_i(\mathbf{A}_i; \alpha_k)}{f_{\mathbf{A}_i|\mathbf{X}_i}(\mathbf{A}_i|\mathbf{X}_i; \hat{\boldsymbol{\theta}})}.
+\]</span></li>
+</ul>
+<p>If , then the object also includes:</p>
+<ul>
+<li>: (# of groups) <span class="math inline">\(\times\)</span> (# of allocations) <span class="math inline">\(\times\)</span> (# of parameters) array of weights computed using derivatives of the propensity function with respect to each parameter;</li>
+<li>: (# of groups) <span class="math inline">\(\times\)</span> (# of parameters) matrix of derivatives of the log likelihood.</li>
+</ul>
+</div>
+<div id="utility-functions" class="section level2">
+<h2>Utility functions</h2>
+<p>The package includes tools to extract effect estimates of interest from the  object. The functions ,  (or ),  (or ), and  (or ) select appropriate records from the  data frame in the  object. Section  shows an example.</p>
+</div>
+</div>
+<div id="example-vaccine-study" class="section level1">
+<h1>Example: Vaccine Study</h1>
+<p>This section illustrates the use of  with an example drawn from vaccine research. The package includes a single dataset based on the same set of parameters used in the simulation study by . The  dataset consists of 3000 units in 250 groups and contains two covariates ( = age in decades and  = distance to river), a vaccination indicator (), a participation indicator (), a binary outcome () indicating cholera infection (1 yes, 0 no), and the unit’s .</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">library</span>(inferference)
+&gt;<span class="st"> </span><span class="kw">head</span>(vaccinesim)</code></pre></div>
+<pre><code>##   Y        X1       X2 A B group
 ## 1 1 5.3607405 1.715527 0 0     1
 ## 2 0 0.1964597 1.730802 0 1     1
 ## 3 0 0.4846243 1.769546 1 1     1
 ## 4 0 0.8012977 1.715527 0 1     1
 ## 5 0 2.1426629 1.772158 1 1     1
 ## 6 0 1.2861017 1.715527 0 1     1</code></pre>
-<p>y is the outcome. X1 and X2 are covariates. A is the randomized treatment indicator. B is an indicator of participation in the trial. Group is obvious.</p>
-</div>
-<div id="interference-function" class="section level1">
-<h1><code>interference</code> function</h1>
-<p>The primary function in <code>inferference</code> is <code>interference</code>. Currently, it only supports IPW estimation. <code>interference</code> has several options:</p>
-<ul>
-<li><code>propensity_integrand</code>: a character string that names the function that defines the group-level propensity: <span class="math inline">\(P(\mathbf{A}_i | \mathbf{X}_i)\)</span>. The default function is <code>logit_integrand</code>. This function handles models with and without random effects. Without random effects, <code>logit_integrand</code> computes: <span class="math display">\[
-\prod_{j = 1}^n_i h_{ij}^{A_{ij}}(1 - h_{ij})^{1 - A_{ij}}
-\]</span> where <span class="math inline">\(h_{ij} = logit^{-1}(\mathbf{X}\hat{\theta})\)</span>; <span class="math inline">\(\hat{\theta}\)</span> are the estimated parameters from logistic regression using <code>glm</code>. In the case of a random effect, <code>logit_integrand</code> computes: <span class="math display">\[
-\prod_{j = 1}^n_i h_{ij}(b_i)^{A_{ij}}(1 - h_{ij}(b_i))^{1 - A_{ij}}f_b(b_i)
-\]</span> where <span class="math inline">\(h_{ij} = logit^{-1}(\mathbf{X}\hat{\theta} + b)\)</span>; <span class="math inline">\(\hat{\boldsymbol{\theta}}_f\)</span> are the estimated fixed effect parameters from random effects logistic regression using <code>glmer</code>; <span class="math inline">\(f_b(\cdot)\)</span> is a <span class="math inline">\(N(0, \hat{\theta}_r)\)</span> density; <span class="math inline">\(\hat{\theta}_r\)</span> is the estimated random effect variance. For both cases <code>logit_integrand</code> is passed through the <code>integrate</code> function. Without a random effect, however, this has no effect since <code>integrate(function(b) dnorm(b))</code> equals 1.</li>
-<li>formula: this has a minimum of 4 parts in the following structure:</li>
-<li><code>outcome | exposure ~ propensity covariates | group</code>. If a random effect for the group is included use the following:</li>
-<li><code>outcome | exposure ~ propensity covariates + (1|group) | group</code>. If the study design includes a ‘participation’ variable like in Perez-Heydrich 2014 use the following:</li>
-<li><code>outcome | exposure | participation ~ propensity covariates + (1|group) | group</code>.</li>
-<li>allocations: a vector of treatment allocation strategies. At least 2 allocations must defined.</li>
-<li>data: the data.frame with the outcome, exposure, covariates, and group variables</li>
-<li>model_method: one of <code>oracle</code>, <code>glm</code>, or <code>glmer</code>.</li>
-<li>model_options: options passed to the <code>model_method</code> as a list. For example, for <code>glm</code> or <code>glmer</code> set this equal to <code>list(family = binomial(link = 'logit'))</code>. To use the <code>oracle</code> method, use <code>list(fixed.effects = c(???, ???, etc), random.effects = NULL)</code> or <code>list(fixed.effects = c(???, ???, etc), random.effects = ???)</code></li>
-<li>causal_estimation_options: list of options passed to <code>ipw_interference</code>. <code>list(variance_estimation = 'naive')</code> or <code>list(variance_estimation = 'robust')</code> are the option settings of most interest. ‘robust’ is the default. ‘robust’ uses M-estimation theory to compute the variance, whereas, ‘naive’ computes <span class="math inline">\(\frac{1}{N^2}\sum_{i= 1}^N (\hat{CE}_i - \hat{CE})^2\)</span>, where <span class="math inline">\(\hat{CE}\)</span> is point estimate for the causal effect of interest while <span class="math inline">\(\hat{CE}_i\)</span> is the point estimate for group <span class="math inline">\(i\)</span>.</li>
-<li>conf.level: the confidence level. defaults to .95.</li>
-<li>rescale.factor: a scaling factor for the causal effects. Defaults to 1.</li>
-<li>… other options passed to <code>grad()</code>, <code>integrate()</code>, or the propensity_integrand function. <code>method = simple</code> will vastly speed up the <code>grad()</code> function.</li>
-</ul>
-</div>
-<div id="examples" class="section level1">
-<h1>Examples</h1>
-<p>Here’s a few samples of <code>interference()</code> based on the data provided.</p>
-<div id="replication-of-perez-heydrich-2014" class="section level2">
-<h2>Replication of Perez-Heydrich 2014</h2>
-<p>The first example follows Perez-Heydrich 2014 and includes a random effect and participation variable. Conditional on participation, subjects were randomized to treatment with probability 2/3, which is the <code>randomization</code> argument. This is an argument in <code>logit_integrand()</code>. This argument defaults to <span class="math inline">\(1\)</span> and so can be left out if unnecessary (see later examples).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample1 &lt;-<span class="st"> </span><span class="kw">interference</span>(
-  <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">45</span>,  .<span class="dv">6</span>), <span class="co"># a minimum of 2 is required</span>
-  <span class="dt">formula =</span> y |<span class="st"> </span>A |<span class="st"> </span>B ~<span class="st"> </span>X1 +<span class="st"> </span>X2 +<span class="st"> </span>(<span class="dv">1</span>|group) |<span class="st"> </span>group, 
-  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
-  <span class="dt">randomization =</span> <span class="dv">2</span>/<span class="dv">3</span>,
-  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
-  )</code></pre></div>
-<p>Take a quick look using the (unpolished) <code>print</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(sample1)</code></pre></div>
+<p>Like the original study  that inspired the simulation, individuals were randomized to vaccine with a known probability of <span class="math inline">\(2/3\)</span>, but subjects could opt to not participate in the trial. In essence, there are both experimental and observational aspects to the data. The  function handles this design when ’s  argument is used and a participation variable is included in the formula.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>example1 &lt;-<span class="st"> </span><span class="kw">interference</span>(
++<span class="st">     </span><span class="dt">formula =</span> Y |<span class="st"> </span>A |<span class="st"> </span>B ~<span class="st"> </span>X1 +<span class="st"> </span>X2 +<span class="st"> </span>(<span class="dv">1</span>|group) |<span class="st"> </span>group, 
++<span class="st">     </span><span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">45</span>,  .<span class="dv">6</span>), 
++<span class="st">     </span><span class="dt">data =</span> vaccinesim, 
++<span class="st">     </span><span class="dt">randomization =</span> <span class="dv">2</span>/<span class="dv">3</span>,
++<span class="st">     </span><span class="dt">method =</span> <span class="st">'simple'</span>)</code></pre></div>
+<p>The only arguments required for  to run are , , and . When using the  method (the default) to compute the variance, the internal workings call   and  frequently. The option  greatly speeds up the  function. For more accurate derivatives, leave out this option. See  for more options.</p>
+<p>The  function provides an overview of the causal effect estimates, estimated standard errors, and Wald-type confidence intervals. In the output,  and  refer to <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\alpha'\)</span>, while  and  refer to <span class="math inline">\(a_1\)</span> and <span class="math inline">\(a_2\)</span>, respectively.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">print</span>(example1)</code></pre></div>
 <pre><code>##  --------------------------------------------------------------------------
 ##                                Model Summary                    
 ##  --------------------------------------------------------------------------
-##  Formula: y | A | B ~ X1 + X2 + (1 | group) | group 
+##  Formula: Y | A | B ~ X1 + X2 + (1 | group) | group 
 ##  Number of groups:  250 
 ##  3 allocations were used from 0.3 (min) to 0.6 (max) 
 ##  --------------------------------------------------------------------------
@@ -175,427 +287,237 @@ interference_sample &lt;-<span class="st"> </span>sample_sim$sims[[<span class="
 ##    0.45   NA   0.60   NA  0.07740  0.008981  0.05980    0.0950
 ## 
 ##  --------------------------------------------------------------------------</code></pre>
-<p>Other pieces that might be interest are the group-level weights: <span class="math display">\[
-\frac{\prod_{j =1}^{n_i} \alpha^{A_{iij}}(1 - \alpha)^{1 - A_{ij}}}{P(\mathbf{A}_i | \mathbf{X}_i)}
-\]</span> which can accessed:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># the matrix of weights</span>
-<span class="kw">head</span>(sample1$weights)</code></pre></div>
-<pre><code>##         0.3      0.45        0.6
-## 1 0.9357967 1.3136823 0.59575151
-## 2 0.2017887 1.3139969 2.75394145
-## 3 1.0450964 1.8672417 1.16433520
-## 4 2.7231738 1.4569438 0.18484460
-## 5 1.6131455 0.5328074 0.03575435
-## 6 1.1980343 1.6818153 0.76269850</code></pre>
-<p>The weight ‘derivatives’: <span class="math display">\[
-\frac{\prod_{j =1}^{n_i} \alpha^{A_{iij}}(1 - \alpha)^{1 - A_{ij}}}{\frac{d}{d\theta}P(\mathbf{A}_i | \mathbf{X}_i)}
-\]</span> which can accessed:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(sample1$weightd[ , , <span class="dv">1</span>]) <span class="co"># For the 1st allocation </span></code></pre></div>
-<pre><code>## NULL</code></pre>
-<p>The ‘scores’ are but the all the last element in <span class="math inline">\(\psi(\mathbf{O}, \boldsymbol{\theta})\)</span>, eqn (3) in the web appendix, which can accessed:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(sample1$scores) </code></pre></div>
-<pre><code>##   fixed_effects.(Intercept) fixed_effects.X1 fixed_effects.X2
-## 1                 0.5272371       -2.9928656        0.8439813
-## 2                 0.6102263        4.1900070        0.5488844
-## 3                 0.2426517       -0.0858347        0.1737990
-## 4                 0.4654924        3.7443002        0.3533921
-## 5                -0.1741076       -7.9031816       -0.2338699
-## 6                -0.5449596        0.8882171       -0.9971978
-##   random_effects.group.(Intercept)
-## 1                       -0.2718808
-## 2                       -0.1595442
-## 3                       -0.5772085
-## 4                       -0.4215365
-## 5                       -0.6825426
-## 6                       -0.3152318</code></pre>
-<p>Finally, the most important piece, the effect estimates are in a data.frame:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample1$estimates </code></pre></div>
-<pre><code>##    alpha1 trt1 alpha2 trt2 marginal effect_type   effect     estimate
-## 1    0.30    0     NA   NA    FALSE     outcome  outcome  0.354299695
-## 2    0.45    0     NA   NA    FALSE     outcome  outcome  0.267729773
-## 3    0.60    0     NA   NA    FALSE     outcome  outcome  0.195230828
-## 4    0.30    1     NA   NA    FALSE     outcome  outcome  0.193796095
-## 5    0.45    1     NA   NA    FALSE     outcome  outcome  0.133836707
-## 6    0.60    1     NA   NA    FALSE     outcome  outcome  0.086644147
-## 7    0.30   NA     NA   NA     TRUE     outcome  outcome  0.306148615
-## 8    0.45   NA     NA   NA     TRUE     outcome  outcome  0.207477893
-## 9    0.60   NA     NA   NA     TRUE     outcome  outcome  0.130078819
-## 10   0.30    1   0.30    0    FALSE    contrast   direct -0.160503600
-## 11   0.45    1   0.45    0    FALSE    contrast   direct -0.133893066
-## 12   0.60    1   0.60    0    FALSE    contrast   direct -0.108586681
-## 13   0.30    0   0.30    1    FALSE    contrast   direct  0.160503600
-## 14   0.45    0   0.45    1    FALSE    contrast   direct  0.133893066
-## 15   0.60    0   0.60    1    FALSE    contrast   direct  0.108586681
-## 16   0.30    0   0.30    0    FALSE    contrast indirect  0.000000000
-## 17   0.45    0   0.30    0    FALSE    contrast indirect -0.086569922
-## 18   0.60    0   0.30    0    FALSE    contrast indirect -0.159068867
-## 19   0.30    1   0.30    1    FALSE    contrast indirect  0.000000000
-## 20   0.45    1   0.30    1    FALSE    contrast indirect -0.059959388
-## 21   0.60    1   0.30    1    FALSE    contrast indirect -0.107151948
-## 22   0.30    0   0.45    0    FALSE    contrast indirect  0.086569922
-## 23   0.45    0   0.45    0    FALSE    contrast indirect  0.000000000
-## 24   0.60    0   0.45    0    FALSE    contrast indirect -0.072498945
-## 25   0.30    1   0.45    1    FALSE    contrast indirect  0.059959388
-## 26   0.45    1   0.45    1    FALSE    contrast indirect  0.000000000
-## 27   0.60    1   0.45    1    FALSE    contrast indirect -0.047192560
-## 28   0.30    0   0.60    0    FALSE    contrast indirect  0.159068867
-## 29   0.45    0   0.60    0    FALSE    contrast indirect  0.072498945
-## 30   0.60    0   0.60    0    FALSE    contrast indirect  0.000000000
-## 31   0.30    1   0.60    1    FALSE    contrast indirect  0.107151948
-## 32   0.45    1   0.60    1    FALSE    contrast indirect  0.047192560
-## 33   0.60    1   0.60    1    FALSE    contrast indirect  0.000000000
-## 34   0.30    1   0.30    0    FALSE    contrast    total -0.160503600
-## 35   0.45    1   0.30    0    FALSE    contrast    total -0.220462988
-## 36   0.60    1   0.30    0    FALSE    contrast    total -0.267655548
-## 37   0.30    1   0.45    0    FALSE    contrast    total -0.073933678
-## 38   0.45    1   0.45    0    FALSE    contrast    total -0.133893066
-## 39   0.60    1   0.45    0    FALSE    contrast    total -0.181085626
-## 40   0.30    1   0.60    0    FALSE    contrast    total -0.001434733
-## 41   0.45    1   0.60    0    FALSE    contrast    total -0.061394121
-## 42   0.60    1   0.60    0    FALSE    contrast    total -0.108586681
-## 43   0.30    0   0.30    1    FALSE    contrast    total  0.160503600
-## 44   0.45    0   0.30    1    FALSE    contrast    total  0.073933678
-## 45   0.60    0   0.30    1    FALSE    contrast    total  0.001434733
-## 46   0.30    0   0.45    1    FALSE    contrast    total  0.220462988
-## 47   0.45    0   0.45    1    FALSE    contrast    total  0.133893066
-## 48   0.60    0   0.45    1    FALSE    contrast    total  0.061394121
-## 49   0.30    0   0.60    1    FALSE    contrast    total  0.267655548
-## 50   0.45    0   0.60    1    FALSE    contrast    total  0.181085626
-## 51   0.60    0   0.60    1    FALSE    contrast    total  0.108586681
-## 52   0.30   NA   0.30   NA     TRUE    contrast  overall  0.000000000
-## 53   0.45   NA   0.30   NA     TRUE    contrast  overall -0.098670722
-## 54   0.60   NA   0.30   NA     TRUE    contrast  overall -0.176069796
-## 55   0.30   NA   0.45   NA     TRUE    contrast  overall  0.098670722
-## 56   0.45   NA   0.45   NA     TRUE    contrast  overall  0.000000000
-## 57   0.60   NA   0.45   NA     TRUE    contrast  overall -0.077399074
-## 58   0.30   NA   0.60   NA     TRUE    contrast  overall  0.176069796
-## 59   0.45   NA   0.60   NA     TRUE    contrast  overall  0.077399074
-## 60   0.60   NA   0.60   NA     TRUE    contrast  overall  0.000000000
-##      std.error    conf.low   conf.high
-## 1  0.020854816  0.31342501  0.39517438
-## 2  0.014875610  0.23857411  0.29688543
-## 3  0.016207373  0.16346496  0.22699669
-## 4  0.018359586  0.15781197  0.22978022
-## 5  0.011495806  0.11130534  0.15636807
-## 6  0.009478636  0.06806636  0.10522193
-## 7  0.016645033  0.27352495  0.33877228
-## 8  0.010144273  0.18759548  0.22736030
-## 9  0.008731284  0.11296582  0.14719182
-## 10 0.024737820 -0.20898884 -0.11201836
-## 11 0.017783082 -0.16874727 -0.09903887
-## 12 0.018567778 -0.14497886 -0.07219450
-## 13 0.024737820  0.11201836  0.20898884
-## 14 0.017783082  0.09903887  0.16874727
-## 15 0.018567778  0.07219450  0.14497886
-## 16 0.000000000  0.00000000  0.00000000
-## 17 0.017318779 -0.12051411 -0.05262574
-## 18 0.026173977 -0.21036892 -0.10776882
-## 19 0.000000000  0.00000000  0.00000000
-## 20 0.013459284 -0.08633910 -0.03357968
-## 21 0.018920051 -0.14423457 -0.07006933
-## 22 0.017318779  0.05262574  0.12051411
-## 23 0.000000000  0.00000000  0.00000000
-## 24 0.014079283 -0.10009383 -0.04490406
-## 25 0.013459284  0.03357968  0.08633910
-## 26 0.000000000  0.00000000  0.00000000
-## 27 0.008272489 -0.06340634 -0.03097878
-## 28 0.026173977  0.10776882  0.21036892
-## 29 0.014079283  0.04490406  0.10009383
-## 30 0.000000000  0.00000000  0.00000000
-## 31 0.018920051  0.07006933  0.14423457
-## 32 0.008272489  0.03097878  0.06340634
-## 33 0.000000000  0.00000000  0.00000000
-## 34 0.024737820 -0.20898884 -0.11201836
-## 35 0.024685415 -0.26884551 -0.17208046
-## 36 0.024352475 -0.31538552 -0.21992557
-## 37 0.021564736 -0.11619978 -0.03166757
-## 38 0.017783082 -0.16874727 -0.09903887
-## 39 0.018406435 -0.21716158 -0.14500968
-## 40 0.025225693 -0.05087618  0.04800672
-## 41 0.019404803 -0.09942684 -0.02336141
-## 42 0.018567778 -0.14497886 -0.07219450
-## 43 0.024737820  0.11201836  0.20898884
-## 44 0.021564736  0.03166757  0.11619978
-## 45 0.025225693 -0.04800672  0.05087618
-## 46 0.024685415  0.17208046  0.26884551
-## 47 0.017783082  0.09903887  0.16874727
-## 48 0.019404803  0.02336141  0.09942684
-## 49 0.024352475  0.21992557  0.31538552
-## 50 0.018406435  0.14500968  0.21716158
-## 51 0.018567778  0.07219450  0.14497886
-## 52 0.000000000  0.00000000  0.00000000
-## 53 0.014206856 -0.12651565 -0.07082580
-## 54 0.019246810 -0.21379285 -0.13834674
-## 55 0.014206856  0.07082580  0.12651565
-## 56 0.000000000  0.00000000  0.00000000
-## 57 0.008980891 -0.09500130 -0.05979685
-## 58 0.019246810  0.13834674  0.21379285
-## 59 0.008980891  0.05979685  0.09500130
-## 60 0.000000000  0.00000000  0.00000000</code></pre>
-<p>Helper functions for finding effects:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">direct_effect</span>(sample1, .<span class="dv">3</span>) <span class="co">#DE(.3)/ unfortunately de() is a function in utils.</span></code></pre></div>
-<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type effect  estimate  std.error
-## 1    0.3    0    0.3    1    FALSE    contrast direct 0.1605036 0.02473782
-##    conf.low conf.high
-## 1 0.1120184 0.2089888</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ie</span>(sample1, .<span class="dv">3</span>, .<span class="dv">6</span>) <span class="co">#IE(.3, .6) </span></code></pre></div>
-<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type   effect  estimate
-## 1    0.3    0    0.6    0    FALSE    contrast indirect 0.1590689
-##    std.error  conf.low conf.high
-## 1 0.02617398 0.1077688 0.2103689</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">indirect_effect</span>(sample1, .<span class="dv">3</span>, .<span class="dv">6</span>) <span class="co"># same</span></code></pre></div>
-<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type   effect  estimate
-## 1    0.3    0    0.6    0    FALSE    contrast indirect 0.1590689
-##    std.error  conf.low conf.high
-## 1 0.02617398 0.1077688 0.2103689</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">te</span>(sample1, .<span class="dv">3</span>, .<span class="dv">6</span>) <span class="co">#TE(.3, .6)</span></code></pre></div>
-<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type effect  estimate  std.error
-## 1    0.3    0    0.6    1    FALSE    contrast  total 0.2676555 0.02435248
-##    conf.low conf.high
-## 1 0.2199256 0.3153855</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">oe</span>(sample1, .<span class="dv">3</span>, .<span class="dv">6</span>) <span class="co">#OE(.3, .6)</span></code></pre></div>
-<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type  effect  estimate
-## 1    0.3   NA    0.6   NA     TRUE    contrast overall 0.1760698
-##    std.error  conf.low conf.high
-## 1 0.01924681 0.1383467 0.2137929</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># You can use the same functions to get all the effects. This will aid in </span>
-<span class="co"># plotting (see below.)</span>
-
-<span class="co"># All direct effect of constrast Y(0) - Y(1)</span>
-<span class="kw">direct_effect</span>(sample1) </code></pre></div>
-<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type effect  estimate  std.error
-## 1   0.30    0   0.30    1    FALSE    contrast direct 0.1605036 0.02473782
-## 2   0.45    0   0.45    1    FALSE    contrast direct 0.1338931 0.01778308
-## 3   0.60    0   0.60    1    FALSE    contrast direct 0.1085867 0.01856778
-##     conf.low conf.high
-## 1 0.11201836 0.2089888
-## 2 0.09903887 0.1687473
-## 3 0.07219450 0.1449789</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># to get Y(1) - Y(0) use trt.lvl1 argument</span>
-<span class="kw">direct_effect</span>(sample1, <span class="dt">trt.lvl1 =</span> <span class="dv">1</span>) </code></pre></div>
-<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type effect   estimate
-## 1   0.30    1   0.30    0    FALSE    contrast direct -0.1605036
-## 2   0.45    1   0.45    0    FALSE    contrast direct -0.1338931
-## 3   0.60    1   0.60    0    FALSE    contrast direct -0.1085867
-##    std.error   conf.low   conf.high
-## 1 0.02473782 -0.2089888 -0.11201836
-## 2 0.01778308 -0.1687473 -0.09903887
-## 3 0.01856778 -0.1449789 -0.07219450</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Other functions work similarly</span>
-
-<span class="co"># all indirect effects where treatment = 0 compare to an allocation of .3</span>
-<span class="kw">ie</span>(sample1, .<span class="dv">3</span>) </code></pre></div>
-<pre><code>##   alpha1 trt1 alpha2 trt2 marginal effect_type   effect   estimate
-## 1    0.3    0   0.30    0    FALSE    contrast indirect 0.00000000
-## 2    0.3    0   0.45    0    FALSE    contrast indirect 0.08656992
-## 3    0.3    0   0.60    0    FALSE    contrast indirect 0.15906887
-##    std.error   conf.low conf.high
-## 1 0.00000000 0.00000000 0.0000000
-## 2 0.01731878 0.05262574 0.1205141
-## 3 0.02617398 0.10776882 0.2103689</code></pre>
-<p>See <code>?direct_effect</code>, <code>?ie</code>, <code>?te</code>, or <code>?oe</code> for options.</p>
+<p>The utility functions return selected effect estimates.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">direct_effect</span>(example1, .<span class="dv">3</span>)</code></pre></div>
+<pre><code>##   alpha1 trt1 alpha2 trt2  estimate  std.error  conf.low conf.high
+## 1    0.3    0    0.3    1 0.1605036 0.02473782 0.1120184 0.2089888</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">ie</span>(example1, .<span class="dv">3</span>)</code></pre></div>
+<pre><code>##   alpha1 trt1 alpha2 trt2   estimate  std.error   conf.low conf.high
+## 1    0.3    0   0.30    0 0.00000000 0.00000000 0.00000000 0.0000000
+## 2    0.3    0   0.45    0 0.08656992 0.01731878 0.05262574 0.1205141
+## 3    0.3    0   0.60    0 0.15906887 0.02617398 0.10776882 0.2103689</code></pre>
+<div id="plotting-effect-estimates" class="section level2">
+<h2>Plotting effect estimates</h2>
+<p>Plots of effect estimates over a range of <span class="math inline">\(\alpha\)</span> levels may be helpful in summarizing results.  present several such graphical displays. Here we demonstrate how to generate similar plots of effect estimates using .</p>
+<p>First, we estimate the effects over a dense sequence of allocations so that lines will be smooth.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>example2 &lt;-<span class="st"> </span><span class="kw">interference</span>( <span class="dt">formula =</span> Y |<span class="st"> </span>A |<span class="st"> </span>B ~<span class="st"> </span>X1 +<span class="st"> </span>X2 +<span class="st"> </span>(<span class="dv">1</span>|group) |<span class="st"> </span>group, 
++<span class="st">     </span><span class="dt">allocations =</span> <span class="kw">seq</span>(.<span class="dv">2</span>, .<span class="dv">8</span>, <span class="dt">by =</span> .<span class="dv">01</span>), 
++<span class="st">     </span><span class="dt">data =</span> vaccinesim, <span class="dt">randomization =</span> <span class="dv">2</span>/<span class="dv">3</span>, <span class="dt">method =</span> <span class="st">'simple'</span>)</code></pre></div>
+<p>In Figure , we present the direct and indirect effect estimates over this range of allocations. For direct effects, a simple scatterplot showing the point-wise confidence intervals suffices. One approach with indirect effects fixes <span class="math inline">\(\alpha\)</span> and plots estimates over a range of <span class="math inline">\(\alpha'\)</span>, whereas a contour plot displays all pairwise <span class="math inline">\((\alpha, \alpha')\)</span> comparisons over a range of allocation strategies.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>deff &lt;-<span class="st"> </span><span class="kw">direct_effect</span>(example2)
+&gt;<span class="st"> </span>x &lt;-<span class="st"> </span>deff$alpha1
+&gt;<span class="st"> </span>y &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(deff$estimate)
+&gt;<span class="st"> </span>u &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(deff$conf.high)
+&gt;<span class="st"> </span>l &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(deff$conf.low)
+&gt;<span class="st"> </span><span class="kw">plot</span>(<span class="kw">c</span>(<span class="kw">min</span>(x), <span class="kw">max</span>(x)), <span class="kw">c</span>(-.<span class="dv">15</span>, .<span class="dv">25</span>), <span class="dt">type =</span> <span class="st">'n'</span>, <span class="dt">bty =</span> <span class="st">'l'</span>,
++<span class="st">      </span><span class="dt">xlab =</span> <span class="kw">expression</span>(alpha), <span class="dt">ylab =</span> <span class="st">''</span> )
+&gt;<span class="st"> </span><span class="kw">title</span>(<span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">widehat</span>(DE) *<span class="st"> &quot;(&quot;</span> *<span class="st"> </span>alpha *<span class="st"> &quot;)&quot;</span>),
++<span class="st">       </span><span class="dt">line =</span> <span class="dv">2</span>)
+&gt;<span class="st"> </span><span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(u, <span class="kw">rev</span>(l)), <span class="dt">col =</span> <span class="st">'skyblue'</span>, <span class="dt">border =</span> <span class="ot">NA</span>)
+&gt;<span class="st"> </span><span class="kw">lines</span>(x, y, <span class="dt">cex =</span> <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>ieff<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">ie</span>(example2, <span class="dt">allocation1 =</span> .<span class="dv">4</span>)
+&gt;<span class="st"> </span>x &lt;-<span class="st"> </span>ieff<span class="fl">.4</span>$alpha2
+&gt;<span class="st"> </span>y &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(ieff<span class="fl">.4</span>$estimate)
+&gt;<span class="st"> </span>u &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(ieff<span class="fl">.4</span>$conf.high)
+&gt;<span class="st"> </span>l &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(ieff<span class="fl">.4</span>$conf.low)
+&gt;<span class="st"> </span><span class="kw">plot</span>(<span class="kw">c</span>(<span class="kw">min</span>(x), <span class="kw">max</span>(x)),<span class="kw">c</span>(-.<span class="dv">15</span>, .<span class="dv">25</span>), <span class="dt">type =</span> <span class="st">'n'</span>, <span class="dt">bty =</span> <span class="st">'l'</span>,
++<span class="st">      </span><span class="dt">xlab =</span> <span class="kw">expression</span>(alpha *<span class="st"> &quot;'&quot;</span>), <span class="dt">ylab =</span> <span class="st">''</span>)
+&gt;<span class="st"> </span><span class="kw">title</span>(<span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">widehat</span>(IE) *<span class="st"> &quot;(&quot;</span> *<span class="st"> </span><span class="fl">0.4</span> *<span class="st"> &quot;,&quot;</span> *<span class="st"> </span>alpha *<span class="st"> &quot;'&quot;</span> *<span class="st"> &quot;)&quot;</span>),
++<span class="st">       </span><span class="dt">line =</span> <span class="dv">2</span>)
+&gt;<span class="st"> </span><span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(u, <span class="kw">rev</span>(l)), <span class="dt">col =</span> <span class="st">'skyblue'</span>, <span class="dt">border =</span> <span class="ot">NA</span>)
+&gt;<span class="st"> </span><span class="kw">lines</span>(x, y, <span class="dt">cex =</span> <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>ieff &lt;-<span class="st"> </span><span class="kw">subset</span>(example2[[<span class="st">&quot;estimates&quot;</span>]], effect ==<span class="st"> 'indirect'</span>)
+&gt;<span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">unique</span>(ieff$alpha1))
+&gt;<span class="st"> </span>y &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">unique</span>(ieff$alpha2))
+&gt;<span class="st"> </span>z &lt;-<span class="st"> </span><span class="kw">xtabs</span>(estimate ~<span class="st"> </span>alpha1 +<span class="st"> </span>alpha2, <span class="dt">data=</span> ieff)
+&gt;<span class="st"> </span><span class="kw">contour</span>(x, y, z, <span class="dt">xlab =</span> <span class="kw">expression</span>(alpha), 
++<span class="st">         </span><span class="dt">ylab =</span> <span class="kw">expression</span>(alpha *<span class="st"> &quot;'&quot;</span>), <span class="dt">bty =</span> <span class="st">'l'</span>)</code></pre></div>
+\begin{figure}[ht]
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[]{jss_inferference_files/figure-latex/deff_plot-1.pdf}
+\end{minipage}\\
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[]{jss_inferference_files/figure-latex/ieff_plot-1.pdf}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[]{jss_inferference_files/figure-latex/ieff_contour-1.pdf}
+\end{minipage}
+ \caption{Plots of the estimates from \code{example2}. The top plot shows the direct effect estimates. The bottom two plots demonstrate different ways of viewing the indirect effect estimates. The shaded regions show the point-wise 95\% confidence intervals}
+  \label{fig:plots}
+\end{figure}
 </div>
-<div id="without-random-effects" class="section level2">
-<h2>Without random effects</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample2 &lt;-<span class="st"> </span><span class="kw">interference</span>(
-  <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">6</span>), <span class="co"># a minimum of 2 is required</span>
-  <span class="dt">formula =</span> y |<span class="st"> </span>A |<span class="st"> </span>B ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
-  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
-  <span class="dt">model_method =</span> <span class="st">'glm'</span>,
-  <span class="dt">model_options =</span> <span class="kw">list</span>(<span class="dt">family =</span> binomial),
-  <span class="dt">randomization =</span> <span class="dv">2</span>/<span class="dv">3</span>,
-  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
-  )
-<span class="kw">print</span>(sample2)</code></pre></div>
-<pre><code>##  --------------------------------------------------------------------------
-##                                Model Summary                    
-##  --------------------------------------------------------------------------
-##  Formula: y | A | B ~ X1 + X2 | group 
-##  Number of groups:  250 
-##  2 allocations were used from 0.3 (min) to 0.6 (max) 
-##  --------------------------------------------------------------------------
-##                           Causal Effect Summary                            
-##                          Confidence level: 0.95                       
-##                          Variance method: robust        
-##  --------------------------------------------------------------------------
-## 
-##  Direct Effects
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.3    1   0.3801   0.07570  0.23177    0.5285
-##     0.6    0    0.6    1   0.1161   0.04215  0.03353    0.1987
-## 
-##  Indirect Effects
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.6    0   0.2953   0.08351   0.1316    0.4589
-## 
-##  Total Effects 
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.6    1   0.4114   0.07698   0.2605    0.5623
-## 
-##  Overall Effects 
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3   NA    0.6   NA   0.2509   0.05691   0.1394    0.3624
-## 
-##  --------------------------------------------------------------------------</code></pre>
+<div id="diagnostics" class="section level2">
+<h2>Diagnostics</h2>
+<p>IPW estimators are known to be unstable if the weights range greatly. The package includes a basic utility to check the performance of the group-level weights, <span class="math inline">\(w_{i,k}\)</span>, for multiple allocations. The function  plots histograms of weights for chosen allocation levels. If the  argument is left , the function plots histograms for five allocation levels used the  call. Figure  shows the resulting histogram for a single allocation. The analyst should examine groups with extreme weights, which may unduly influence population-level estimates.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">diagnose_weights</span>(example2, <span class="dt">allocations =</span> .<span class="dv">5</span>, <span class="dt">breaks =</span> <span class="dv">30</span>)</code></pre></div>
+\begin{figure}[ht]
+\centering
+ \includegraphics[width=8cm]{jss_inferference_files/figure-latex/diagnostic-1.pdf}
+ \caption{A histogram of group-level weights, $w_{i,k}$, for $\alpha_k = 0.2$.}
+  \label{fig:diagnostics}
+\end{figure}
 </div>
-<div id="using-oracle-parameters-wo-the-random-effects" class="section level2">
-<h2>Using oracle parameters w/o the random effects</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample3 &lt;-<span class="st"> </span><span class="kw">interference</span>(
-  <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">6</span>), <span class="co"># a minimum of 2 is required</span>
-  <span class="dt">formula =</span> y |<span class="st"> </span>A |<span class="st"> </span>B ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
-  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
-  <span class="dt">model_method =</span> <span class="st">'oracle'</span>,
-  <span class="dt">model_options =</span> <span class="kw">list</span>(<span class="dt">fixed.effects =</span> <span class="kw">c</span>(<span class="fl">0.2727</span>, -<span class="fl">0.0387</span>, .<span class="dv">2719</span>),
-                       <span class="dt">random.effects =</span> <span class="ot">NULL</span>),
-  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'naive'</span>),
-  <span class="dt">randomization =</span> <span class="dv">2</span>/<span class="dv">3</span>,
-  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
-  )
-<span class="kw">print</span>(sample3)</code></pre></div>
-<pre><code>##  --------------------------------------------------------------------------
-##                                Model Summary                    
-##  --------------------------------------------------------------------------
-##  Formula: y | A | B ~ X1 + X2 | group 
-##  Number of groups:  250 
-##  2 allocations were used from 0.3 (min) to 0.6 (max) 
-##  --------------------------------------------------------------------------
-##                           Causal Effect Summary                            
-##                          Confidence level: 0.95                       
-##                          Variance method: naive        
-##  --------------------------------------------------------------------------
-## 
-##  Direct Effects
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.3    1  0.51883   0.09880  0.32519    0.7125
-##     0.6    0    0.6    1  0.09991   0.02622  0.04851    0.1513
-## 
-##  Indirect Effects
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.6    0   0.5162    0.1071   0.3064    0.7261
-## 
-##  Total Effects 
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.6    1   0.6161    0.1042   0.4119    0.8204
-## 
-##  Overall Effects 
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3   NA    0.6   NA   0.4205   0.07675   0.2701    0.5709
-## 
-##  --------------------------------------------------------------------------</code></pre>
 </div>
-<div id="without-the-participation-variable" class="section level2">
-<h2>Without the participation variable</h2>
-<p>Suppose we don’t have the participation variable and estimate the treatment probability directly, just leave out the <code>randomization</code> argument and modify the formula:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample4 &lt;-<span class="st"> </span><span class="kw">interference</span>(
-  <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">6</span>), <span class="co"># a minimum of 2 is required</span>
-  <span class="dt">formula =</span> y |<span class="st"> </span>A ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
-  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
-  <span class="dt">model_method =</span> <span class="st">'glm'</span>,
-  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'robust'</span>),
-  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
-  )
-<span class="kw">print</span>(sample4)</code></pre></div>
-<pre><code>##  --------------------------------------------------------------------------
-##                                Model Summary                    
-##  --------------------------------------------------------------------------
-##  Formula: y | A ~ X1 + X2 | group 
-##  Number of groups:  250 
-##  2 allocations were used from 0.3 (min) to 0.6 (max) 
-##  --------------------------------------------------------------------------
-##                           Causal Effect Summary                            
-##                          Confidence level: 0.95                       
-##                          Variance method: robust        
-##  --------------------------------------------------------------------------
-## 
-##  Direct Effects
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.3    1   0.3622   0.06846  0.22805    0.4964
-##     0.6    0    0.6    1   0.1158   0.03900  0.03938    0.1923
-## 
-##  Indirect Effects
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.6    0    0.272   0.07107   0.1327    0.4113
-## 
-##  Total Effects 
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.6    1   0.3878   0.06584   0.2588    0.5169
-## 
-##  Overall Effects 
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3   NA    0.6   NA   0.2328   0.04754   0.1397     0.326
-## 
-##  --------------------------------------------------------------------------</code></pre>
+<div id="example-voting-experiment" class="section level1">
+<h1>Example: Voting Experiment</h1>
+<p>The preceding example used the default  function to define the group-level propensities. The following example demonstrates how to customize the propensity score function.</p>
+<p> reported an experiment on voter behavior to examine peer-to-peer indirect effects on voting participation. The experiment randomized households with only two registered voters in Denver and Minneapolis to receive one of three assignments: voting encouragement, recycling encouragement, or nothing. Canvassers knocked on doors of households randomized to the voting or recycling groups a week before the 2002 primary. If a registered voter answered the door, the canvassers delivered a scripted message about voting (treatment) or recycling (control). The researchers used voter turnout records to determine if each member of the household then voted in the election. Nickerson was interested in the potential spillover effect of the voting encouragement to the untreated individual via the treated individual. From analysis of the observed data, he concluded there was a “secondary effect” where the household members not contacted by the canvassers voted more often in the treatment groups compared to the control groups.</p>
+<p>The dataset  contains information for 3861 households, 2549 in Denver and 1312 in Minneapolis, including covariates such as age, gender, previous voting history, and party affiliation. Our estimand of interest involves average voting outcomes when households receive voting encouragement compared to when household receive the recycling message, hence we exclude households not contacted by canvassers. We also exclude the single household where a canvasser appears to have contacted both registered voters.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>voters &lt;-<span class="st">  </span><span class="kw">within</span>(voters, {
++<span class="st">     </span>treated     =<span class="st"> </span>(treatment ==<span class="st"> </span><span class="dv">1</span> &amp;<span class="st"> </span>reached ==<span class="st"> </span><span class="dv">1</span>) *<span class="st"> </span><span class="dv">1</span> 
++<span class="st">     </span>c_age       =<span class="st"> </span>(age -<span class="st"> </span><span class="kw">mean</span>(age))/<span class="dv">10</span> 
++<span class="st">    </span>})
+&gt;<span class="st"> </span>reach_cnt &lt;-<span class="st"> </span><span class="kw">tapply</span>(voters$reached, voters$family, sum)
+&gt;<span class="st"> </span>voters &lt;-<span class="st"> </span>voters[!(voters$family %in%<span class="st"> </span><span class="kw">names</span>(reach_cnt[reach_cnt &gt;<span class="st"> </span><span class="dv">1</span>])), ]
+&gt;<span class="st"> </span>voters &lt;-<span class="st"> </span>voters[voters$hsecontact ==<span class="st"> </span><span class="dv">1</span>, ]</code></pre></div>
+<div id="household-level-propensity" class="section level2">
+<h2>Household-level propensity</h2>
+<p>Unlike the vaccine study example, in this data set randomization occurred at the group level but individual level treatment was not randomized. With only two subjects, <span class="math inline">\(\mathbf{A}_i = (A_{i1}, A_{i2})\)</span> is the treatment allocation for group <span class="math inline">\(i\)</span> and <span class="math inline">\(\mathbf{X}_i = (\mathbf{X}_{i1}, \mathbf{X}_{i2})\)</span> is the matrix of individuals’ covariate matrices for group <span class="math inline">\(i\)</span>. Let <span class="math inline">\(\mathbf{B}_i = (B_{i1}, B_{i2})\)</span> be indicators of being reached by a canvasser in group <span class="math inline">\(i\)</span>. Since we only consider households where someone answered the door, <span class="math inline">\(\mathbf{B}_i \in \{(1, 0), (0, 1)\}\)</span> and <span class="math inline">\(\Pr(B_{i1} = 1| \mathbf{X}_{i}) + \Pr(B_{i2} = 1| \mathbf{X}_{i}) = 1\)</span>. Let <span class="math inline">\(h_{ij} = \Pr(B_{ij} = 1| \mathbf{X}_{i}; \theta) = \mbox{logit}^{-1}(\mathbf{X}_{i}\theta_x)\)</span>. Let <span class="math inline">\(G_i \in \{0, 1\}\)</span> be the indicator that group <span class="math inline">\(i\)</span> is randomized to treatment (1) or control (0). By design, <span class="math inline">\(\Pr(G_i = 1) = 0.5\)</span>. Since <span class="math inline">\(\Pr(A_{i1} | \mathbf{X}_i; \theta) = 1 - \Pr(A_{i2} | \mathbf{X}_i; \theta)\)</span>, <span class="math inline">\(\Pr(\mathbf{A}_i | \mathbf{X}_i; \theta)\)</span> can arbitrarily be defined in terms of either household member. By convention we use the first subject (subject one) of each group found in the dataset. Among treated groups, the probability of subject one being treated is the probability that a canvasser reached subject one. That is, <span class="math inline">\(\Pr(A_{i1} | G_{i} = 1, \mathbf{X}_i; \theta) = h_{i1}^{A_{i1}}(1 - h_{i1})^{1 - A_{i1}}\)</span>. Thus, the group-level propensity can be expressed:</p>
+\begin{align*}
+\Pr(\mathbf{A}_i | \mathbf{X}_i ; \theta) &amp;= \Pr(\mathbf{A}_i | G_i = 1, \mathbf{X}_i ; \theta)\Pr(G_i = 1) + \Pr(\mathbf{A}_i | G_i = 0, \mathbf{X}_i ; \theta)\Pr(G_i = 0) \\
+&amp;= 0.5 \{ \Pr(\mathbf{A}_i | G_i = 1, \mathbf{X}_i ; \theta) +   \Pr(\mathbf{A}_i | G_i = 0, \mathbf{X}_i ; \theta) \} \\
+&amp;= \begin{cases}
+.5 &amp; \text{if $A_{i1} = 0, A_{i2} = 0$ and $G_i = 0$} \\
+.5 h_{i1}^{A_{i1}}(1 - h_{i1})^{1 - A_{i1}} &amp; \text{if ($A_{i1} = 0, A_{i2} = 1$ or $A_{i1} = 1, A_{i2} = 0$) and $G_i = 1$}  \\
+0  &amp; \text{otherwise}
+\end{cases} \\
+\end{align*}
+<p>Thus, <span class="math inline">\(h_{i1}\)</span> is sufficient to determine the group-level propensity. If we know whether or not the first subject was reached by a canvasser, then we know if the second was. Therefore, we can estimate parameters for <span class="math inline">\(h_{i1}\)</span> with a dataset that includes only subject one from each group. To do this, we must estimate the parameters outside of  and use . We include centered age (in decades) in the propensity model for demonstration purposes.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>voters1 &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">by</span>(voters, voters[, <span class="st">'family'</span>], function(x) x[<span class="dv">1</span>, ]))
+&gt;<span class="st"> </span>coef.voters &lt;-<span class="st"> </span><span class="kw">coef</span>(<span class="kw">glm</span>(reached ~<span class="st"> </span>c_age, <span class="dt">data =</span> voters1, 
++<span class="st">                      </span><span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">'logit'</span>)))</code></pre></div>
 </div>
-<div id="defining-ones-own-integrand" class="section level2">
-<h2>Defining one’s own integrand</h2>
-<p>Let’s say you want to fix the group level propensity to be .5. I don’t know why you’d want to do this, but this illustrates how to write your own function. The function required three arguments: <code>b</code>, <code>x</code>, and <code>pos</code>. <code>b</code> must be the first argument. <code>x</code> and <code>pos</code> are necessary for the <code>grad()</code>, and I will describe how to use these later.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myFUN &lt;-<span class="st"> </span>function(b, x, pos){
-  <span class="kw">return</span>(.<span class="dv">5</span> *<span class="st"> </span><span class="kw">dnorm</span>(b))
-}
-
-<span class="kw">integrate</span>(myFUN, <span class="dt">l =</span> -<span class="ot">Inf</span>, <span class="dt">u =</span> <span class="ot">Inf</span>) <span class="co"># returns 0.5</span></code></pre></div>
-<pre><code>## 0.5 with absolute error &lt; 4.7e-05</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample5 &lt;-<span class="st"> </span><span class="kw">interference</span>(
-  <span class="dt">propensity_integrand =</span> <span class="st">'myFUN'</span>,
-  <span class="dt">allocations =</span> <span class="kw">c</span>(.<span class="dv">3</span>, .<span class="dv">6</span>), <span class="co"># a minimum of 2 is required</span>
-  <span class="dt">formula =</span> y |<span class="st"> </span>A ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
-  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
-  <span class="dt">model_method =</span> <span class="st">'glm'</span>,
-  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'naive'</span>),
-  <span class="co"># won't work for 'robust' unless addition arguments are defined</span>
-  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
-  )
-<span class="kw">print</span>(sample5)</code></pre></div>
-<pre><code>##  --------------------------------------------------------------------------
-##                                Model Summary                    
-##  --------------------------------------------------------------------------
-##  Formula: y | A ~ X1 + X2 | group 
-##  Number of groups:  250 
-##  2 allocations were used from 0.3 (min) to 0.6 (max) 
-##  --------------------------------------------------------------------------
-##                           Causal Effect Summary                            
-##                          Confidence level: 0.95                       
-##                          Variance method: naive        
-##  --------------------------------------------------------------------------
-## 
-##  Direct Effects
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.3    1        0         0        0         0
-##     0.6    0    0.6    1        0         0        0         0
-## 
-##  Indirect Effects
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.6    0        0         0        0         0
-## 
-##  Total Effects 
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3    0    0.6    1        0         0        0         0
-## 
-##  Overall Effects 
-##  alpha1 trt1 alpha2 trt2 estimate std.error conf.low conf.high
-##     0.3   NA    0.6   NA        0         0        0         0
-## 
-##  --------------------------------------------------------------------------</code></pre>
+<div id="coding-the-propensity-function" class="section level2">
+<h2>Coding the propensity function</h2>
+<p>Custom  and  functions must have at least one argument:</p>
+<ul>
+<li>: the first argument is the variable for which the  function computes the integral. As in this example, the function can be written so that the integral evaluates to 1 and has no effect.</li>
+</ul>
+<p>For example, the following function will fix the group-level propensity to 0.5 for all groups when :</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>fixed_propensity &lt;-<span class="st"> </span>function(b){
++<span class="st">   </span><span class="kw">return</span>(<span class="fl">0.5</span> *<span class="st"> </span><span class="kw">dnorm</span>(b)) 
++<span class="st"> </span>}</code></pre></div>
+<p>For more realistic models, additional arguments may be passed to the custom function:</p>
+<ul>
+<li>: the covariate matrix (determined by the ) for the <span class="math inline">\(i\)</span>th group</li>
+<li>: the vector of treatment indicators for the <span class="math inline">\(i\)</span>th group</li>
+<li>: vector of estimated parameters from the </li>
+<li>: the allocation level for which the propensity is currently being estimated</li>
+<li>: other arguments can be passed via the ellipsis in </li>
+</ul>
+<p>Now we have the pieces to write the propensity function for the voting example.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>household_propensity &lt;-<span class="st"> </span>function(b, X, A, 
++<span class="st">                                  </span>parameters, 
++<span class="st">                                  </span><span class="dt">group.randomization =</span> .<span class="dv">5</span>){
++<span class="st">   </span>if(!<span class="kw">is.matrix</span>(X)){
++<span class="st">     </span>X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(X)
++<span class="st">   </span>}
++<span class="st">   </span>if(<span class="kw">sum</span>(A) ==<span class="st"> </span><span class="dv">0</span>){ 
++<span class="st">     </span>pr &lt;-<span class="st">  </span>group.randomization
++<span class="st">   </span>} else { 
++<span class="st">     </span>X<span class="fl">.1</span> &lt;-<span class="st"> </span>X[<span class="dv">1</span> ,]; A<span class="fl">.1</span> &lt;-<span class="st"> </span>A[<span class="dv">1</span>] 
++<span class="st">     </span>h   &lt;-<span class="st"> </span><span class="kw">plogis</span>(X<span class="fl">.1</span> %*%<span class="st"> </span>parameters)
++<span class="st">     </span>pr  &lt;-<span class="st">  </span>group.randomization *<span class="st"> </span><span class="kw">dbinom</span>(A<span class="fl">.1</span>, <span class="dv">1</span>, h)
++<span class="st">   </span>}
++<span class="st">   </span>out &lt;-<span class="st"> </span>pr *<span class="st"> </span><span class="kw">dnorm</span>(b) 
++<span class="st">   </span>out
++<span class="st"> </span>}</code></pre></div>
 </div>
-<div id="a-sample-plot" class="section level2">
-<h2>A sample plot</h2>
-<p>Here’s a simple plot of direct effects. Run the <code>interference</code> function with a larger number of allocations (this will take longer!):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample6 &lt;-<span class="st"> </span><span class="kw">interference</span>(
-  <span class="dt">allocations =</span> <span class="kw">seq</span>(.<span class="dv">3</span>, .<span class="dv">6</span>, <span class="dt">by =</span> .<span class="dv">01</span>), 
-  <span class="dt">formula =</span> y |<span class="st"> </span>A ~<span class="st"> </span>X1 +<span class="st"> </span>X2 |<span class="st"> </span>group,
-  <span class="dt">data =</span> vaccinesim, <span class="co"># name of the data frame</span>
-  <span class="dt">model_method =</span> <span class="st">'glm'</span>,
-  <span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'robust'</span>),
-  <span class="dt">method =</span> <span class="st">'simple'</span> <span class="co"># speeds up grad()</span>
-  )
-
-<span class="co"># Look at the direct effects</span>
-deff &lt;-<span class="st"> </span><span class="kw">direct_effect</span>(sample6)
-
-<span class="co"># Plot the point estimates</span>
-<span class="kw">plot</span>(deff$alpha1, deff$estimate, <span class="dt">type =</span> <span class="st">'l'</span>)</code></pre></div>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAYAAAAUg66AAAAEDWlDQ1BJQ0MgUHJvZmlsZQAAOI2NVV1oHFUUPrtzZyMkzlNsNIV0qD8NJQ2TVjShtLp/3d02bpZJNtoi6GT27s6Yyc44M7v9oU9FUHwx6psUxL+3gCAo9Q/bPrQvlQol2tQgKD60+INQ6Ium65k7M5lpurHeZe58853vnnvuuWfvBei5qliWkRQBFpquLRcy4nOHj4g9K5CEh6AXBqFXUR0rXalMAjZPC3e1W99Dwntf2dXd/p+tt0YdFSBxH2Kz5qgLiI8B8KdVy3YBevqRHz/qWh72Yui3MUDEL3q44WPXw3M+fo1pZuQs4tOIBVVTaoiXEI/MxfhGDPsxsNZfoE1q66ro5aJim3XdoLFw72H+n23BaIXzbcOnz5mfPoTvYVz7KzUl5+FRxEuqkp9G/Ajia219thzg25abkRE/BpDc3pqvphHvRFys2weqvp+krbWKIX7nhDbzLOItiM8358pTwdirqpPFnMF2xLc1WvLyOwTAibpbmvHHcvttU57y5+XqNZrLe3lE/Pq8eUj2fXKfOe3pfOjzhJYtB/yll5SDFcSDiH+hRkH25+L+sdxKEAMZahrlSX8ukqMOWy/jXW2m6M9LDBc31B9LFuv6gVKg/0Szi3KAr1kGq1GMjU/aLbnq6/lRxc4XfJ98hTargX++DbMJBSiYMIe9Ck1YAxFkKEAG3xbYaKmDDgYyFK0UGYpfoWYXG+fAPPI6tJnNwb7ClP7IyF+D+bjOtCpkhz6CFrIa/I6sFtNl8auFXGMTP34sNwI/JhkgEtmDz14ySfaRcTIBInmKPE32kxyyE2Tv+thKbEVePDfW/byMM1Kmm0XdObS7oGD/MypMXFPXrCwOtoYjyyn7BV29/MZfsVzpLDdRtuIZnbpXzvlf+ev8MvYr/Gqk4H/kV/G3csdazLuyTMPsbFhzd1UabQbjFvDRmcWJxR3zcfHkVw9GfpbJmeev9F08WW8uDkaslwX6avlWGU6NRKz0g/SHtCy9J30o/ca9zX3Kfc19zn3BXQKRO8ud477hLnAfc1/G9mrzGlrfexZ5GLdn6ZZrrEohI2wVHhZywjbhUWEy8icMCGNCUdiBlq3r+xafL549HQ5jH+an+1y+LlYBifuxAvRN/lVVVOlwlCkdVm9NOL5BE4wkQ2SMlDZU97hX86EilU/lUmkQUztTE6mx1EEPh7OmdqBtAvv8HdWpbrJS6tJj3n0CWdM6busNzRV3S9KTYhqvNiqWmuroiKgYhshMjmhTh9ptWhsF7970j/SbMrsPE1suR5z7DMC+P/Hs+y7ijrQAlhyAgccjbhjPygfeBTjzhNqy28EdkUh8C+DU9+z2v/oyeH791OncxHOs5y2AtTc7nb/f73TWPkD/qwBnjX8BoJ98VVBg/m8AADGDSURBVHgB7V0J3FVT917JTINZ0r+QRCIVhZCxKFEos5QSiSSkEiqEKJ85QyKVkjGRoVCEUsJXUYoyZCZTxLf/61nfd647vud233vuuee+z/r97vues88+e3jOuevuvcZKTklIRIAIEIEQEFgvhD7ZJREgAkTAECAD4otABIhAaAiQAYUGPTsmAkSADIjvABEgAqEhQAYUGvTsmAgQATIgvgNEgAiEhgAZUGjQs2MiQATIgPgOEAEiEBoCZEChQc+OiQARIAPiO0AEiEBoCJABhQY9OyYCRIAMiO8AESACoSFABhQa9OyYCBABMiC+A0SACISGABlQaNCzYyJABMiA+A4QASIQGgJkQKFBz46JABEgA+I7QASIQGgIkAGFBj07JgJEgAyI7wARIAKhIUAGFBr07JgIEAEyIL4DRIAIhIYAGVBo0LNjIkAEyID4DhABIhAaAmRAoUHPjokAESAD4jtABIhAaAiQAYUGPTsmAkSADIjvABEgAqEhQAYUGvTsmAgQATIgvgNEgAiEhgAZUGjQs2MiQATIgPgOEAEiEBoCZEChQc+OiQARIAPiO0AEiEBoCJABhQY9OyYCRIAMiO8AESACoSFABhQa9OyYCBABMiC+A0SACISGABlQaNCzYyJABMiA+A4QASIQGgJkQKFBz46JABEgA+I7QASIQGgIkAGFBj07JgJEgAyI7wARIAKhIUAGFBr07JgIEAEyIL4DRIAIhIYAGVBo0LNjIkAEyID4DhABIhAaAmRAoUHPjokAESAD4jtABIhAaAiQAYUGPTsmAkSADIjvABEgAqEhQAYUGvTsmAgQATIgvgNEgAiEhgAZUGjQs2MiQATIgPgOEAEiEBoCZEChQc+OiQARIAPiO0AEiEBoCJABhQY9OyYCRIAMiO8AESACoSFABhQa9OyYCBABMiC+A0SACISGABlQaNCzYyJABMiA+A4QASIQGgJkQKFBz46JABEgA+I7QASIQGgIkAGFBj07JgJEgAyI7wARIAKhIUAGFBr07JgIEAEyIL4DRIAIhIYAGVBo0LNjIkAEyID4DhABIhAaAmRAoUHPjokAESAD4jtABIhAaAiQAYUGPTsmAkSADIjvABEgAqEhQAYUGvTsmAgQgfUJQW4I/Otf/5K77rpLqlWrllsDvIsIBIzAxhtvLM8884xUqVIl4J5yb76SU8r99op757777itDhw4lA6q4r0DRz/zQQw+VN998U/bee++iHStXQDk+mvXXX1+qVq0qzZs3z7EF3kYEgkWgXr16wXaQh9YpA8oDiGyCCBCB3BAgA8oNt4x3rVy5UlavXp3xOi8QASLwDwJkQP9gkZejpUuXStOmTeU///lPXtpjI0SglBEgA8rz04Xgb5tttpGJEyfmuWU2RwRKDwEyoACe6aBBg2TIkCFCBWMA4LLJkkKADCiAx9mqVSvZdNNN5YknngigdTZJBEoHgXVSw//666/y8ccfy8477ywbbLCBbLTRRqWDxP9m8uSTT8rAgQN957V48WKZPn267L///mnrXnXVVTJgwADp0KFD2ussJAJEQCQrBvTZZ59J7969ZfLkyYbZW2+9JePGjRPYwgwePNh+7UsFzJYtW8qjjz7qO5399ttPqlevnrFe27ZtjZHBEvXYY4/NWI8XiEBFRsCXAf3555/Srl07+euvv2TEiBH2qw7ADjroIOnataupnEeNGlUyGIKplMVYvImut956suGGG3qnaf9DFgQGTQaUFh4WEgHxlQG99NJL8vnnn8vMmTNtFYRVD+iEE06QSZMmyZQpUyhszfAitW/fXn777TeZNm1ahhosJgIVGwFfBrRkyRJp0KBBWp8n+EN9+eWX8sknn1RsFDPMvlKlSoJV0DXXXJOhBouJQMVGwJcB7bTTTvL666/LN998k4LUhAkTTA5Us2bNlGss+C8CJ510knz33XcmsCYmRIAIJCLgy4AOO+ww2XHHHeWYY46R8ePHm4UvVkVXXnmlfU499VRfWUhilxXrDLIiaNUgCyIRASKQiIAvA9p8883NnuXvv/8WMJtffvlFTj/9dAtF0aJFC7n11lsTW+RZCgKnnXaafPvtt/Lss8+mXGMBEajICPhqwX7//XdzLZg7d6688847gtUPtD+QC9WpU0fefvtt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esrGFs/k/G6uVq2a3HTTTX7V1un6Aw88IFtvvfU63cPK2SNABpQ9VqypCIwaNUq++OILeeWVV+Ttt9+W999/Xx599FEZOHCgLF26VJo1ayannnqqfWlxvscee8hbb70lL774ojzyyCORwvDJJ5+U8847z5hspAYeocGSAUXoYRXDUL/66itp0KCBHHLIIVKrVi3BOejMM8+UXXbZxc6XL18uF1xwgWy77bZ2rUmTJjJkyBCJylZm9erVcvrpp0v79u1ttWeT4J9AECADCgTW4mx0ypQp0qpVK9lqq63kuOOOizGP+NHef//9trWqUqWK7LfffvL000/HLnfo0EGeeOIJ+eijj6Rp06bSrVs36dmzp13HlxWrhS222EIqV64sy5Yti92Hg8svv1y6d+8eK8N1tIftHPoCkyprhQQGhjZuvfVWqVu3rjG7Pn36yK+//hprEwdr1qwx5rfDDjtYHdzjnIvV+eOPP+SKK66QvfbaSzbbbDOpV6+eXHTRRfLbb7/F6rzzzjsya9YswQqoR48ethWMXeRBfhHQh0OqAAjMnz/fbbTRRu7ss892zzzzjFNm4TbccEN8M923335rCNx4441u/fXXd7qFcvrlcxdffLFTGZF77LHH7DrKdOXjdt55Z/fQQw9ZnUsvvdTauOWWW9wLL7xg9dq2bev0y+2GDh3qVAidgq4KrF316tVdixYt3IMPPujuvfded8ABB1g7uqWL9YWxffnll3betWtXpzIet+uuuzplpDYmZTLujDPOiLVftWpVm2Pr1q3d6NGjna7KrM2bb745Vqdjx45um222cZjr5MmTnTJRqzNo0KBYHYxPGZWdY16bbrpp7BoP8osAfh1IFQCBww8/3B188MEJM9VVi335wIB++OEHhy8wGFQ8derUyemKI1Z0zjnnOF0Zxc6nTZtmbagGLFb2888/u1NOOcVtsMEGbr311nMHHnigUzlR7Ppzzz3ndOXhPv3001jZkiVLrB2VMVkZmF0yA0JbKtSO3QOGhzoqi7IyjL9x48ZONXGxOhj7CSecYOe6WnIqOHd333137DoOUHbEEUcklHknZEAeEsH85xZM3+CKQO+++64cf/zxCVNV5hI7x3XIPvbee2954403Yh9dcZhw+ZtvvonV9TvYfPPNZdy4caaWhwYJ96IvXYnYrbpCkQ8//NA0acqsTJitTEmUwSRshZL7gdatfv36seIjjzxSdHUi8+bNi5UpkxVdxcXODzroIBsHCry65557rvz111+yePFimTBhgvz5559l9htrjAd5R+CfJ5X3ptlgsSDw/fffm6p9u+22SxgS5CQe6WrEDnv37u0VJfyHjY9uXRLK/E7QH/qAFkxXITJ48GDRbZ0xGshybrvtNpMVbbLJJqJbMJPV6O9sxmZr1qyZcg2CbmjbPKpRo4Z3aP912yl///13rOz111+X/v37m6kAbJYgC/rll19EV0+xOjwoHAJcARUO69B6gmAYgl4wonjC6sOjLbfc0g5hxwN7neTPvvvu61Ut8z8E1P369bPVlFdRZU0mcMYKS2U6AkE3GBFWZGAIMGKE3Q+oLAb0008/eU3G/uv2UVQmFTuHXVMmgkHk0UcfbQxw0qRJxpSx8mvYsGGmW1geMAJkQAEDXAzN40uJrdX06dMThoMvv0dQraMebHrw3/uovEROOukk0y55dcv6D23SDTfcINC4xZMKwUVlQoJV0dSpU80+aPjw4WasiHIwAjCf+NVK/P04XrBggcQzzblz59rqBXPLhmbOnGn333nnndKuXTvT2GErBlumsvrNpm3WyQ0BMqDccIvcXViVQKV+xx132JdQNWG2BfImglUE5DSw/AVjgH0P1NB9+/Y1ZrHxxht7Vcv8D2YAudGAAQPM+BArqfHjx8vYsWPNtgbyGchpIH+ZMWOGuW7Mnj1bTjvtNGs3Xh2e3BFWSlDlQ6aE+2EGAHlS8+bNk6umPVdhuJkIjBkzxtT32FaeddZZgu1nsjo/bQMszD8Cwci22WoxIqAyFwfVtb5FToXDTlcqduyp4XWL4zp37myqeNRReYqpqZUpxKaTjRZMv9imWUIb3geaKGjaQPiv2y+nsh/ra/vtt3fKoJzaKDndIlmddFqw3Xff3an9kpkGQMMGdbvXJm6CFgzq9XhSO54EUwC1J3IqS7J+YYbQq1cvN3LkSDNJ0C1q/K12TC1YCiR5LaiE1vQlIVUQBPC4V6xYYRoobLPSEbRCkJfUUSPBTHXS3ZdchpXFUUcdZRo1GD8mE1Y7kEvtuOOOyZdSzpXx2RZszpw5ArkPhMuQa+VCwACrH/SL7R8pPASoBQsP+1B6BkOBc2hZBKExHEvLS3DVgPYrHfNB21CL47OuVF7nUGCQj/mt67hZPxUByoBSMWFJnhCAXc91112Xp9bYTCkiwC1YKT7VEpzTZ599Zpo4+IGRSgcBMqDSeZacCRGIHALcgkXukXHARKB0ECADKp1nyZkQgcghQAYUuUfGAROB0kGADKh0niVnQgQihwAZUOQeGQdMBEoHATKg0nmWnAkRiBwCZECRe2QcMBEoHQTIgErnWXImRCByCJABRe6RccBEoHQQIAMqnWfJmRCByCFABhS5R8YBE4HSQYAMqHSeJWdCBCKHABlQ5B4ZB0wESgcBMqDSeZacCRGIHAJkQJF7ZBwwESgdBMiASudZciZEIHIIkAFF7pFxwESgdBAgAyqdZ8mZEIHIIUAGFLlHxgETgdJB4P8ByAPDPgFYGHgAAAAASUVORK5CYII=" alt /><!-- --></p>
+<div id="evidence-of-a-peer-influence-effect" class="section level2">
+<h2>Evidence of a peer influence effect</h2>
+<p>The influence of the door opener on the non-door opener’s voting behavior corresponds to an indirect effect. Though the Bernoulli-type parametrization of the estimands allows us to look at a range of allocations, <span class="math inline">\(\widehat{IE}(0.5, 0)\)</span> makes the sensible comparison between a world where individuals receive a voting message with probability <span class="math inline">\(0.5\)</span> to a world where individuals have zero probability of receiving the voting message.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>example3 &lt;-<span class="st"> </span><span class="kw">interference</span>(
++<span class="st">   </span><span class="dt">formula =</span> voted02p |<span class="st"> </span>treated |<span class="st"> </span>reached ~<span class="st"> </span>c_age |<span class="st"> </span>family,
++<span class="st">   </span><span class="dt">propensity_integrand =</span> <span class="st">'household_propensity'</span>,
++<span class="st">   </span><span class="dt">data =</span> voters,
++<span class="st">   </span><span class="dt">model_method =</span> <span class="st">'oracle'</span>, 
++<span class="st">   </span><span class="dt">model_options =</span> <span class="kw">list</span>(<span class="dt">fixed.effects =</span> coef.voters, <span class="dt">random.effects =</span> <span class="ot">NULL</span>),
++<span class="st">   </span><span class="dt">allocations   =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">5</span>),
++<span class="st">   </span><span class="dt">integrate_allocation =</span> <span class="ot">FALSE</span>,
++<span class="st">   </span><span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'robust'</span>),
++<span class="st">   </span><span class="dt">conf.level =</span> .<span class="dv">9</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">ie</span>(example3, .<span class="dv">5</span>, <span class="dv">0</span>)[ , <span class="kw">c</span>(<span class="st">'estimate'</span>, <span class="st">'conf.low'</span>, <span class="st">'conf.high'</span>)]</code></pre></div>
+<pre><code>##     estimate    conf.low  conf.high
+## 1 0.03151501 0.002290586 0.06073944</code></pre>
+<p>The point estimate suggests an individual receiving the voting encouragement increases the voting likelihood of the other household member by 3.2%. The 90% confidence interval excludes zero, indicating a significant indirect effect corroborating the analysis in .</p>
+<p>For comparison, suppose that a flip of a fair coin determined which registered voter opened the door. We exclude age as a covariate and instead set <span class="math inline">\(h_{i1} = 0.5\)</span>. Here we assume to know the propensity score, so we use .</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>example4 &lt;-<span class="st"> </span><span class="kw">interference</span>(
++<span class="st">   </span><span class="dt">formula =</span> voted02p |<span class="st"> </span>treated |<span class="st"> </span>reached ~<span class="st"> </span><span class="dv">1</span> |<span class="st"> </span>family,
++<span class="st">   </span><span class="dt">propensity_integrand =</span> <span class="st">'household_propensity'</span>,
++<span class="st">   </span><span class="dt">data =</span> voters,
++<span class="st">   </span><span class="dt">model_method =</span> <span class="st">'oracle'</span>,
++<span class="st">   </span><span class="dt">model_options =</span> <span class="kw">list</span>(<span class="dt">fixed.effects =</span> <span class="dv">0</span>, <span class="dt">random.effects =</span> <span class="ot">NULL</span>),
++<span class="st">   </span><span class="dt">allocations   =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">5</span>),
++<span class="st">   </span><span class="dt">integrate_allocation =</span> <span class="ot">FALSE</span>,
++<span class="st">   </span><span class="dt">causal_estimation_options =</span> <span class="kw">list</span>(<span class="dt">variance_estimation =</span> <span class="st">'naive'</span>),
++<span class="st">   </span><span class="dt">conf.level =</span> .<span class="dv">9</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">ie</span>(example4, .<span class="dv">5</span>, <span class="dv">0</span>)[ , <span class="kw">c</span>(<span class="st">'estimate'</span>, <span class="st">'conf.low'</span>, <span class="st">'conf.high'</span>)]</code></pre></div>
+<pre><code>##     estimate    conf.low  conf.high
+## 1 0.03144654 0.002209019 0.06068406</code></pre>
+<p>Examining the group-level weights may help diagnose coding errors in the propensity score function. In the case of a fixed probability as in , the propensity weights are easily computed by hand. For example, for <span class="math inline">\(\alpha = 0.5\)</span>,</p>
+<p><span class="math display">\[
+w_i = \frac{\pi(\mathbf{A}_i; 0.5)}{f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i; \theta = 0)} = \begin{cases}
+\frac{0.5^2}{.5} = .5 &amp; \text{ if } G_i = 0 \\
+\frac{0.5^2}{.5^2} = 1 &amp; \text{ if } G_i = 1\\
+ \end{cases},
+\]</span></p>
+<p>which we can confirm the software computed.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>G &lt;-<span class="st"> </span><span class="kw">tapply</span>(voters[<span class="dv">1</span>:<span class="dv">12</span>, <span class="st">'treated'</span>], voters[<span class="dv">1</span>:<span class="dv">12</span>, <span class="st">'family'</span>], sum)
+&gt;<span class="st"> </span>W &lt;-<span class="st"> </span><span class="kw">head</span>(example4[[<span class="st">&quot;weights&quot;</span>]])[, <span class="dv">2</span>]
+&gt;<span class="st"> </span><span class="kw">cbind</span>(G, W)</code></pre></div>
+<pre><code>##    G   W
+## 2  1 1.0
+## 4  0 0.5
+## 5  0 0.5
+## 6  0 0.5
+## 9  1 1.0
+## 10 0 0.5</code></pre>
 </div>
+</div>
+<div id="computational-issues-with-ipw-estimators" class="section level1">
+<h1>Computational Issues with IPW Estimators</h1>
+<p>We show in this section how computation of the group-level weights may affect estimation as the number of individuals in groups grows. To illustrate, consider the IPW estimator of the overall effect, which weights individual outcomes in group <span class="math inline">\(i\)</span> with:</p>
+<p><span class="math display">\[
+w_{1i} = \frac{\pi(\textbf{A}_i ; \alpha)}{f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i; \hat{\boldsymbol{\theta}})} = \frac{\prod_{j=1}^{n_i} \alpha^{A_{ij}} (1 - \alpha)^{1 - A_{ij}}}{ \int \prod_{j=1}^{n_i} h_{ij}^{A_{ij}} (1 - h_{ij})^{1 - A_{ij}}  f_b (b_i ; \hat{\theta}_s) db_i  }
+\]</span></p>
+<p>or equivalently, <span class="math display">\[
+w_{2i} = \left\{ \int \prod_{j=1}^{n_i} \left(\frac{h_{ij}}{\alpha}\right)^{A_{ij}} \left(\frac{1 - h_{ij}}{1 - \alpha}\right)^{1 - A_{ij}}  f_b (b_i ; \hat{\theta}_s) db_i  \right\}^{-1}
+\]</span></p>
+<p>or, <span class="math display">\[
+w_{3i} = \left\{ \int \exp\left[ \sum_{j=1}^{n_i} \left\{ A_{ij} \log \left( \frac{h_{ij}}{\alpha}\right) + (1 - A_{ij})\log \left(\frac{1 - h_{ij}}{1 - \alpha}\right) \right\} \right] f_b (b_i ; \hat{\theta}_s) db_i \right\}^{-1}. 
+\]</span></p>
+<p>While mathematically equivalent, these weights may be computationally dissimilar. In the case of <span class="math inline">\(w_{1i}\)</span>, the product term within the integral entails multiplying probabilities and thus will tend to 0 as <span class="math inline">\(n_i\)</span> increases, causing the denominator of <span class="math inline">\(w_{1i}\)</span> to get arbitrarily large. In contrast, the product term in <span class="math inline">\(w_{2i}\)</span> entails multiplying values which may be less than or greater than 1 and thus tends to be less susceptible to numerical instability. Summing <span class="math inline">\(\log(h_{ij}/\alpha)\)</span> or <span class="math inline">\(\log(1 - h_{ij})/(1 - \alpha))\)</span> and then exponentiating the result may provide greater numerical stability. Internally,  uses <span class="math inline">\(w_{3i}\)</span>.</p>
+<p>When group sizes are small, the differences between these weights tend to be infinitesimal, but as group sizes grow the differences become important. To be specific, consider the code below comparing <span class="math inline">\(w_{1i}\)</span>, <span class="math inline">\(w_{2i}\)</span>, and <span class="math inline">\(w_{3i}\)</span> for increasing group sizes where <span class="math inline">\(\alpha = 0.5\)</span>, all units are treated, there is no random effect, and <span class="math inline">\(h_{ij}\)</span> is fixed at <span class="math inline">\(0.5\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>compare_weights &lt;-<span class="st"> </span>function(n, <span class="dt">alpha =</span> .<span class="dv">5</span>, <span class="dt">h =</span> .<span class="dv">5</span>){
++<span class="st">   </span>pi  &lt;-<span class="st"> </span><span class="kw">rep</span>(alpha, n)
++<span class="st">   </span>PrA &lt;-<span class="st"> </span><span class="kw">rep</span>(h, n)
++<span class="st">   </span><span class="kw">c</span>(<span class="dt">w1 =</span> <span class="kw">prod</span>(pi)/<span class="kw">prod</span>(PrA),
++<span class="st">     </span><span class="dt">w2 =</span> <span class="dv">1</span>/<span class="kw">prod</span>(PrA/pi),
++<span class="st">     </span><span class="dt">w3 =</span> <span class="dv">1</span>/<span class="kw">exp</span>(<span class="kw">sum</span>(<span class="kw">log</span>(PrA/pi))))  
++<span class="st"> </span>}
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>n &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">500</span>, <span class="dv">1074</span>, <span class="dv">1075</span>, <span class="dv">10000</span>)
+&gt;<span class="st"> </span><span class="kw">cbind</span>(n, <span class="kw">t</span>(<span class="kw">sapply</span>(n, <span class="dt">FUN =</span> compare_weights)))</code></pre></div>
+<pre><code>##          n  w1 w2 w3
+## [1,]    50   1  1  1
+## [2,]   100   1  1  1
+## [3,]   500   1  1  1
+## [4,]  1074   1  1  1
+## [5,]  1075 NaN  1  1
+## [6,] 10000 NaN  1  1</code></pre>
+<p>For group sizes up to <span class="math inline">\(1074\)</span> there is no difference, but when <span class="math inline">\(n\)</span> reaches <span class="math inline">\(1075\)</span>, <span class="math inline">\(w_{1i}\)</span> returns  while <span class="math inline">\(w_{2i}\)</span> and <span class="math inline">\(w_{3i}\)</span> correctly return 1.</p>
+<p> used <span class="math inline">\(w_{1i}\)</span> to calculate weights, but 15 groups in their analysis had over 1000 subjects. These groups had missing values for weights for all the values of <span class="math inline">\(\alpha\)</span> considered and were excluded from computing the average IPW estimate. Rather than computing the average IPW across 700 groups, they inadvertently took the average across 685 groups. Correcting the estimates by using <span class="math inline">\(w_{2i}\)</span> or <span class="math inline">\(w_{3i}\)</span> did not alter the conclusions in this case, but analysts should be aware of this issue when dealing with large groups.</p>
+</div>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<p>The  package  computes inverse probability weighted estimators of causal effects in the presence of interference. The package currently supports the IPW methods of  and . These methods require a model for the group-level propensity scores. The package provides useful defaults for the propensity models but allows for non-standard models.</p>
+<p>Development and application of statistical methods for inferring causal effects in the presence of interference is an active area of research. Future versions of  may incorporate other estimation methods, such as doubly robust methods and stratification. Also, additional methods for estimating variances and effect bounds may be incorporated into the software.</p>
+\section*{Acknowledgments}
+<p>We would like to thank Carolina Perez-Heydrich (Meredith College) for sharing code from her analysis, which made debugging and validation much smoother. David Nickerson (University of Notre Dame) graciously agreed to share and distribute the voting experiment data in the  package. Steve Cole (UNC), Brian Barkley (UNC), Betz Halloran (University of Washington), Wen Wei Loh (UNC), and Mary Kirk Wilkinson provided helpful comments. This work was partially supported by NIH grant R01 AI085073. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health.</p>
 </div>
 
 

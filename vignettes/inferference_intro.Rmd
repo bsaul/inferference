@@ -1,239 +1,493 @@
 ---
-title: "A Brief Intro to `inferference`"
+title: "`inferference` Vignette"
 author: 
 - name : "Bradley Saul"
+  affiliation: "University of North Carolina"
+- name : "Michael Hudgens"
   affiliation: "University of North Carolina"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{inferference_intro}
+  %\VignetteIndexEntry{inferference_vignette}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+abstract:  In causal inference, interference occurs when the treatment of one subject affects the outcome of other subjects. Interference can distort research conclusions about causal effects when not accounted for properly. In the absence of interference, inverse probability weighted (IPW) estimators are commonly used to estimate causal effects from observational data. Recently, IPW estimators have been extended to handle interference. \citet*{ttv2012} proposed IPW methods to estimate direct and indirect (or spillover) effects that allow for interference between individuals within groups. In this paper, we present \pkg{inferference}, an \proglang{R} package that computes these IPW causal effect estimates when interference may be present within groups. We illustrate use of the package with examples from political science and infectious disease. 
 ---
+# Introduction #
 
-# Use of `inferference` 
+Interference occurs when the treatment (or exposure) of one subject affects the outcome of other subjects \citep{cox1958}. Without accounting for interference, measuring only a treatment's direct effect may be misleading. For example, a vaccine's direct effect on an individual in a group with a large proportion of vaccinated individuals can be small. However, the protective, indirect effect from other group members' vaccinations may be large. In this case the vaccine may be judged to be ineffective based on the direct effect despite possibly having great public health utility due to the indirect effect \citep{clemens2011}. Other areas where interference may be present include criminology \citep[e.g.,][]{sampson2010, vs2012}, developmental psychology \citep[e.g.,][]{duncan2005, foster2010}, econometrics \citep[e.g.,][]{sobel2006, manski2013}, education \citep[e.g.,][]{hong2006, vanderweele2013}, imaging \citep[e.g.,][]{luo2012}, political science \citep[e.g.,][]{sinclair2012, bowers2013}, social media and network analysis \citep[e.g.,][]{vanderweele2013b, toulis2013, eckles2014, kramer2014}, sociology \citep[e.g.,][]{aronow2013}, and spatial analyses \citep[e.g.,][]{zigler2012, graham2013}. 
 
-This is a brief description of how to use the `inferference` package.
+Inverse probability weighted (IPW) methods are often used to estimate causal effects when interference is absent \citep{rosenbaum1987model, robins2000marginal, lunceford2004, cole2008}. Recent developments have extended IPW estimators to estimate causal effects when interference may be present in either randomized or observational studies. \citet*{ttv2012} proposed estimators for observational studies assuming partial interference \citep{sobel2006}, i.e., individuals can be partitioned into groups where there may be interference between individuals in the same group but not between individuals in different groups. Partial interference could be reasonable, for example, in study of bovine disease where physical separation of herds precludes pathogen transmission between herds. On the other hand, if birds or farm workers could spread the pathogen between herds, then partial interference may be questionable. The \citet{ttv2012} IPW estimators require a model for the group-level propensity score (i.e., the probability of a group's observed treatment allocation). The large sample properties of these estimators were derived by \citet{carolina2014}.
 
-```{r, echo = TRUE}
-# load the package
+To date, software for analysis of causal effects in the presence of interference is limited. Without interference, the \proglang{R} \citep{r2014} package \pkg{ipw} provides tools to compute IPW estimators \citep{ipw2011}. Existing interference-related \proglang{R} packages, including \pkg{interferenceCI} \citep{interferenceCI2015} and \pkg{blockTools} \citep{blocktools2015}, were designed for analysis of randomized experiments. In this paper, we present the \proglang{R} package \pkg{inferference} which computes the \citet{ttv2012} IPW estimators and the large sample variance estimators developed by \citet{carolina2014}. 
+ 
+The outline for the remainder of this paper is as follows. The next section provides background on interference and an overview of the mathematical concepts and notation. Section \ref{using-inferference} describes the package's main features. Sections \ref{example-vaccine-study} and \ref{example-voting-experiment} demonstrate the software with examples from public health and political science. The example in Section \ref{example-voting-experiment} shows advanced features of the package. We discuss computational issues with IPW estimators when groups have large numbers of individuals in Section \ref{computational-issues-with-ipw-estimators}. We conclude with a brief discussion and future directions in Section \ref{discussion}.
+
+# Preliminaries #
+
+## A Brief History of Interference ##
+
+Much of causal inference assumes that the exposure of one individual does not affect the outcomes of other individuals, i.e., there is no interference between individuals. \citet*{rubin1980randomization} bundled no interference with the assumption that treatments for all units are comparable (no hidden forms of treatment) into the "Stable Unit Treatment Value Assumption" (SUTVA). Despite sporadic efforts, the research community gave little attention to this assumption until the early 2000s. One approach to relaxing the no interference assumption is to assume partial interference. Under this assumption, space, time, and/or social network groupings preclude interference between individuals in different groups, but interference may occur within a group. 
+
+\citet*{sobel2006}, \citet*{hh2008}, and \citet*{ttv2012} developed methods based on the assumption of partial interference to estimate causal effects in the presence of interference. When an experimenter randomizes units -- by design -- at the group and individual levels, \citet*{hh2008} defined estimators that, under certain assumptions, are unbiased for a treatment's direct and indirect (or spillover) effects. 
+
+Observational studies complicate estimation of interference effects. \citet*{ttv2012} proposed IPW estimators of causal effects based on group-level propensity scores for non-randomized treatment allocation. They showed these estimators to be unbiased when the propensity score is known. \citet{carolina2014} derived the large sample properties of these estimators when the propensity scores are unknown but correctly modeled. They applied these results to draw inference about the direct and indirect effects of cholera vaccination in Matlab, Bangladesh.
+
+## Basic partial interference setup ##
+
+Consider $N$ individuals partitioned into $m$ groups, each with $n_i$ individuals for $i = 1, \dots, m$. The triplet $(Y_{ij}, A_{ij}, \mathbf{X}_{ij})$ represents the observed outcome, treatment, and baseline covariate vector, respectively, for individual $j$ in group $i$. We let capitalized letters denote random variables, and lowercase letters (e.g., $(y_{ij}, a_{ij}, \mathbf{x}_{ij})$) denote observed or realized values. Let $\mathbf{X}_{i}$\ and $\mathbf{A}_i$ be the matrix of baseline covariates and vector of treatment allocations for members of group $i$. Let $\mathbf{A}_{i,-j} = (A_{i1}, \dots, A_{ij-1}, A_{ij+1}, \dots, A_{in_i})$ represent a group's treatment allocation excluding the $j$th subject. Let $Y_{ij}(a_{ij}, \mathbf{a}_{i,-j}) = Y_{ij}(\mathbf{a}_i)$ be the potential outcome for individual $j$ in group $i$ if, possibly contrary to fact, group $i$ received $\mathbf{a}_i$. By causal consistency, $Y_{ij} = Y_{ij}(\mathbf{A}_i)$ \citep{pearl2010}. Let $\mathbf{Y}_i$ be the vector of potential outcomes for group $i$. By assuming no interference between groups, an individual's potential outcome may depend only on the treatment allocation of its group. The set $\mathcal{A}(n_i)$ contains all of group $i$'s possible treatment vectors.  With a binary treatment, $A_{ij} \in \{a_1, a_2\}$, this set has $2^{n_i}$ elements. 
+
+### Estimands ###
+
+Without interference, researchers often estimate an average treatment effect, which contrasts the average outcome for two treatment allocations: the entire population treated versus the entire population untreated. With interference, causal estimands may be defined in terms of the continuum of treatment allocation strategies between those extremes. In \pkg{inferference}, we consider Bernoulli-type allocation strategies proposed by \citet{ttv2012}, where individuals independently receive treatment with probability $\alpha$. For this allocation strategy, the probability of a group's treatment vector is denoted as $\pi_{i}(\mathbf{A}_i; \alpha) = \prod_{j = 1}^{n_i} \alpha^{A_{ij}}(1 - \alpha)^{1 - A_{ij}}$ and, excluding the $j$th subject, $\pi_{i}(\mathbf{A}_{i, -j}; \alpha) = \prod_{k = 1, k \neq j}^{n_i} \alpha^{A_{ik}}(1 - \alpha)^{1 - A_{ik}}.$  The analyst may compute the estimators described below over a range of $\alpha$'s to explore hypothetical underlying treatment allocations. In their analysis of a cholera vaccine study, \citet{carolina2014} examined strategies between $\alpha = 0.3$ and $\alpha = 0.6$ because 75\% of the groups had observed vaccine coverages in that range.
+
+Define an individual's average potential outcome when assigned treatment $a$ under strategy $\alpha$ by
+
+\[
+\overline{Y}_{ij}(a; \alpha) = \sum_{\mathbf{a}_{i, -j} \in \mathcal{A}(n_i - 1)} Y_{ij}(a, \mathbf{a}_{i, -j}) \pi_i(\mathbf{a}_{i, -j}; \alpha).
+\]
+
+In words, $\overline{Y}_{ij}(a; \alpha)$ is a weighted average of individual $j$'s potential outcomes under possible treatment vectors of the other $n_{i} - 1$ subjects in group $i$ weighted by the probability of each treatment vector. Similarly, define the marginal individual average potential outcome by
+
+\[
+\overline{Y}_{ij}(\alpha) = \sum_{\mathbf{a}_{i} \in \mathcal{A}(n_i)} Y_{ij}(\mathbf{a}_{i}) \pi_i(\mathbf{a}_{i}; \alpha).
+\]
+
+Here, the weighted average of individual $j$'s potential outcomes is across all group treatment vectors in $\mathcal{A}(n_i)$.
+
+A simple mean of individual average potential outcomes within a cluster defines group average potential outcomes. Then group-level estimands are averaged to make population-level estimands. For example, $\overline{Y}(a; \alpha) = \sum_{i = 1}^m \{\sum_{j = 1}^{n_i} \overline{Y}_{ij}(a; \alpha)/n_i \} /m$ is the population-level average outcome when individuals receive treatment $a$ and their group adopts allocation strategy $\alpha$. Likewise, $\overline{Y}(\alpha) = \sum_{i = 1}^m \{ \sum_{j = 1}^{n_i} \overline{Y}_{ij}(\alpha)/n_i \} /m$ is the population-level average outcome when groups adopt allocation strategy $\alpha$.
+ 
+Contrasts of the population average potential outcomes define causal effects. \citet*{hh2008} describe four causal effects: direct, indirect, total, and overall \citep[see also][]{ttv2012}.  The direct (or unit-level treatment) effect compares average potential outcomes within a single allocation strategy:
+
+\[
+\overline{DE}(\alpha) = \overline{Y}(a_1; \alpha)  - \overline{Y}(a_2; \alpha).
+\]
+
+An indirect effect compares a treatment's average potential outcomes under different allocation strategies:
+
+\[
+\overline{IE}(\alpha, \alpha') = \overline{Y}(a_1; \alpha)  - \overline{Y}(a_1; \alpha'). 
+\] 
+
+For a binary treatment, there are two indirect effects for a fixed $(\alpha, \alpha')$ pair: one for $a_1$ and one for $a_2$. If interference is not present, then the indirect effect equals zero. The total effect accounts for both the direct and indirect effects:
+
+\[
+\overline{TE}(\alpha, \alpha') = \overline{Y}(a_1; \alpha)  - \overline{Y}(a_2; \alpha'). 
+\] 
+
+The overall effect contrasts the marginal average potential outcomes for two allocation strategies: 
+
+\[
+\overline{OE}(\alpha, \alpha') = \overline{Y}(\alpha)  - \overline{Y}(\alpha'). 
+\] 
+
+See \citet*{hh2008} and \citet*{ttv2012} for further discussion of these causal estimands. 
+
+
+## IPW estimation ##
+
+\citet{ttv2012} proposed IPW estimators of the causal estimands defined above assuming partial interference. Their estimator weights an individual's outcome by the inverse of the group-level propensity score, $\Pr(\mathbf{A}_i | \mathbf{X}_i)$, the probability of a group's treatment allocation given the covariates of the group's individuals. \citet{ttv2012} showed the IPW estimators to be unbiased when the group-level propensities are known, under the following assumptions:
+
+1. Conditional Independence:  $\Pr(\mathbf{A}_i = \mathbf{a}_i | \mathbf{X}_i, \mathbf{Y}_i) = \Pr(\mathbf{A}_i = \mathbf{a}_i | \mathbf{X}_i)$
+2. Positivity: $\Pr(\mathbf{A}_i = \mathbf{a}_i | \mathbf{X}_i) > 0 \quad \forall \mathbf{a}_i \in \mathcal{A}(n_i)$
+
+The true propensity scores are not generally known in observational studies and must be estimated. \citet{ttv2012} suggested estimating $\Pr(\mathbf{A}_i | \mathbf{X}_i)$ using a generalized mixed effects model. We denote these models as $f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i; \boldsymbol{\theta}_x, \theta_s)$, where $\boldsymbol{\theta}_x$ represents fixed effects parameters and $\theta_s$ a group random effect parameter. Model parameters may be estimated by maximum likelihood methods, which we denote $\widehat{\boldsymbol{\theta}} = (\hat{\boldsymbol{\theta}}_x, \hat{\theta}_s)$. For a binary treatment, a model for the group's propensity score might be:
+
+\begin{equation} \label{eq:propensity}
+f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i; \boldsymbol{\theta}_x, \theta_s) = \int \prod_{j = 1}^{n_i} h_{ij}(b_i; \boldsymbol{\theta}_x)^{A_{ij}} \{ 1 - h_{ij}(b_i; \boldsymbol{\theta}_x) \}^{1 - A_{ij}} f_b(b_i; \theta_s) db_i 
+\end{equation}
+
+where $h_{ij}(b_i; \boldsymbol{\theta}_x) = \Pr(A_{ij} = 1 | \mathbf{X}_{ij}, b_i, \boldsymbol{\theta}_x) = \mbox{logit}^{-1}(\mathbf{X}_{ij}\boldsymbol{\theta}_x + b_i)$ and $f_b(\cdot; \theta_s)$ is the density of a Normal random variable with mean 0 and variance $\theta_s$. This is the default group-level propensity score model in \pkg{inferference}; the examples below show how the user can modify the default group propensity score model. Validity of inferences drawn using the methods described below requires correct specification of the group propensity score model. Therefore, it is important in practice to conduct diagnostics to assess the fit of the model employed. For example, if \eqref{eq:propensity} is assumed, then the \citet{ttc2006} diagnostic test can be used to assess whether the random effects are Normally distributed. 
+
+The IPW estimator for the group-level average potential outcomes is a straightforward weighted sum,
+
+\begin{equation} \label{eq:ipw}
+\widehat{Y}_i^{ipw}(a, \alpha) = \frac{\sum_{j = 1}^{n_i} \pi_i(\mathbf{A}_{i, -j}; \alpha) I(A_{ij} = a) Y_{ij} }{n_i f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i; \widehat{\boldsymbol{\theta}})   },
+\end{equation}
+
+as is the estimator for group-level marginal potential outcomes,
+
+\begin{equation} \label{eq:marg_ipw}
+\widehat{Y}_i^{ipw}(\alpha) = \frac{\sum_{j = 1}^{n_i} \pi_i(\mathbf{A}_{i}; \alpha) Y_{ij} }{n_i  f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i;\widehat{\boldsymbol{\theta}})   }.
+\end{equation}
+
+From \eqref{eq:ipw} and \eqref{eq:marg_ipw}, one constructs population-level average potential outcome and marginal population-level average potential outcome estimators by $\widehat{Y}^{ipw}(a; \alpha) = \sum_{i = 1}^m \widehat{Y}_i^{ipw}(a; \alpha)/m$ and $\widehat{Y}^{ipw}(\alpha) = \sum_{i = 1}^m \widehat{Y}_i^{ipw}(\alpha)/m$. Estimators for direct, indirect, total, and overall effects simply contrast population-level estimators, 
+
+\begin{align*}
+\widehat{DE}(\alpha) &= \widehat{Y}^{ipw}(a_1; \alpha) - \widehat{Y}^{ipw}(a_2; \alpha)  \\
+\widehat{IE}(\alpha, \alpha') &= \widehat{Y}^{ipw}(a_1; \alpha) - \widehat{Y}^{ipw}(a_1; \alpha')  \\
+\widehat{TE}(\alpha, \alpha') &= \widehat{Y}^{ipw}(a_1; \alpha) - \widehat{Y}^{ipw}(a_2; \alpha')  \\
+\widehat{OE}(\alpha, \alpha') &= \widehat{Y}^{ipw}(\alpha) - \widehat{Y}^{ipw}(\alpha').
+\end{align*}
+
+
+### IPW variance estimation ###
+
+\citet{carolina2014} derived asymptotic distributions of the IPW estimators using standard estimating equation theory. Briefly, the IPW estimators above are consistent and asymptotically Normal as the number of groups $m$ tends to infinity. When the group-level propensity scores are known (as in the case of simulation or randomized studies), a large sample estimator of the variance of $\widehat{DE}(\alpha)$ is
+
+\[
+\frac{1}{m^2}\sum_{i = 1}^m \left\{\widehat{DE}_i(\alpha) - \widehat{DE}(\alpha) \right\}^2 \; .
+\]
+
+Results for $\widehat{IE}$, $\widehat{TE}$, and $\widehat{OE}$ are analogous. As explained below, when \code{variance_estimation = `naive'} in the \code{interference} function, this formula is used to compute standard errors and Wald-type confidence intervals. 
+
+When the propensity scores are unknown and instead estimated using a parametric model, computing variance estimators is more complicated and involves derivatives of the group propensity with respect to each parameter and derivatives of the propensity model's log likelihood. The supplementary materials in \citet{carolina2014} contain the mathematical details, and this method is available with the \code{variance_estimation = `robust'} option. The \code{robust} option computes consistent variance estimates which account for the estimation of the weights, whereas the \code{naive} option computes variance estimates described in the preceding paragraph which ignore estimation of the weights and are conservative (i.e., tend to be too large).
+
+# Using inferference #
+
+## User's guide ##
+
+To start, install the package from CRAN using \code{install.packages(`inferference')}. The list below details the arguments for \code{interference}, the primary function in \pkg{inferference}. Special attention should be given to the \code{propensity_integrand} and \code{formula} arguments.
+
+* \code{formula}: formula used to define the causal model. \code{formula} has a minimum of 4 parts, separated by \code{|} and \code{~} in a specific structure: \code{outcome | exposure ~ covariates | group}. The order matters, and the pipes (\code{|}) split the data frame into corresponding pieces \citep{formula2010}. The \code{exposure ~ covariates} piece is passed as a single formula to the chosen \code{model_method} (defined below) used to estimate or fix propensity parameters. 
+    * The following includes a random effect for the group: \code{outcome | exposure ~ covariates + (1|group) | group}. In this instance, the group variable appears twice. 
+    * If the study design includes a `participation' variable (as in both examples below), this is easily added to the formula: \code{outcome | exposure | participation ~ covariates | group}. 
+* \code{propensity_integrand}: a function, which may be created by the user, used to compute the IP weights. This defaults to the function \code{logit_integrand()}, which calculates the product of inverse logits for individuals in a group: $\prod_{j = 1}^{n_i} \{r h_{ij}(b_i)\}^{A_{ij}}\{1 - r h_{ij}(b_i)\}^{1 - A_{ij}}  f_b(b_i; \theta_s)$, where $h_{ij}(b_i) = \mbox{logit}^{-1}(\mathbf{X}_{ij}\theta_x + b_i)$, $b_i$ is a group-level random effect, $f_b$ is a $N(0, \theta_s)$ density, and $r$ is a known constant. In an observational study typically $r = 1$. The examples below include individual randomized experiments in which case $r$ denotes the randomization probability among trial participants. \code{logit_integrand()} is the integrand of \eqref{eq:propensity} where $h_{ij}(b_i)$ is scaled by a constant $r$ term. If no random effect is included in the \code{formula}, \code{logit_integrand()} ignores the random effect. IP weights are computed by numerically integrating \code{propensity_integrand} over the random effect distribution using by \code{stats::integrate()} to which arguments may be passed via \code{...} (see below). The default \code{logit_integrand()} also takes the following argument that can be passed via the \code{...} argument in \code{interference()}: 
+    * \code{randomization}: a scalar. This is the $r$ in the formula just above. It defaults to 1 in the case that a \code{participation} vector is not included. The vaccine study example in Section \ref{example-vaccine-study} demonstrates use of this argument.
+* \code{loglihood_integrand}: a function, which may be created by the user, that defines the log likelihood of the propensity score model. This should generally be the same function as \code{propensity_integrand}, which is the default.
+* \code{allocations}: a vector of values in $[0, 1]$. These are the $\alpha$'s defined in Section \ref{basic-partial-interference-setup}. Increasing the number of elements of the allocation vector increases computation time; however, a larger number of allocations will make plotted effect estimates smoother. A minimum of two allocations is required.
+* \code{data}: the analysis data frame. This must include all the variables defined in the \code{formula}.
+* \code{model_method}: the method used to estimate or set the propensity model parameters. Must be one of \code{`glm'}, \code{`glmer'}, or \code{`oracle'}. For a fixed effects only model use \code{`glm'}, or to include random effects use \pkg{lme4}'s \code{`glmer'} \citep{lme4}. \code{logit_integrand} only supports a single random effect for the grouping variable, corresponding to $b_i$. When the propensity parameters are known (as in simulations) or if estimating parameters for the propensity model outside of \code{interference}, use the \code{`oracle'} option. See \code{model_options} for details on how to pass the oracle parameters. Defaults to \code{`glmer'}.
+* \code{model_options}: a list of options passed to the function in \code{model_method}. Defaults to \code{list(family = binomial(link = `logit'))}. When \code{model_method = `oracle'}, the list must have two elements, \code{fixed.effects} and \code{random.effects}. If the model does not include random effects, set \code{random.effects = NULL}.
+* \code{causal_estimation_method}: currently only supports and defaults to \code{`ipw'}.
+* \code{causal_estmation_options}: a list with a single item \code{variance_estimation}, which is either \code{`naive'} or \code{`robust'}. See Section \ref{ipw-estimation} for details. Defaults to \code{`robust'}.
+* \code{conf.level}: level for confidence intervals. Defaults to \code{0.95}.
+* \code{rescale.factor}: a scalar multiplication factor by which to rescale outcomes and effects. Defaults to \code{1}.
+* \code{integrate_allocation}: indicator of whether the integrand function uses the allocation parameter. Defaults to TRUE.
+* \code{...}: used to pass additional arguments to internal functions such as \code{numDeriv::grad()} or \code{stats::integrate()}. Arguments can also be passed to the \code{propensity_integrand} and \code{loglihood_integrand} functions.
+
+## The interference object ##
+
+An \code{interference()} call results in an \code{S3} object of class \code{interference} which contains: 
+
+* \code{estimates}: a data frame of causal effect estimates;
+* \code{models$propensity_model}: the \code{glm} or \code{glmer} object;
+* \code{summary}: a list of objects summarizing the causal model such as the number of groups, number of allocations, and the formula used in the \code{interference} call;
+* \code{weights}: (\# of groups) $\times$ (\# of allocations) matrix of group-level weights:
+\[
+w_{i, k} = \frac{\pi_i(\mathbf{A}_i; \alpha_k)}{f_{\mathbf{A}_i|\mathbf{X}_i}(\mathbf{A}_i|\mathbf{X}_i; \hat{\boldsymbol{\theta}})}.
+\]
+
+If \code{variance_estimation = `robust'}, then the object also includes:
+
+* \code{weightd}: (\# of groups) $\times$ (\# of allocations) $\times$ (\# of parameters) array of weights computed using derivatives of the propensity function with respect to each parameter;
+* \code{scores}: (\# of groups) $\times$ (\# of parameters) matrix of derivatives of the log likelihood.
+
+## Utility functions ##
+
+The package includes tools to extract effect estimates of interest from the \code{S3} object. The functions \code{direct_effect}, \code{indirect_effect} (or \code{ie}), \code{total_effect} (or \code{te}), and \code{overall_effect} (or \code{oe}) select appropriate records from the \code{estimates} data frame in the \code{interference} object. Section \ref{example-vaccine-study} shows an example.
+
+# Example: Vaccine Study #
+
+This section illustrates the use of \pkg{inferference} with an example drawn from vaccine research. The package includes a single dataset based on the same set of parameters used in the simulation study by \citet{carolina2014}. The  \code{vaccinesim} dataset consists of 3000 units in 250 groups and contains two covariates (\code{X1} = age in decades and \code{X2} = distance to river), a vaccination indicator (\code{A}), a participation indicator (\code{B}), a binary outcome (\code{Y}) indicating cholera infection (1 yes, 0 no), and the unit's \code{group}. 
+
+```{r setup, echo = FALSE, eval = TRUE, cache=FALSE}
+library(knitr)
+opts_chunk$set(prompt=TRUE)
+options(continue ="+ ")
+```
+
+```{r library, echo = TRUE, eval = TRUE}
 library(inferference)
-```
-
-I have included a simple dataset generated from `rinterferenceSim` package: 3000 units, 250 groups, 2 covariates, 21 allocations (0 to 1 by 0.05), using the parameters in the code below. See Perez 2014 for details on how the simulations were structured.
-
-
-```{r, echo=TRUE, eval=FALSE}
-alphaz = seq(0, 1, by=.05) # needed to compute truth
-theta.base <- c(.5, -0.788, -2.953, -0.098, -0.145, 0.351)
-theta.sim <- c(0.2727, -0.0387, .2719, 1.0859)
-sample_sim <- sim_interference(n = 3000, N = 250, nsims = 1, 
-                               base.parameters = theta.base, 
-                               parameters = theta.sim,
-                               alphas = alphaz)
-interference_sample <- sample_sim$sims[[1]]
-#save(sample_data, file = "data/sample_data.rda")
-```
-
-Here's what the data looks like:
-```{r}
 head(vaccinesim)
 ```
 
-y is the outcome. X1 and X2 are covariates. A is the randomized treatment indicator. B is an indicator of participation in the trial. Group is obvious.
+Like the original study \citep{ali2005} that inspired the simulation, individuals were randomized to vaccine with a known probability of $2/3$, but subjects could opt to not participate in the trial. In essence, there are both experimental and observational aspects to the data. The \code{interference} function handles this design when \code{logit_integrand}'s \code{randomization} argument is used and a participation variable is included in the formula.
 
-# `interference` function
-
-The primary function in `inferference` is `interference`. Currently, it only supports IPW estimation. `interference` has several options:
-
-* `propensity_integrand`: a character string that names the function that defines the group-level propensity: $P(\mathbf{A}_i | \mathbf{X}_i)$. The default function is `logit_integrand`. This function handles models with and without random effects. Without random effects, `logit_integrand` computes:
-\[
-\prod_{j = 1}^n_i h_{ij}^{A_{ij}}(1 - h_{ij})^{1 - A_{ij}}
-\]
-where $h_{ij} = logit^{-1}(\mathbf{X}\hat{\theta})$; $\hat{\theta}$ are the estimated parameters from logistic regression using `glm`. In the case of a random effect, `logit_integrand` computes:
-\[
-\prod_{j = 1}^n_i h_{ij}(b_i)^{A_{ij}}(1 - h_{ij}(b_i))^{1 - A_{ij}}f_b(b_i)
-\]
-where $h_{ij} = logit^{-1}(\mathbf{X}\hat{\theta} + b)$; $\hat{\boldsymbol{\theta}}_f$ are the estimated fixed effect parameters from random effects logistic regression using `glmer`; $f_b(\cdot)$ is a $N(0, \hat{\theta}_r)$ density; $\hat{\theta}_r$ is the estimated random effect variance. For both cases `logit_integrand` is passed through the `integrate` function. Without a random effect, however, this has no effect since `integrate(function(b) dnorm(b))` equals 1.
-* formula: this has a minimum of 4 parts in the following structure:
-  * `outcome | exposure ~ propensity covariates | group`. 
-If a random effect for the group is included use the following: 
-  * `outcome | exposure ~ propensity covariates + (1|group) | group`.
-If the study design includes a 'participation' variable like in Perez-Heydrich 2014 use the following:
-  * `outcome | exposure | participation ~ propensity covariates + (1|group) | group`.
-* allocations: a vector of treatment allocation strategies. At least 2 allocations must defined.
-* data: the data.frame with the outcome, exposure, covariates, and group variables
-* model_method: one of `oracle`, `glm`, or `glmer`.
-* model_options: options passed to the `model_method` as a list. For example, for `glm` or `glmer` set this equal to `list(family = binomial(link = 'logit'))`. To use the `oracle` method, use `list(fixed.effects = c(???, ???, etc), random.effects = NULL)` or `list(fixed.effects = c(???, ???, etc), random.effects = ???)`
-* causal_estimation_options: list of options passed to `ipw_interference`. `list(variance_estimation = 'naive')` or `list(variance_estimation = 'robust')` are the option settings of most interest. 'robust' is the default.
-'robust' uses M-estimation theory to compute the variance, whereas, 'naive' computes $\frac{1}{N^2}\sum_{i= 1}^N (\hat{CE}_i - \hat{CE})^2$, where $\hat{CE}$ is point estimate for the causal effect of interest while $\hat{CE}_i$ is the point estimate for group $i$.
-* conf.level: the confidence level. defaults to .95.
-* rescale.factor: a scaling factor for the causal effects. Defaults to 1.
-* ... other options passed to `grad()`, `integrate()`, or the propensity_integrand function. `method = simple` will vastly speed up the `grad()` function. 
-
-# Examples
-
-Here's a few samples of `interference()` based on the data provided. 
-
-## Replication of Perez-Heydrich 2014
-
-The first example follows Perez-Heydrich 2014 and includes a random effect and participation variable. Conditional on participation, subjects were randomized to treatment with probability 2/3, which is the `randomization` argument. This is an argument in `logit_integrand()`. This argument defaults to $1$ and so can be left out if unnecessary (see later examples). 
-
-```{r, echo=TRUE}
-sample1 <- interference(
-  allocations = c(.3, .45,  .6), # a minimum of 2 is required
-  formula = y | A | B ~ X1 + X2 + (1|group) | group, 
-  data = vaccinesim, # name of the data frame
-  randomization = 2/3,
-  method = 'simple' # speeds up grad()
-  )
+```{r example1, echo = TRUE, eval = TRUE, results = 'hide', cache = FALSE}
+example1 <- interference(
+    formula = Y | A | B ~ X1 + X2 + (1|group) | group, 
+    allocations = c(.3, .45,  .6), 
+    data = vaccinesim, 
+    randomization = 2/3,
+    method = 'simple')
 ```
 
-Take a quick look using the (unpolished) `print` function:
-```{r, echo = TRUE}
-print(sample1)
+The only arguments required for \code{interference} to run are \code{formula}, \code{allocations}, and \code{data}. When using the \code{`robust'} method (the default) to compute the variance, the internal workings call \code{numDeriv::grad} \citep{numDeriv2012} and \code{stats::integrate} frequently. The option \code{method = `simple'} greatly speeds up the \code{numDeriv::grad} function. For more accurate derivatives, leave out this option. See \code{?numDeriv::grad}  for more options.
+
+The \code{print.interference} function provides an overview of the causal effect estimates, estimated standard errors, and Wald-type confidence intervals. In the output, \code{alpha1} and \code{alpha2} refer to $\alpha$ and $\alpha'$, while \code{trt1} and \code{trt2} refer to $a_1$ and $a_2$, respectively.
+
+```{r example1_summary, echo = TRUE, eval = TRUE}
+print(example1)
 ```
 
-Other pieces that might be interest are the group-level weights:
-\[
-\frac{\prod_{j =1}^{n_i} \alpha^{A_{iij}}(1 - \alpha)^{1 - A_{ij}}}{P(\mathbf{A}_i | \mathbf{X}_i)}
-\]
-which can accessed:
-```{r, echo = TRUE}
-# the matrix of weights
-head(sample1$weights)
+The utility functions return selected effect estimates.
+
+```{r, echo = TRUE, eval = TRUE}
+direct_effect(example1, .3)
+ie(example1, .3)
 ```
 
-The weight 'derivatives':
-\[
-\frac{\prod_{j =1}^{n_i} \alpha^{A_{iij}}(1 - \alpha)^{1 - A_{ij}}}{\frac{d}{d\theta}P(\mathbf{A}_i | \mathbf{X}_i)}
-\]
-which can accessed:
-```{r, echo = TRUE}
-head(sample1$weightd[ , , 1]) # For the 1st allocation 
+## Plotting effect estimates ##
+
+Plots of effect estimates over a range of $\alpha$ levels may be helpful in summarizing results. \citet{carolina2014} present several such graphical displays. Here we demonstrate how to generate similar plots of effect estimates using \pkg{inferference}.
+
+First, we estimate the effects over a dense sequence of allocations so that lines will be smooth. 
+
+```{r example2, echo = TRUE, eval = TRUE, results = 'hide', cache = FALSE}
+example2 <- interference( formula = Y | A | B ~ X1 + X2 + (1|group) | group, 
+    allocations = seq(.2, .8, by = .01), 
+    data = vaccinesim, randomization = 2/3, method = 'simple')
 ```
 
-The 'scores' are but the all the last element in $\psi(\mathbf{O}, \boldsymbol{\theta})$, eqn (3) in the web appendix, which can accessed:
-```{r, echo = TRUE}
-head(sample1$scores) 
+In Figure \ref{fig:plots}, we present the direct and indirect effect estimates over this range of allocations. For direct effects, a simple scatterplot showing the point-wise confidence intervals suffices. One approach with indirect effects fixes $\alpha$ and plots estimates over a range of $\alpha'$, whereas a contour plot displays all pairwise $(\alpha, \alpha')$ comparisons over a range of allocation strategies.
+
+```{r deff_plot, echo = TRUE, fig.show = 'hide', fig.width = 6, fig.height = 6}
+deff <- direct_effect(example2)
+x <- deff$alpha1
+y <- as.numeric(deff$estimate)
+u <- as.numeric(deff$conf.high)
+l <- as.numeric(deff$conf.low)
+plot(c(min(x), max(x)), c(-.15, .25), type = 'n', bty = 'l',
+     xlab = expression(alpha), ylab = '' )
+title(ylab = expression(widehat(DE) * "(" * alpha * ")"),
+      line = 2)
+polygon(c(x, rev(x)), c(u, rev(l)), col = 'skyblue', border = NA)
+lines(x, y, cex = 2)
 ```
 
-Finally, the most important piece, the effect estimates are in a data.frame:
-```{r, echo = TRUE}
-sample1$estimates 
+```{r ieff_plot, echo = TRUE, fig.show = 'hide', fig.width = 6, fig.height = 6}
+ieff.4 <- ie(example2, allocation1 = .4)
+x <- ieff.4$alpha2
+y <- as.numeric(ieff.4$estimate)
+u <- as.numeric(ieff.4$conf.high)
+l <- as.numeric(ieff.4$conf.low)
+plot(c(min(x), max(x)),c(-.15, .25), type = 'n', bty = 'l',
+     xlab = expression(alpha * "'"), ylab = '')
+title(ylab = expression(widehat(IE) * "(" * 0.4 * "," * alpha * "'" * ")"),
+      line = 2)
+polygon(c(x, rev(x)), c(u, rev(l)), col = 'skyblue', border = NA)
+lines(x, y, cex = 2)
 ```
 
-Helper functions for finding effects:
-```{r, echo=TRUE}
-direct_effect(sample1, .3) #DE(.3)/ unfortunately de() is a function in utils.
-ie(sample1, .3, .6) #IE(.3, .6) 
-indirect_effect(sample1, .3, .6) # same
-te(sample1, .3, .6) #TE(.3, .6)
-oe(sample1, .3, .6) #OE(.3, .6)
-
-# You can use the same functions to get all the effects. This will aid in 
-# plotting (see below.)
-
-# All direct effect of constrast Y(0) - Y(1)
-direct_effect(sample1) 
-
-# to get Y(1) - Y(0) use trt.lvl1 argument
-direct_effect(sample1, trt.lvl1 = 1) 
-
-# Other functions work similarly
-
-# all indirect effects where treatment = 0 compare to an allocation of .3
-ie(sample1, .3) 
-```
-See `?direct_effect`, `?ie`, `?te`, or `?oe` for options.
-
-
-## Without random effects
-```{r, echo=TRUE}
-sample2 <- interference(
-  allocations = c(.3, .6), # a minimum of 2 is required
-  formula = y | A | B ~ X1 + X2 | group,
-  data = vaccinesim, # name of the data frame
-  model_method = 'glm',
-  model_options = list(family = binomial),
-  randomization = 2/3,
-  method = 'simple' # speeds up grad()
-  )
-print(sample2)
+```{r ieff_contour, echo = TRUE, fig.show = 'hide', fig.width = 6, fig.height = 6}
+ieff <- subset(example2[["estimates"]], effect == 'indirect')
+x <- sort(unique(ieff$alpha1))
+y <- sort(unique(ieff$alpha2))
+z <- xtabs(estimate ~ alpha1 + alpha2, data= ieff)
+contour(x, y, z, xlab = expression(alpha), 
+        ylab = expression(alpha * "'"), bty = 'l')
 ```
 
-## Using oracle parameters w/o the random effects
-```{r, echo=TRUE}
-sample3 <- interference(
-  allocations = c(.3, .6), # a minimum of 2 is required
-  formula = y | A | B ~ X1 + X2 | group,
-  data = vaccinesim, # name of the data frame
-  model_method = 'oracle',
-  model_options = list(fixed.effects = c(0.2727, -0.0387, .2719),
-                       random.effects = NULL),
-  causal_estimation_options = list(variance_estimation = 'naive'),
-  randomization = 2/3,
-  method = 'simple' # speeds up grad()
-  )
-print(sample3)
+\begin{figure}[ht]
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[]{jss_inferference_files/figure-latex/deff_plot-1.pdf}
+\end{minipage}\\
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[]{jss_inferference_files/figure-latex/ieff_plot-1.pdf}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[]{jss_inferference_files/figure-latex/ieff_contour-1.pdf}
+\end{minipage}
+ \caption{Plots of the estimates from \code{example2}. The top plot shows the direct effect estimates. The bottom two plots demonstrate different ways of viewing the indirect effect estimates. The shaded regions show the point-wise 95\% confidence intervals}
+  \label{fig:plots}
+\end{figure}
+
+## Diagnostics ##
+
+IPW estimators are known to be unstable if the weights range greatly. The package includes a basic utility to check the performance of the group-level weights, $w_{i,k}$, for multiple allocations. The function \code{diagnose_weights} plots histograms of weights for chosen allocation levels. If the \code{allocations} argument is left \code{NULL}, the function plots histograms for five allocation levels used the \code{interference} call. Figure \ref{fig:diagnostics} shows the resulting histogram for a single allocation. The analyst should examine groups with extreme weights, which may unduly influence population-level estimates.
+
+```{r diagnostic, echo = TRUE, eval = TRUE, fig.show = 'hide', fig.width = 4.5, fig.height = 4.5}
+diagnose_weights(example2, allocations = .5, breaks = 30)
 ```
 
-## Without the participation variable
+\begin{figure}[ht]
+\centering
+ \includegraphics[width=8cm]{jss_inferference_files/figure-latex/diagnostic-1.pdf}
+ \caption{A histogram of group-level weights, $w_{i,k}$, for $\alpha_k = 0.2$.}
+  \label{fig:diagnostics}
+\end{figure}
 
-Suppose we don't have the participation variable and estimate the treatment probability directly, just leave out the `randomization` argument and modify the formula:
-```{r, echo=TRUE}
-sample4 <- interference(
-  allocations = c(.3, .6), # a minimum of 2 is required
-  formula = y | A ~ X1 + X2 | group,
-  data = vaccinesim, # name of the data frame
-  model_method = 'glm',
+# Example: Voting Experiment #
+
+The preceding example used the default \code{logit_integrand} function to define the group-level propensities. The following example demonstrates how to customize the propensity score function. 
+
+\citet{nickerson2008} reported an experiment on voter behavior to examine peer-to-peer indirect effects on voting participation. The experiment randomized households with only two registered voters in Denver and Minneapolis to receive one of three assignments: voting encouragement, recycling encouragement, or nothing. Canvassers knocked on doors of households randomized to the voting or recycling groups a week before the 2002 primary. If a registered voter answered the door, the canvassers delivered a scripted message about voting (treatment) or recycling (control). The researchers used voter turnout records to determine if each member of the household then voted in the election. Nickerson was interested in the potential spillover effect of the voting encouragement to the untreated individual via the treated individual. From analysis of the observed data, he concluded there was a "secondary effect" where the household members not contacted by the canvassers voted more often in the treatment groups compared to the control groups.
+
+The dataset \code{voters} contains information for 3861 households, 2549 in Denver and 1312 in Minneapolis, including covariates such as age, gender, previous voting history, and party affiliation. Our estimand of interest involves average voting outcomes when households receive voting encouragement compared to when household receive the recycling message, hence we exclude households not contacted by canvassers. We also exclude the single household where a canvasser appears to have contacted both registered voters. 
+
+```{r voters_data, echo = TRUE, eval = TRUE, cache = FALSE}
+voters <-  within(voters, {
+    treated     = (treatment == 1 & reached == 1) * 1 
+    c_age       = (age - mean(age))/10 
+   })
+reach_cnt <- tapply(voters$reached, voters$family, sum)
+voters <- voters[!(voters$family %in% names(reach_cnt[reach_cnt > 1])), ]
+voters <- voters[voters$hsecontact == 1, ]
+```
+
+## Household-level propensity ##
+
+Unlike the vaccine study example, in this data set randomization occurred at the group level but individual level treatment was not randomized. With only two subjects, $\mathbf{A}_i = (A_{i1}, A_{i2})$ is the treatment allocation for group $i$ and $\mathbf{X}_i = (\mathbf{X}_{i1}, \mathbf{X}_{i2})$ is the matrix of individuals' covariate matrices for group $i$. Let $\mathbf{B}_i = (B_{i1}, B_{i2})$ be indicators of being reached by a canvasser in group $i$. Since we only consider households where someone answered the door, $\mathbf{B}_i \in \{(1, 0), (0, 1)\}$ and $\Pr(B_{i1} = 1| \mathbf{X}_{i}) + \Pr(B_{i2} = 1| \mathbf{X}_{i}) = 1$.  Let $h_{ij} = \Pr(B_{ij} = 1| \mathbf{X}_{i}; \theta) = \mbox{logit}^{-1}(\mathbf{X}_{i}\theta_x)$. Let $G_i \in \{0, 1\}$ be the indicator that group $i$ is randomized to treatment (1) or control (0). By design, $\Pr(G_i = 1) = 0.5$. Since $\Pr(A_{i1} | \mathbf{X}_i; \theta) = 1 - \Pr(A_{i2} | \mathbf{X}_i; \theta)$, $\Pr(\mathbf{A}_i | \mathbf{X}_i; \theta)$ can arbitrarily be defined in terms of either household member. By convention we use the first subject (subject one) of each group found in the dataset. Among treated groups, the probability of subject one being treated is the probability that a canvasser reached subject one. That is, $\Pr(A_{i1} | G_{i} = 1, \mathbf{X}_i; \theta) = h_{i1}^{A_{i1}}(1 - h_{i1})^{1 - A_{i1}}$.  Thus, the group-level propensity can be expressed:
+
+\begin{align*}
+\Pr(\mathbf{A}_i | \mathbf{X}_i ; \theta) &= \Pr(\mathbf{A}_i | G_i = 1, \mathbf{X}_i ; \theta)\Pr(G_i = 1) + \Pr(\mathbf{A}_i | G_i = 0, \mathbf{X}_i ; \theta)\Pr(G_i = 0) \\
+&= 0.5 \{ \Pr(\mathbf{A}_i | G_i = 1, \mathbf{X}_i ; \theta) +   \Pr(\mathbf{A}_i | G_i = 0, \mathbf{X}_i ; \theta) \} \\
+&= \begin{cases}
+.5 & \text{if $A_{i1} = 0, A_{i2} = 0$ and $G_i = 0$} \\
+.5 h_{i1}^{A_{i1}}(1 - h_{i1})^{1 - A_{i1}} & \text{if ($A_{i1} = 0, A_{i2} = 1$ or $A_{i1} = 1, A_{i2} = 0$) and $G_i = 1$}  \\
+0  & \text{otherwise}
+\end{cases} \\
+\end{align*}
+
+Thus, $h_{i1}$ is sufficient to determine the group-level propensity. If we know whether or not the first subject was reached by a canvasser, then we know if the second was. Therefore, we can estimate parameters for $h_{i1}$ with a dataset that includes only subject one from each group. To do this, we must estimate the parameters outside of \pkg{inferference} and use \code{model_method = `oracle'}. We include centered age (in decades) in the propensity model for demonstration purposes. 
+
+```{r voter_coef, echo=TRUE, eval = TRUE, cache = FALSE}
+voters1 <- do.call(rbind, by(voters, voters[, 'family'], function(x) x[1, ]))
+coef.voters <- coef(glm(reached ~ c_age, data = voters1, 
+		               family = binomial(link = 'logit')))
+```
+
+
+## Coding the propensity function ##
+
+Custom \code{propensity_integrand} and \code{loglihood_integrand} functions must have at least one argument:
+
+* \code{b}: the first argument is the variable for which the \code{integrate} function computes the integral. As in this example, the function can be written so that the integral evaluates to 1 and has no effect.
+
+For example, the following function will fix the group-level propensity to 0.5 for all groups when \code{variance_estimation = `naive'}:
+
+```{r propensity_fixed, echo = TRUE, eval = FALSE}
+fixed_propensity <- function(b){
+	return(0.5 * dnorm(b)) 
+}
+```
+
+For more realistic models, additional arguments may be passed to the custom function:
+
+* \code{X}: the covariate matrix (determined by the \code{formula}) for the $i$th group
+* \code{A}: the vector of treatment indicators for the $i$th group
+* \code{parameters}: vector of estimated parameters from the \code{model_method}
+* \code{allocation}: the allocation level for which the propensity is currently being estimated 
+* \code{...}: other arguments can be passed via the ellipsis in \code{interference}
+
+Now we have the pieces to write the propensity function for the voting example. 
+
+```{r household_propensity, echo =TRUE, eval = TRUE}
+household_propensity <- function(b, X, A, 
+                                 parameters, 
+                                 group.randomization = .5){
+  if(!is.matrix(X)){
+    X <- as.matrix(X)
+  }
+  if(sum(A) == 0){ 
+    pr <-  group.randomization
+  } else { 
+    X.1 <- X[1 ,]; A.1 <- A[1] 
+    h   <- plogis(X.1 %*% parameters)
+    pr  <-  group.randomization * dbinom(A.1, 1, h)
+  }
+  out <- pr * dnorm(b) 
+  out
+}
+```
+
+## Evidence of a peer influence effect ##
+
+The influence of the door opener on the non-door opener's voting behavior corresponds to an indirect effect. Though the Bernoulli-type parametrization of the estimands allows us to look at a range of allocations, $\widehat{IE}(0.5, 0)$ makes the sensible comparison between a world where individuals receive a voting message with probability $0.5$ to a world where individuals have zero probability of receiving the voting message.
+
+```{r example3, echo=TRUE, eval = TRUE, results = 'hide', cache = FALSE}
+example3 <- interference(
+  formula = voted02p | treated | reached ~ c_age | family,
+  propensity_integrand = 'household_propensity',
+  data = voters,
+  model_method = 'oracle', 
+  model_options = list(fixed.effects = coef.voters, random.effects = NULL),
+  allocations   = c(0, .5),
+  integrate_allocation = FALSE,
   causal_estimation_options = list(variance_estimation = 'robust'),
-  method = 'simple' # speeds up grad()
-  )
-print(sample4)
+  conf.level = .9)
+```
+```{r example3_results, echo=TRUE, eval = TRUE}
+ie(example3, .5, 0)[ , c('estimate', 'conf.low', 'conf.high')]
 ```
 
-## Defining one's own integrand
+The point estimate suggests an individual receiving the voting encouragement increases the voting likelihood of the other household member by 3.2\%. The 90\% confidence interval excludes zero, indicating a significant indirect effect corroborating the analysis in \citet{nickerson2008}. 
 
-Let's say you want to fix the group level propensity to be .5. I don't know why you'd want to do this, but this illustrates how to write your own function. The function required three arguments: `b`, `x`, and `pos`. `b` must be the first argument. `x` and `pos` are necessary for the `grad()`, and  I will describe how to use these later.
+For comparison, suppose that a flip of a fair coin determined which registered voter opened the door. We exclude age as a covariate and instead set $h_{i1} = 0.5$. Here we assume to know the propensity score, so we use \code{variance_estimation = `naive'}.
 
-```{r, echo = TRUE}
-myFUN <- function(b, x, pos){
-  return(.5 * dnorm(b))
+```{r example4, echo= TRUE, eval = TRUE, results = 'hide', cache = FALSE}
+example4 <- interference(
+  formula = voted02p | treated | reached ~ 1 | family,
+  propensity_integrand = 'household_propensity',
+  data = voters,
+  model_method = 'oracle',
+  model_options = list(fixed.effects = 0, random.effects = NULL),
+  allocations   = c(0, .5),
+  integrate_allocation = FALSE,
+  causal_estimation_options = list(variance_estimation = 'naive'),
+  conf.level = .9)
+```
+```{r example4_results, echo=TRUE, eval = TRUE}
+ie(example4, .5, 0)[ , c('estimate', 'conf.low', 'conf.high')]
+```
+
+Examining the group-level weights may help diagnose coding errors in the propensity score function. In the case of a fixed probability as in \code{example4}, the propensity weights are easily computed by hand. For example, for $\alpha = 0.5$,
+
+\[
+w_i = \frac{\pi(\mathbf{A}_i; 0.5)}{f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i; \theta = 0)} = \begin{cases}
+\frac{0.5^2}{.5} = .5 & \text{ if } G_i = 0 \\
+\frac{0.5^2}{.5^2} = 1 & \text{ if } G_i = 1\\
+ \end{cases},
+\]
+
+which we can confirm the software computed.
+
+```{r example4_weights, echo = TRUE}
+G <- tapply(voters[1:12, 'treated'], voters[1:12, 'family'], sum)
+W <- head(example4[["weights"]])[, 2]
+cbind(G, W)
+```
+
+# Computational Issues with IPW Estimators #
+
+We show in this section how computation of the group-level weights may affect estimation as the number of individuals in groups grows. To illustrate, consider the IPW estimator of the overall effect, which weights individual outcomes in group $i$ with:
+
+\[
+w_{1i} = \frac{\pi(\textbf{A}_i ; \alpha)}{f_{\mathbf{A}_i | \mathbf{X}_i}(\mathbf{A}_i | \mathbf{X}_i; \hat{\boldsymbol{\theta}})} = \frac{\prod_{j=1}^{n_i} \alpha^{A_{ij}} (1 - \alpha)^{1 - A_{ij}}}{ \int \prod_{j=1}^{n_i} h_{ij}^{A_{ij}} (1 - h_{ij})^{1 - A_{ij}}  f_b (b_i ; \hat{\theta}_s) db_i  }
+\]
+
+or equivalently,
+\[
+w_{2i} = \left\{ \int \prod_{j=1}^{n_i} \left(\frac{h_{ij}}{\alpha}\right)^{A_{ij}} \left(\frac{1 - h_{ij}}{1 - \alpha}\right)^{1 - A_{ij}}  f_b (b_i ; \hat{\theta}_s) db_i  \right\}^{-1}
+\]
+
+or,
+\[
+w_{3i} = \left\{ \int \exp\left[ \sum_{j=1}^{n_i} \left\{ A_{ij} \log \left( \frac{h_{ij}}{\alpha}\right) + (1 - A_{ij})\log \left(\frac{1 - h_{ij}}{1 - \alpha}\right) \right\} \right] f_b (b_i ; \hat{\theta}_s) db_i \right\}^{-1}. 
+\]
+
+While mathematically equivalent, these weights may be computationally dissimilar. In the case of $w_{1i}$, the product term within the integral entails multiplying probabilities and thus will tend to 0 as $n_i$ increases, causing the denominator of $w_{1i}$ to get arbitrarily large. In contrast, the product term in $w_{2i}$ entails multiplying values which may be less than or greater than 1 and  thus tends to be less susceptible to numerical instability. Summing $\log(h_{ij}/\alpha)$ or $\log(1 - h_{ij})/(1 - \alpha))$ and then exponentiating the result may provide greater numerical stability. Internally, \pkg{inferference} uses $w_{3i}$. 
+
+When group sizes are small, the differences between these weights tend to be infinitesimal, but as group sizes grow the differences become important. To be specific, consider the code below comparing $w_{1i}$, $w_{2i}$, and $w_{3i}$ for increasing group sizes where $\alpha = 0.5$, all units are treated, there is no random effect, and $h_{ij}$ is fixed at $0.5$.
+
+```{r compare_weights, echo = TRUE, eval = TRUE}
+compare_weights <- function(n, alpha = .5, h = .5){
+  pi  <- rep(alpha, n)
+  PrA <- rep(h, n)
+  c(w1 = prod(pi)/prod(PrA),
+    w2 = 1/prod(PrA/pi),
+    w3 = 1/exp(sum(log(PrA/pi))))  
 }
 
-integrate(myFUN, l = -Inf, u = Inf) # returns 0.5
-
-sample5 <- interference(
-  propensity_integrand = 'myFUN',
-  allocations = c(.3, .6), # a minimum of 2 is required
-  formula = y | A ~ X1 + X2 | group,
-  data = vaccinesim, # name of the data frame
-  model_method = 'glm',
-  causal_estimation_options = list(variance_estimation = 'naive'),
-  # won't work for 'robust' unless addition arguments are defined
-  method = 'simple' # speeds up grad()
-  )
-print(sample5)
+n <- c(50, 100, 500, 1074, 1075, 10000)
+cbind(n, t(sapply(n, FUN = compare_weights)))
 ```
 
-## A sample plot
+For group sizes up to $1074$ there is no difference, but when $n$ reaches $1075$, $w_{1i}$ returns \code{NaN} while $w_{2i}$ and $w_{3i}$ correctly return 1. 
 
-Here's a simple plot of direct effects. Run the `interference` function with a larger number of allocations (this will take longer!):
+\citet{carolina2014} used $w_{1i}$ to calculate weights, but 15 groups in their analysis had over 1000 subjects. These groups had missing values for weights for all the values of $\alpha$ considered and were excluded from computing the average IPW estimate. Rather than computing the average IPW across 700 groups, they inadvertently took the average across 685 groups. Correcting the estimates by using $w_{2i}$ or $w_{3i}$ did not alter the conclusions in this case, but analysts should be aware of this issue when dealing with large groups.
 
-```{r, echo = TRUE}
-sample6 <- interference(
-  allocations = seq(.3, .6, by = .01), 
-  formula = y | A ~ X1 + X2 | group,
-  data = vaccinesim, # name of the data frame
-  model_method = 'glm',
-  causal_estimation_options = list(variance_estimation = 'robust'),
-  method = 'simple' # speeds up grad()
-  )
+# Discussion #
 
-# Look at the direct effects
-deff <- direct_effect(sample6)
+The \proglang{R} package \pkg{inferference} computes inverse probability weighted estimators of causal effects in the presence of interference. The package currently supports the IPW methods of \citet{ttv2012} and \citet{carolina2014}. These methods require a model for the group-level propensity scores. The package provides useful defaults for the propensity models but allows for non-standard models. 
 
-# Plot the point estimates
-plot(deff$alpha1, deff$estimate, type = 'l')
-```
+Development and application of statistical methods for inferring causal effects in the presence of interference is an active area of research. Future versions of \pkg{inferference} may incorporate other estimation methods, such as doubly robust methods and stratification. Also, additional methods for estimating variances and effect bounds may be incorporated into the software. 
+
+\section*{Acknowledgments}
+
+We would like to thank Carolina Perez-Heydrich (Meredith College) for sharing code from her analysis, which made debugging and validation much smoother. David Nickerson (University of Notre Dame) graciously agreed to share and distribute the voting experiment data in the \pkg{inferference} package. Steve Cole (UNC), Brian Barkley (UNC), Betz Halloran (University of Washington), Wen Wei Loh (UNC), and Mary Kirk Wilkinson provided helpful comments. This work was partially supported by NIH grant R01 AI085073. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health. 
