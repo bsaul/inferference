@@ -27,7 +27,7 @@ example2 <- interference( formula = Y | A | B ~ X1 + X2 + (1|group) | group,
     allocations = seq(.2, .8, by = .01), 
     data = vaccinesim, randomization = 2/3, method = 'simple')
 
-## ----deff_plot, echo = TRUE, fig.show = 'hide', fig.width = 6, fig.height = 6----
+## ----deff_plot, echo = TRUE, fig.width = 6, fig.height = 6---------------
 deff <- direct_effect(example2)
 x <- deff$alpha1
 y <- as.numeric(deff$estimate)
@@ -40,7 +40,7 @@ title(ylab = expression(widehat(DE) * "(" * alpha * ")"),
 polygon(c(x, rev(x)), c(u, rev(l)), col = 'skyblue', border = NA)
 lines(x, y, cex = 2)
 
-## ----ieff_plot, echo = TRUE, fig.show = 'hide', fig.width = 6, fig.height = 6----
+## ----ieff_plot, echo = TRUE, fig.width = 6, fig.height = 6---------------
 ieff.4 <- ie(example2, allocation1 = .4)
 x <- ieff.4$alpha2
 y <- as.numeric(ieff.4$estimate)
@@ -53,7 +53,7 @@ title(ylab = expression(widehat(IE) * "(" * 0.4 * "," * alpha * "'" * ")"),
 polygon(c(x, rev(x)), c(u, rev(l)), col = 'skyblue', border = NA)
 lines(x, y, cex = 2)
 
-## ----ieff_contour, echo = TRUE, fig.show = 'hide', fig.width = 6, fig.height = 6----
+## ----ieff_contour, echo = TRUE, fig.width = 6, fig.height = 6------------
 ieff <- subset(example2[["estimates"]], effect == 'indirect')
 x <- sort(unique(ieff$alpha1))
 y <- sort(unique(ieff$alpha2))
@@ -61,7 +61,7 @@ z <- xtabs(estimate ~ alpha1 + alpha2, data= ieff)
 contour(x, y, z, xlab = expression(alpha), 
         ylab = expression(alpha * "'"), bty = 'l')
 
-## ----diagnostic, echo = TRUE, eval = TRUE, fig.show = 'hide', fig.width = 4.5, fig.height = 4.5----
+## ----diagnostic, echo = TRUE, eval = TRUE, fig.width = 4.5, fig.height = 4.5----
 diagnose_weights(example2, allocations = .5, breaks = 30)
 
 ## ----voters_data, echo = TRUE, eval = TRUE, cache = FALSE----------------
@@ -89,14 +89,14 @@ household_propensity <- function(b, X, A,
                                  group.randomization = .5){
   if(!is.matrix(X)){
     X <- as.matrix(X)
-  }
+  }   
   if(sum(A) == 0){ 
     pr <-  group.randomization
   } else { 
     X.1 <- X[1 ,]; A.1 <- A[1] 
     h   <- plogis(X.1 %*% parameters)
     pr  <-  group.randomization * dbinom(A.1, 1, h)
-  }
+  }   
   out <- pr * dnorm(b) 
   out
 }
@@ -144,7 +144,6 @@ compare_weights <- function(n, alpha = .5, h = .5){
     w2 = 1/prod(PrA/pi),
     w3 = 1/exp(sum(log(PrA/pi))))  
 }
-
 n <- c(50, 100, 500, 1074, 1075, 10000)
 cbind(n, t(sapply(n, FUN = compare_weights)))
 
