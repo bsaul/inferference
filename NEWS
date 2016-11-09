@@ -1,3 +1,10 @@
+inferference 0.5.1
+----------------------------------------------------------------
+
+* updates vignettes to a stripped down version of the JSS paper
+
+* effect utilities now only return a smaller subset of columns: alphas, treatments, estimate, std.error, and confidence limits
+
 inferference 0.5.0
 ----------------------------------------------------------------
 
