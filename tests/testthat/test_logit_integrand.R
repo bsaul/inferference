@@ -1,6 +1,14 @@
 context("Logit Integrand")
 
 test_that("Value of Logit Integrand equals", {
+  
+  # Check it works when n_i = 1
+  expect_equal(logit_integrand(0, 
+                               X = cbind(1, .5), 
+                               A = 1, 
+                               parameters = c(.1, .1), 
+                               randomization = .5), 0.107201744028612)
+  
   # No random effect
   expect_equal(logit_integrand(0, 
                                X = cbind(rep(1, 2), c(.5, .6)), 
