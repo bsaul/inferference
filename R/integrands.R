@@ -56,7 +56,17 @@ logit_integrand <- function(b, X, A,
   if(ignore_re){
     pr.b <- randomization * (stats::plogis(X %*% theta[1:p]))
   } else {
-    pr.b <- randomization * (stats::plogis(drop(outer(X %*% theta[1:p], b, '+'))))
+    if (nrow(X)==1) {
+      linpred_vec <- drop(outer(X %*% theta[1:p], b, '+'))
+      ##drop() will return a vector if X has one row - BGB 2017-02-12
+      ##solution: create a matrix of one row from that vector - BGB 2017-02-12
+      linpred_mat <- matrix(linpred_vec, byrow=TRUE,
+                            nrow=1, ncol = length(linpred_vec))
+      pr.b <- randomization * (stats::plogis(linpred_mat))
+      ##pr.b should not throw errors in the apply() fun below. - BGB 2017-02-12
+    } else {
+      pr.b <- randomization * (stats::plogis(drop(outer(X %*% theta[1:p], b, '+'))))
+    }
   }
   
   hh <- (pr.b/allocation)^A * ((1-pr.b)/(1 - allocation))^(1-A)
