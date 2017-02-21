@@ -14,9 +14,9 @@
 #' @param X n by length(fixed effects) matrix of covariates.
 #' @param parameters vector of fixed effect (and random effect if applicable). 
 #' Random effect should be last element in vector.
-#' @param A vector of observed treatments (0,1)
-#' @param allocation The allocation strategy. Required if include.allocations == TRUE. 
-#' Defaults to NA.
+#' @param A vector of binary treatments 
+#' @param allocation The allocation strategy. Defaults to A so that is essentially 
+#' ignored if allocation is not set to a value within (0, 1).
 #' @param randomization Randomization probability. Defaults to 1.
 #' 
 #' @return value of the integrand
