@@ -1,0 +1,9 @@
+citHeader("To cite inferference in publications, please use:")
+
+citEntry(entry = "article",
+  author = "Bradley Saul and Michael Hudgens",
+  title = "A Recipe for {inferference}: Start with Causal Inference. Add  Interference. Mix Well with {R}.",
+  year = "2017",
+  journal = {Journal of Statistical Software},
+ note = {Conditionally accepted for publication}
+)
