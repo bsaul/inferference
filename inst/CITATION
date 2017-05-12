@@ -4,6 +4,10 @@ citEntry(entry = "article",
   author = "Bradley Saul and Michael Hudgens",
   title = "A Recipe for {inferference}: Start with Causal Inference. Add  Interference. Mix Well with {R}.",
   year = "2017",
-  journal = {Journal of Statistical Software},
- note = {Conditionally accepted for publication}
+  journal = "Journal of Statistical Software",
+  note = "Conditionally accepted for publication",
+  textVersion = 
+  paste("Bradley Saul and Michael Hudgens (2017).", 
+       "A Recipe for {inferference}: Start with Causal Inference. Add  Interference. Mix Well with R.",
+       "Journal of Statistical Software. Conditionally accepted for publication.")
 )
