@@ -24,7 +24,7 @@ ie(example1, .3)
 
 ## ----example2, echo = TRUE, eval = TRUE, results = 'hide', cache = FALSE----
 example2 <- interference( formula = Y | A | B ~ X1 + X2 + (1|group) | group, 
-    allocations = seq(.2, .8, by = .01), 
+    allocations = seq(.2, .8, by = .1), 
     data = vaccinesim, randomization = 2/3, method = 'simple')
 
 ## ----deff_plot, echo = TRUE, fig.width = 6, fig.height = 6---------------

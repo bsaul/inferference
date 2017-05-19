@@ -22,45 +22,6 @@ print(example1)
 direct_effect(example1, .3)
 ie(example1, .3)
 
-## ----example2, echo = TRUE, eval = TRUE, results = 'hide', cache = FALSE----
-example2 <- interference( formula = Y | A | B ~ X1 + X2 + (1|group) | group, 
-    allocations = seq(.2, .8, by = .01), 
-    data = vaccinesim, randomization = 2/3, method = 'simple')
-
-## ----deff_plot, echo = TRUE, fig.width = 6, fig.height = 6---------------
-deff <- direct_effect(example2)
-x <- deff$alpha1
-y <- as.numeric(deff$estimate)
-u <- as.numeric(deff$conf.high)
-l <- as.numeric(deff$conf.low)
-plot(c(min(x), max(x)), c(-.15, .25), type = 'n', bty = 'l',
-     xlab = expression(alpha), ylab = '' )
-title(ylab = expression(widehat(DE) * "(" * alpha * ")"),
-      line = 2)
-polygon(c(x, rev(x)), c(u, rev(l)), col = 'skyblue', border = NA)
-lines(x, y, cex = 2)
-
-## ----ieff_plot, echo = TRUE, fig.width = 6, fig.height = 6---------------
-ieff.4 <- ie(example2, allocation1 = .4)
-x <- ieff.4$alpha2
-y <- as.numeric(ieff.4$estimate)
-u <- as.numeric(ieff.4$conf.high)
-l <- as.numeric(ieff.4$conf.low)
-plot(c(min(x), max(x)),c(-.15, .25), type = 'n', bty = 'l',
-     xlab = expression(alpha * "'"), ylab = '')
-title(ylab = expression(widehat(IE) * "(" * 0.4 * "," * alpha * "'" * ")"),
-      line = 2)
-polygon(c(x, rev(x)), c(u, rev(l)), col = 'skyblue', border = NA)
-lines(x, y, cex = 2)
-
-## ----ieff_contour, echo = TRUE, fig.width = 6, fig.height = 6------------
-ieff <- subset(example2[["estimates"]], effect == 'indirect')
-x <- sort(unique(ieff$alpha1))
-y <- sort(unique(ieff$alpha2))
-z <- xtabs(estimate ~ alpha1 + alpha2, data= ieff)
-contour(x, y, z, xlab = expression(alpha), 
-        ylab = expression(alpha * "'"), bty = 'l')
-
 ## ----diagnostic, echo = TRUE, eval = TRUE, fig.width = 4.5, fig.height = 4.5----
 diagnose_weights(example2, allocations = .5, breaks = 30)
 
