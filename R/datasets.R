@@ -42,7 +42,6 @@ NULL
 #'    \item{age}{age}
 #'    \item{gender}{gender}    
 #'  }
-#' @source \url{http://www3.nd.edu/~dnickers/data.php}
 #' @references Nickerson, D. W. (2008). Is voting contagious? Evidence from two field experiments. 
 #'  American Political Science Review, 102(01), 49-57.
 #' @name voters

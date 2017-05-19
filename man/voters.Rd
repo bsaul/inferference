@@ -16,9 +16,6 @@
    \item{age}{age}
    \item{gender}{gender}    
  }}
-\source{
-\url{http://www3.nd.edu/~dnickers/data.php}
-}
 \description{
 A dataset of a voting contagion experiment. For complete documentation, see 
 the 'Minneapolis and Denver Contagion Experiment' files on \href{http://www3.nd.edu/~dnickers/data.php}{David Nickerson's 
