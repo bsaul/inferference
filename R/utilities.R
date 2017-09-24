@@ -296,12 +296,14 @@ oe <- overall_effect
 
 diagnose_weights <- function(obj, allocations = NULL, ...){
   
+  obj_allocations <- as.numeric(dimnames(obj$weights)[[2]])
+
   if(!is.null(allocations)){
-    if(!all(allocations %in% as.numeric(dimnames(obj$weight)[[2]]))){
+    if(!all(allocations %in% obj_allocations)){
       stop('Allocations argument must only include allocation levels used in interference call.')
     } else {
-      which_cols <- which(allocations %in% as.numeric(dimnames(obj$weight)[[2]]))
-      w <- obj$weights[ , c(which_cols), drop = FALSE]  
+      which_cols <- which(obj_allocations %in% allocations)
+      w <- obj$weights[ , which_cols, drop = FALSE]  
     }
   } else {
     n <- ncol(obj$weights)
