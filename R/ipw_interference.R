@@ -59,7 +59,8 @@ ipw_interference <- function(propensity_integrand,
   weights <- do.call(wght_matrix, args = weight_args)
   
   if(variance_estimation == 'robust'){
-    weightd <- do.call(wght_deriv_array, args = append(weight_args, grad_args))  
+    weightd <- do.call(wght_deriv_array, args = append(weight_args, grad_args)) 
+    out$weightd <- weightd
   }
   
   
