@@ -4,7 +4,7 @@ Title: Methods for Causal Inference with Interference
 Version: 0.5.3
 Date: 2017-09-24
 Author: Bradley Saul
-Maintainer: Bradley Saul <saulb@live.unc.edu>
+Maintainer: Bradley Saul <bradleysaul@gmail.com>
 Description: Provides methods for estimating causal effects in the presence of
     interference. Currently it implements the inverse-probability weighted (IPW)
     estimators proposed by E.J. Tchetgen Tchetgen and T.J. Vanderweele in "On causal
