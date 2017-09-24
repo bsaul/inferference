@@ -22,4 +22,3 @@ Retrieves the population average direct causal effect for a
 specified allocation:
 \eqn{\hat{Y}(0, alpha) - \hat{Y}(1, alpha)}{Yhat(0, alpha) - Yhat(1, alpha)}.
 }
-

@@ -23,4 +23,3 @@ Perez-Heydrich, C., Hudgens, M. G., Halloran, M. E., Clemens, J. D., Ali, M., & 
 Assessing effects of cholera vaccination in the presence of interference. Biometrics, 70(3), 731-741.
 }
 \keyword{datasets}
-

@@ -35,4 +35,3 @@ group weight derivatives
 Uses \code{\link{wght_deriv_calc}} to compute the weight derivatives for each
 group per coverage level
 }
-

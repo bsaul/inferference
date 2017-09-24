@@ -24,4 +24,3 @@ length(theta) vector of scores
 Used by \code{\link{score_matrix}} to log likelihood derivatives for
 a single group.
 }
-

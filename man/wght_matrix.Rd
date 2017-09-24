@@ -34,4 +34,3 @@ a length(unique(group)) X length(alphas) matrix of group weights
 \description{
 Groups should be numbered 1, ..., N
 }
-

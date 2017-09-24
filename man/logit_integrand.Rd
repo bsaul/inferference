@@ -34,4 +34,3 @@ where \eqn{r} is the randomization scheme. \eqn{X} is the covariate(s) vectors.
 \eqn{fixef} is the vector of fixed effects. \eqn{b} is the random (group-level) effect.
 \eqn{ranef} is the random effect variance.
 }
-

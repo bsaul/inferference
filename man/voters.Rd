@@ -27,4 +27,3 @@ Nickerson, D. W. (2008). Is voting contagious? Evidence from two field experimen
  American Political Science Review, 102(01), 49-57.
 }
 \keyword{datasets}
-

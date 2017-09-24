@@ -19,4 +19,3 @@ value of log likelihood
 \description{
 Used by \code{\link{score_matrix}} to compute the log likelihood.
 }
-

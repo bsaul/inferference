@@ -35,4 +35,3 @@ Otherwise, the weight is computed by:
 \deqn{\frac{\prod_{j=1}^n \alpha^A_j (1 - \alpha)^(1-
 A_j)}{Pr(A|X)}}{prod(allocation^A(1 - allocation)^A) / integrate(integrand)}
 }
-

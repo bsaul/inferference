@@ -29,4 +29,3 @@ N X length(params) matrix of scores
 \description{
 Calculate matrix of log Likelihood derivatives
 }
-

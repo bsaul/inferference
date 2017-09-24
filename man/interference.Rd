@@ -125,4 +125,3 @@ Assessing effects of cholera vaccination in the presence of interference. Biomet
 Tchetgen Tchetgen, E. J., & VanderWeele, T. J. (2012). On causal inference in the presence of interference. 
 Statistical Methods in Medical Research, 21(1), 55-75.
 }
-

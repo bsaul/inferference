@@ -1,6 +1,11 @@
 inferference 0.5.3
 ----------------------------------------------------------------
 
+* fixes small issue with diagnose_weights() function
+
+inferference 0.5.3
+----------------------------------------------------------------
+
 * fixes issue where weightd object was not showing up in output
 
 inferference 0.5.2

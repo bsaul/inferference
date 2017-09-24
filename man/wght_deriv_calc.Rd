@@ -26,4 +26,3 @@ vector of derivatives with respect to element of params
 Takes the derivative of the \code{\link{wght_calc}} function with respect to each
 parameter in \code{params}.
 }
-

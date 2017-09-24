@@ -21,4 +21,3 @@ histogram of group-level weights
 \description{
 Plot histograms of weights from an interference object
 }
-

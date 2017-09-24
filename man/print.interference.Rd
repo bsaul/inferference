@@ -14,4 +14,3 @@
 \description{
 Prints a summary of an interference object
 }
-

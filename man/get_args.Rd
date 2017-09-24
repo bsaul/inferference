@@ -24,4 +24,3 @@ of those arguments where they exist in ... .
 myargs <- get_args(lm, formula = Sepal.Length ~ Sepal.Width, data = iris )
 summary(do.call('lm', myargs))
 }
-
