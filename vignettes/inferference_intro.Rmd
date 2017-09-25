@@ -79,7 +79,7 @@ references:
       given: Paul
     - family: Varadhan
       given: Ravi
-  URL: 'http://CRAN.R-project.org/package=numDeriv'
+  URL: 'https://CRAN.R-project.org/package=numDeriv'
   type: article-journal
   issued:
     year: 2012
@@ -94,7 +94,7 @@ references:
       given: B.
     - family: Walker
       given: S.
-  URL: 'http://CRAN.R-project.org/package=lme4'
+  URL: 'https://CRAN.R-project.org/package=lme4'
   type: article-journal
   issued:
     year: 2014

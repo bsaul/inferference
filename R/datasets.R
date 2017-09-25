@@ -24,9 +24,7 @@ NULL
 #-----------------------------------------------------------------------------#
 #' Voting Contagion Experiment Data
 #'
-#' A dataset of a voting contagion experiment. For complete documentation, see 
-#' the 'Minneapolis and Denver Contagion Experiment' files on \href{http://www3.nd.edu/~dnickers/data.php}{David Nickerson's 
-#' website.} See also \href{http://dx.doi.org/10.1017/S0003055408080039}{Nickerson 2008} for more 
+#' A dataset of a voting contagion experiment. See \href{http://dx.doi.org/10.1017/S0003055408080039}{Nickerson 2008} for more 
 #' details. The variables used in the package vignette are documented here.
 #'  
 #' @docType data
