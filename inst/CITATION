@@ -1,13 +1,17 @@
-citHeader("To cite inferference in publications, please use:")
+bibentry(bibtype = "Article",
+  title        = "A Recipe for {inferference}: {S}tart with Causal Inference. {A}dd Interference. {M}ix Well with {R}.",
+  author       = c(person(given = c("Bradley", "C."),
+                          family = "Saul",
+                          email = "saulb@live.unc.edu"),
+                   person(given = c("Michael", "G."),
+                          family = "Hudgens")),
+  journal      = "Journal of Statistical Software",
+  year         = "2017",
+  volume       = "82",
+  number       = "2",
+  pages        = "1--21",
+  doi          = "10.18637/jss.v082.i02",
 
-citEntry(entry = "article",
-  author = "Bradley Saul and Michael Hudgens",
-  title = "A Recipe for {inferference}: Start with Causal Inference. Add  Interference. Mix Well with {R}.",
-  year = "2017",
-  journal = "Journal of Statistical Software",
-  note = "Conditionally accepted for publication",
-  textVersion = 
-  paste("Bradley Saul and Michael Hudgens (2017).", 
-       "A Recipe for {inferference}: Start with Causal Inference. Add  Interference. Mix Well with R.",
-       "Journal of Statistical Software. Conditionally accepted for publication.")
+  header       = "To cite inferference in publications use:"
 )
+
