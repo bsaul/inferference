@@ -119,6 +119,10 @@ If the true propensity model is known (e.g. in simulations) use
 for complete details.
 }
 \references{
+Saul, B. and Hugdens, M. G. (2017). 
+A Recipe for {inferference}: {S}tart with Causal Inference. {A}dd Interference. {M}ix Well with {R}. 
+Journal of Statistical Software, 82(2), 1-21. \href{http://dx.doi.org/10.18637/jss.v082.i02}{doi:10.18637/jss.v082.i02}
+
 Perez-Heydrich, C., Hudgens, M. G., Halloran, M. E., Clemens, J. D., Ali, M., & Emch, M. E. (2014). 
 Assessing effects of cholera vaccination in the presence of interference. Biometrics, 70(3), 731-741.
 
