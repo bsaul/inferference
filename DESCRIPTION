@@ -1,15 +1,11 @@
 Package: inferference
 Type: Package
 Title: Methods for Causal Inference with Interference
-Version: 0.5.4
-Date: 2017-09-24
+Version: 1.0.0
+Date: 2017-11-24
 Author: Bradley Saul
 Maintainer: Bradley Saul <bradleysaul@gmail.com>
-Description: Provides methods for estimating causal effects in the presence of
-    interference. Currently it implements the inverse-probability weighted (IPW)
-    estimators proposed by E.J. Tchetgen Tchetgen and T.J. Vanderweele in "On causal
-    inference in the presence of interference" (Statistical Methods in Medical
-    Research (2012), 21(1) 55-75).
+Description: Provides methods for estimating causal effects in the presence of interference described in  B. Saul and M. Hugdens  in "A Recipe for inferference: Start with Causal Inference. Add Interference. Mix Well with R" (Journal of Statistical Software, 82(2), 1-21). Currently it implements the inverse-probability weighted (IPW) estimators proposed by E.J. Tchetgen Tchetgen and T.J. Vanderweele in "On causal inference in the presence of interference" (Statistical Methods in Medical Research (2012), 21(1) 55-75).
 Depends:
     R (>= 3.1)
 Imports:
