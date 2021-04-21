@@ -4,7 +4,8 @@
 \name{voters}
 \alias{voters}
 \title{Voting Contagion Experiment Data}
-\format{a dataset with 21 variables and 7722 rows
+\format{
+a dataset with 21 variables and 7722 rows
 \itemize{
    \item{family}{household ID}
    \item{denver}{1 = subject in Denver, 0 = Minneapolis}
@@ -15,13 +16,14 @@
    \item{party}{party affiliation}
    \item{age}{age}
    \item{gender}{gender}    
- }}
+ }
+}
 \description{
-A dataset of a voting contagion experiment. See \href{http://dx.doi.org/10.1017/S0003055408080039}{Nickerson 2008} for more 
+A dataset of a voting contagion experiment. See Nickerson (2008) for more
 details. The variables used in the package vignette are documented here.
 }
 \references{
 Nickerson, D. W. (2008). Is voting contagious? Evidence from two field experiments. 
- American Political Science Review, 102(01), 49-57.
+ American Political Science Review, 102(01), 49-57. \doi{10.1017/S0003055408080039}
 }
 \keyword{datasets}

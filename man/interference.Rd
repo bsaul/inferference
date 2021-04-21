@@ -4,13 +4,22 @@
 \alias{interference}
 \title{Estimate Causal Effects in presence of interference}
 \usage{
-interference(formula, propensity_integrand = "logit_integrand",
-  loglihood_integrand = propensity_integrand, allocations, data,
-  model_method = "glmer", model_options = list(family = stats::binomial(link
-  = "logit")), causal_estimation_method = "ipw",
+interference(
+  formula,
+  propensity_integrand = "logit_integrand",
+  loglihood_integrand = propensity_integrand,
+  allocations,
+  data,
+  model_method = "glmer",
+  model_options = list(family = stats::binomial(link = "logit")),
+  causal_estimation_method = "ipw",
   causal_estimation_options = list(variance_estimation = "robust"),
-  conf.level = 0.95, rescale.factor = 1, integrate_allocation = TRUE,
-  runSilent = TRUE, ...)
+  conf.level = 0.95,
+  rescale.factor = 1,
+  integrate_allocation = TRUE,
+  runSilent = TRUE,
+  ...
+)
 }
 \arguments{
 \item{formula}{The formula used to define the causal model.  Has a minimum 
@@ -115,13 +124,13 @@ argument:
 If the true propensity model is known (e.g. in simulations) use 
 \code{variance_estimatation = 'naive'}; otherwise, use the default 
 \code{variance_estimatation = 'robust'}. Refer to the web appendix of
-\href{http://dx.doi.org/10.1111/biom.12184}{Heydrich-Perez et al. (2014)} 
+Heydrich-Perez et al. (2014) (\doi{10.1111/biom.12184})
 for complete details.
 }
 \references{
 Saul, B. and Hugdens, M. G. (2017). 
 A Recipe for {inferference}: {S}tart with Causal Inference. {A}dd Interference. {M}ix Well with {R}. 
-Journal of Statistical Software, 82(2), 1-21. \href{http://dx.doi.org/10.18637/jss.v082.i02}{doi:10.18637/jss.v082.i02}
+Journal of Statistical Software, 82(2), 1-21. \doi{10.18637/jss.v082.i02}
 
 Perez-Heydrich, C., Hudgens, M. G., Halloran, M. E., Clemens, J. D., Ali, M., & Emch, M. E. (2014). 
 Assessing effects of cholera vaccination in the presence of interference. Biometrics, 70(3), 731-741.

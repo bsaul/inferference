@@ -27,6 +27,4 @@ Retrieves the population average indirect causal effect for
 specified allocations:
 \eqn{\hat{Y}(0, alpha1) - \hat{Y}(0, alpha2)}{Yhat(0, alpha1) - Yhat(0, alpha2)}. 
 This is the effect due to the coverage (allocation) levels.
-
-Retreive Indirect Effect estimates
 }

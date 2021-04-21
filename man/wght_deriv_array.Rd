@@ -4,8 +4,17 @@
 \alias{wght_deriv_array}
 \title{Create an array of group weight derivatives}
 \usage{
-wght_deriv_array(parameters, integrand, allocations, X, A, G,
-  runSilent = TRUE, integrate_allocation = TRUE, ...)
+wght_deriv_array(
+  parameters,
+  integrand,
+  allocations,
+  X,
+  A,
+  G,
+  runSilent = TRUE,
+  integrate_allocation = TRUE,
+  ...
+)
 }
 \arguments{
 \item{parameters}{vector of parameters passed to \code{integrand}}

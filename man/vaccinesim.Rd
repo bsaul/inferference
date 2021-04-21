@@ -4,7 +4,8 @@
 \name{vaccinesim}
 \alias{vaccinesim}
 \title{Vaccine Study Sample Data}
-\format{a dataset with 6 variables and 3000 rows
+\format{
+a dataset with 6 variables and 3000 rows
 \itemize{
    \item{Y}{the outcome (0 - no cholera; 1 - cholera)}
    \item{X1}{an individual's age (in decades)}
@@ -12,10 +13,11 @@
    \item{A}{an indicator of vaccination (0 - no vaccine; 1 - vaccine)}
    \item{B}{an indicator of participation (0 - did not participant in vaccine trial, 1 - did participate)}
    \item{group}{group membership}
- }}
+ }
+}
 \description{
 A sample dataset based on the simulations of a cholera vaccine trial 
-in \href{http://dx.doi.org/10.1111/biom.12184}{Heydrich-Perez et al. (2014)}
+in Heydrich-Perez et al. (2014) (\doi{10.1111/biom.12184})
 except with 3000 individuals in 250 groups rather than 10000 in 500.
 }
 \references{

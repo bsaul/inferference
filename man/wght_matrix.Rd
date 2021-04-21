@@ -5,8 +5,17 @@
 \title{Creates a number of groups by number of allocation schemes matrix of group weights.
 Allocation schemes are selected by the user.}
 \usage{
-wght_matrix(integrand, allocations, X, A, G, parameters, runSilent = TRUE,
-  integrate_allocation = TRUE, ...)
+wght_matrix(
+  integrand,
+  allocations,
+  X,
+  A,
+  G,
+  parameters,
+  runSilent = TRUE,
+  integrate_allocation = TRUE,
+  ...
+)
 }
 \arguments{
 \item{integrand}{function to pass to the argument 'f' of \code{\link{integrate}}.}

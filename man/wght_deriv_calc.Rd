@@ -4,8 +4,13 @@
 \alias{wght_deriv_calc}
 \title{Compute the derivative(s) of a weight}
 \usage{
-wght_deriv_calc(integrand, parameters, allocation,
-  integrate_allocation = TRUE, ...)
+wght_deriv_calc(
+  integrand,
+  parameters,
+  allocation,
+  integrate_allocation = TRUE,
+  ...
+)
 }
 \arguments{
 \item{integrand}{function to pass to the argument 'f' of \code{\link{integrate}}.}

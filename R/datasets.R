@@ -2,7 +2,7 @@
 #' Vaccine Study Sample Data
 #'
 #' A sample dataset based on the simulations of a cholera vaccine trial 
-#' in \href{http://dx.doi.org/10.1111/biom.12184}{Heydrich-Perez et al. (2014)}
+#' in Heydrich-Perez et al. (2014) (\doi{10.1111/biom.12184})
 #' except with 3000 individuals in 250 groups rather than 10000 in 500.
 #' @docType data
 #' @format a dataset with 6 variables and 3000 rows
@@ -24,7 +24,7 @@ NULL
 #-----------------------------------------------------------------------------#
 #' Voting Contagion Experiment Data
 #'
-#' A dataset of a voting contagion experiment. See \href{http://dx.doi.org/10.1017/S0003055408080039}{Nickerson 2008} for more 
+#' A dataset of a voting contagion experiment. See Nickerson (2008) for more
 #' details. The variables used in the package vignette are documented here.
 #'  
 #' @docType data
@@ -41,7 +41,7 @@ NULL
 #'    \item{gender}{gender}    
 #'  }
 #' @references Nickerson, D. W. (2008). Is voting contagious? Evidence from two field experiments. 
-#'  American Political Science Review, 102(01), 49-57.
+#'  American Political Science Review, 102(01), 49-57. \doi{10.1017/S0003055408080039}
 #' @name voters
 #' @keywords datasets
 #-----------------------------------------------------------------------------#
