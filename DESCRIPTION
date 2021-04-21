@@ -12,7 +12,8 @@ Imports:
     numDeriv (>= 2012.9-1),
     lme4 (>= 1.1-6),
     Formula (>= 1.1-2),
-    methods
+    methods,
+    spaMM
 License: GPL (>= 2)
 Suggests:
     testthat,

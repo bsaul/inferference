@@ -32,11 +32,11 @@
 #' @param data the analysis data frame. This must include all the variables 
 #' defined in the \code{formula}.
 #' @param model_method the method used to estimate or set the propensity model 
-#' parameters. Must be one of \code{'glm'}, \code{'glmer'}, or \code{'oracle'}. 
-#' Defaults to \code{'glmer'}. For a fixed effects only model use \code{'glm'}, 
-#' and to include random effects use\code{'glmer'}. \code{logit_integrand} 
-#' only supports a single random effect for the grouping variable, so if more 
-#' random effects are included in the model, different \code{propensity_integrand}
+#' parameters. Must be one of \code{'glm'}, \code{'glmer'}, \code{'HLfit'},
+#' or \code{'oracle'}. Defaults to \code{'glmer'}. For a fixed effects only model 
+#' use \code{'glm'}, and to include random effects use\code{'glmer'} or \code{'HLfit'}.
+#' \code{logit_integrand} only supports a single random effect for the grouping variable,
+#' so if more random effects are included in the model, different \code{propensity_integrand}
 #' and \code{loglihood_integrand} functions should be defined. When the propensity 
 #' parameters are known (as in simulations) or if estimating parameters by 
 #' other methods, use the \code{'oracle'} option. See \code{model_options} for
@@ -186,6 +186,16 @@ interference <- function(formula,
     parameters$fixed_effects  <- lme4::getME(propensity_model, 'fixef')
     parameters$random_effects <- lme4::getME(propensity_model, 'theta')
     X <- lme4::getME(propensity_model, "X")
+    
+    if(sum(parameters$random_effects == 0) > 0){
+      stop('At least one random effect was estimated as 0. This will lead to a
+           non-invertible matrix if using robust variance estimation.')
+    }
+  } else if(model_method == "HLfit"){
+    propensity_model <- do.call(spaMM::HLfit, args = estimation_args)
+    parameters$fixed_effects  <- propensity_model$fixef
+    parameters$random_effects <- sqrt(propensity_model$lambda[[1]])
+    X <- stats::model.matrix(propensity_model)
     
     if(sum(parameters$random_effects == 0) > 0){
       stop('At least one random effect was estimated as 0. This will lead to a
