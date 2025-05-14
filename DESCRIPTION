@@ -2,7 +2,7 @@ Package: inferference
 Type: Package
 Title: Methods for Causal Inference with Interference
 Version: 1.0.3
-Date: 2024-05-14
+Date: 2025-05-14
 Authors@R: person(given = "Bradley",
                 family = "Saul",
                 role = c("aut", "cre"),
