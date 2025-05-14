@@ -124,11 +124,11 @@ defined in the <code>formula</code>.</p></dd>
 
 <dt id="arg-model-method">model_method<a class="anchor" aria-label="anchor" href="#arg-model-method"></a></dt>
 <dd><p>the method used to estimate or set the propensity model
-parameters. Must be one of <code>'glm'</code>, <code>'glmer'</code>, or <code>'oracle'</code>.
-Defaults to <code>'glmer'</code>. For a fixed effects only model use <code>'glm'</code>,
-and to include random effects use<code>'glmer'</code>. <code>logit_integrand</code>
-only supports a single random effect for the grouping variable, so if more
-random effects are included in the model, different <code>propensity_integrand</code>
+parameters. Must be one of <code>'glm'</code>, <code>'glmer'</code>, <code>'HLfit'</code>,
+or <code>'oracle'</code>. Defaults to <code>'glmer'</code>. For a fixed effects only model
+use <code>'glm'</code>, and to include random effects use<code>'glmer'</code> or <code>'HLfit'</code>.
+<code>logit_integrand</code> only supports a single random effect for the grouping variable,
+so if more random effects are included in the model, different <code>propensity_integrand</code>
 and <code>loglihood_integrand</code> functions should be defined. When the propensity
 parameters are known (as in simulations) or if estimating parameters by
 other methods, use the <code>'oracle'</code> option. See <code>model_options</code> for
