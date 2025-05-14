@@ -10,6 +10,5 @@
 #' @references Saul, B. and Hugdens, M. G. (2017). 
 #' A Recipe for {inferference}: {S}tart with Causal Inference. {A}dd Interference. {M}ix Well with {R}. 
 #' Journal of Statistical Software, 82(2), 1-21. \doi{10.18637/jss.v082.i02}
-#' 
-#' @docType package
-NULL
+
+"_PACKAGE"

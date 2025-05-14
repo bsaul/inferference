@@ -2,6 +2,7 @@
 % Please edit documentation in R/inferference.R
 \docType{package}
 \name{inferference}
+\alias{inferference-package}
 \alias{inferference}
 \title{Methods for causal inference with interference}
 \description{
@@ -15,4 +16,8 @@ and developed further in Heydrich-Perez et al. (2014) (\doi{10.1111/biom.12184})
 Saul, B. and Hugdens, M. G. (2017). 
 A Recipe for {inferference}: {S}tart with Causal Inference. {A}dd Interference. {M}ix Well with {R}. 
 Journal of Statistical Software, 82(2), 1-21. \doi{10.18637/jss.v082.i02}
+}
+\author{
+\strong{Maintainer}: Bradley Saul \email{bradleysaul@fastmail.com}
+
 }

@@ -20,7 +20,8 @@ score_matrix(integrand, X, A, G, parameters, runSilent = TRUE, ...)
 
 \item{runSilent}{If FALSE, prints errors to console. Defaults to TRUE.}
 
-\item{...}{additional arguments passed to \code{integrand} or \code{\link{grad}}.
+\item{...}{additional arguments passed to \code{integrand} 
+       or \code{\link[numDeriv]{grad}}.
 For example, one can change the \code{method} argument in \code{grad}.}
 }
 \value{

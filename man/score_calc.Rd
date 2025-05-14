@@ -12,7 +12,7 @@ score_calc(parameters, integrand, hide.errors = TRUE, ...)
 \item{integrand}{function to used for the integrand.
 Defaults to \code{\link{logit_integrand}}.}
 
-\item{hide.errors}{Hide errors printed from \code{\link{grad}}.
+\item{hide.errors}{Hide errors printed from \code{\link[numDeriv]{grad}}.
 Defaults to true.}
 
 \item{...}{additional arguments pass to the integrand function.}

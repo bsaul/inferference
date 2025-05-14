@@ -58,11 +58,11 @@ allocations is required.}
 defined in the \code{formula}.}
 
 \item{model_method}{the method used to estimate or set the propensity model 
-parameters. Must be one of \code{'glm'}, \code{'glmer'}, or \code{'oracle'}. 
-Defaults to \code{'glmer'}. For a fixed effects only model use \code{'glm'}, 
-and to include random effects use\code{'glmer'}. \code{logit_integrand} 
-only supports a single random effect for the grouping variable, so if more 
-random effects are included in the model, different \code{propensity_integrand}
+parameters. Must be one of \code{'glm'}, \code{'glmer'}, \code{'HLfit'},
+or \code{'oracle'}. Defaults to \code{'glmer'}. For a fixed effects only model 
+use \code{'glm'}, and to include random effects use\code{'glmer'} or \code{'HLfit'}.
+\code{logit_integrand} only supports a single random effect for the grouping variable,
+so if more random effects are included in the model, different \code{propensity_integrand}
 and \code{loglihood_integrand} functions should be defined. When the propensity 
 parameters are known (as in simulations) or if estimating parameters by 
 other methods, use the \code{'oracle'} option. See \code{model_options} for

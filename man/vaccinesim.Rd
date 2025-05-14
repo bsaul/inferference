@@ -6,7 +6,7 @@
 \title{Vaccine Study Sample Data}
 \format{
 a dataset with 6 variables and 3000 rows
-\itemize{
+\describe{
    \item{Y}{the outcome (0 - no cholera; 1 - cholera)}
    \item{X1}{an individual's age (in decades)}
    \item{X2}{an individual's distance from river}
