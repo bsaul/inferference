@@ -7,3 +7,4 @@ github$
 ^flake
 ^\.envrc$
 ^\.direnv
+^result$
