@@ -1,10 +1,13 @@
 Package: inferference
 Type: Package
 Title: Methods for Causal Inference with Interference
-Version: 1.0.2
-Date: 2021-04-21
-Author: Bradley Saul
-Maintainer: Bradley Saul <bradleysaul@gmail.com>
+Version: 1.0.3
+Date: 2024-05-14
+Authors@R: person(given = "Bradley",
+                family = "Saul",
+                role = c("aut", "cre"),
+               email = "bradleysaul@fastmail.com")
+Maintainer: Bradley Saul <bradleysaul@fastmail.com>
 Description: Provides methods for estimating causal effects in the presence of interference described in  B. Saul and M. Hugdens (2017) <doi:10.18637/jss.v082.i02>. Currently it implements the inverse-probability weighted (IPW) estimators proposed by E.J. Tchetgen Tchetgen and T.J. Vanderweele (2012) <doi:10.1177/0962280210386779>.
 Depends:
     R (>= 3.1)
@@ -18,7 +21,7 @@ License: GPL (>= 2)
 Suggests:
     testthat,
     knitr,
-    markdown
+    rmarkdown
 VignetteBuilder: knitr
 LazyData: true
 RoxygenNote: 7.1.1

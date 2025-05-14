@@ -1,7 +1,14 @@
+inferference 1.0.3
+----------------------------------------------------------------
+
+* Updates documentation to pass CRAN checks.
+
+
 inferference 1.0.1
 ----------------------------------------------------------------
 
-* Adds ability to fit some types of models with HLfit(family = binomial(), rand.family = gaussian()).
+* Adds ability to fit some types of models with 
+  HLfit(family = binomial(), rand.family = gaussian()).
 
 inferference 0.5.3
 ----------------------------------------------------------------

@@ -49,7 +49,7 @@ log_likelihood <- function(parameters,
 #' @param parameters vector of parameters passed to \code{integrand}
 #' @param integrand function to used for the integrand.
 #' Defaults to \code{\link{logit_integrand}}.
-#' @param hide.errors Hide errors printed from \code{\link{numDeriv::grad}}.
+#' @param hide.errors Hide errors printed from \code{\link[numDeriv]{grad}}.
 #' Defaults to true.
 #' @param ... additional arguments pass to the integrand function.
 #' @return length(theta) vector of scores
@@ -90,7 +90,7 @@ score_calc <- function(parameters,
 #' @param parameters vector of parameters passed to \code{integrand}
 #' @param runSilent If FALSE, prints errors to console. Defaults to TRUE.
 #' @param ... additional arguments passed to \code{integrand} 
-#'        or \code{\link{numDeriv::grad}}.
+#'        or \code{\link[numDeriv]{grad}}.
 #' For example, one can change the \code{method} argument in \code{grad}.
 #' @return N X length(params) matrix of scores
 #' @export
