@@ -4,6 +4,5 @@ NEWS.md
 cran-comments.md
 ^scratch$
 github$
-flake.nix
-flack.lock
+^flake
 ^\.envrc$
