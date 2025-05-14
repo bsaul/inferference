@@ -6,7 +6,7 @@
 #' except with 3000 individuals in 250 groups rather than 10000 in 500.
 #' @docType data
 #' @format a dataset with 6 variables and 3000 rows
-#' \itemize{
+#' \describe{
 #'    \item{Y}{the outcome (0 - no cholera; 1 - cholera)}
 #'    \item{X1}{an individual's age (in decades)}
 #'    \item{X2}{an individual's distance from river}
@@ -29,7 +29,7 @@ NULL
 #'  
 #' @docType data
 #' @format a dataset with 21 variables and 7722 rows
-#' \itemize{
+#' \describe{
 #'    \item{family}{household ID}
 #'    \item{denver}{1 = subject in Denver, 0 = Minneapolis}
 #'    \item{treatment}{1 = voting encouragement, 2 = recycling message, 3 = not contacted}
