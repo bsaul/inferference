@@ -1,0 +1,7 @@
+pandoc: 3.1.11
+pkgdown: 2.1.2
+pkgdown_sha: ~
+articles:
+  inferference_intro: inferference_intro.html
+  inferference_plots: inferference_plots.html
+last_built: 2025-05-14T11:28Z
